@@ -35,20 +35,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'operand_2')->textInput() ?>
 
-    <hr>
-
-    <?= $form->field($model, 'true_next_exec_type')->dropDownList(['action' => 'Action', 'condition' => 'Condition'], ['prompt' => 'Choose true next execution type', 'onchange' => 'showNextExecutionType(this)']) ?>
-
-    <?= $form->field($model, 'false_next_exec_type')->dropDownList(['action' => 'Action', 'condition' => 'Condition'], ['prompt' => 'Choose false next execution type', 'onchange' => 'showNextExecutionType(this)']) ?>
-
-    <?= $form->field($model, 'true_action_id')->dropDownList($model->node->getNodeActions(), ['prompt' => 'Choose true action']) ?>
-
-    <?= $form->field($model, 'false_action_id')->dropDownList($model->node->getNodeActions(), ['prompt' => 'Choose false action']) ?>
-
-    <?= $form->field($model, 'true_condition_id')->dropDownList($model->node->getNodeConditions(), ['prompt' => 'Choose true condition']) ?>
-
-    <?= $form->field($model, 'false_condition_id')->dropDownList($model->node->getNodeConditions(), ['prompt' => 'Choose false condition']) ?>
-
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
