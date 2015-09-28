@@ -313,4 +313,28 @@ class NodesConditions extends \yii\db\ActiveRecord
 
         return $html;
     }
+
+    protected function resolve()
+    {
+
+    }
+
+    public function getNext()
+    {
+        if($this->resolve()){
+            //true
+            if($this->true_next_exec_type == 'condition'){
+                return $this->trueCondition->getNext();
+            }else{
+                return $this->true_action_id;
+            }
+        }else{
+            //false
+            if($this->false_next_exec_type == 'condition'){
+                return $this->falseCondition->getNext();
+            }else{
+                return $this->false_action_id;
+            }
+        }
+    }
 }
