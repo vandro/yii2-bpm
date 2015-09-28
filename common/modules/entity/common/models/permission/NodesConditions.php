@@ -8,6 +8,7 @@ use common\modules\entity\common\models\NodesActions;
 use common\modules\entity\common\models\ProcessNodes;
 use Yii;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "nodes_conditions".
@@ -178,6 +179,29 @@ class NodesConditions extends \yii\db\ActiveRecord
 
     public function getTitle()
     {
-        return $this->operand1Entity->title.'->'.$this->operand1Field->title.' '.$this->operator.' '.$this->operand_2;
+        $operator = '';
+        switch($this->operator){
+            case 'equal':
+                $operator = '==';
+                break;
+            default:
+                $operator = '==';
+                break;
+        }
+        return '<var style="color: red;">'.$this->operand1Entity->title.'.'.$this->operand1Field->title.'</var> <var style="color: blue;">'.$operator.'</var> <var style="color: green;">'.$this->operand_2.'</var>';
+    }
+
+    public function getActionAddUrl()
+    {
+        $customUrl = Yii::$app->getUrlManager()->createUrl(['entity/conditions/addAction', 'node_id' => $this->node_id, 'parent_id' => $this->id]);
+        return Html::a( '<span class="glyphicon glyphicon-info-sign"></span>', $customUrl,
+            ['title' => Yii::t('yii', 'Add action'), 'data-pjax' => 0]);
+    }
+
+    public function getConditionAddUrl()
+    {
+        $customUrl = Yii::$app->getUrlManager()->createUrl(['entity/conditions/addCondition', 'node_id' => $this->node_id, 'parent_id' => $this->id]);
+        return Html::a( '<span class="glyphicon glyphicon-question-sign"></span>', $customUrl,
+            ['title' => Yii::t('yii', 'Add condition'), 'data-pjax' => 0]);
     }
 }
