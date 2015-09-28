@@ -26,6 +26,7 @@ use common\helpers\ActionColumnHelper;
         'dataProvider' => $model->getConditionsAdp(),
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            'id',
             [
                 'header' => 'Условие',
                 'format' => 'html',
@@ -33,18 +34,19 @@ use common\helpers\ActionColumnHelper;
                     return $model->title;
                 }
             ],
-            [
-                'attribute' => 'next_execution_type',
-                'header' => 'Следующее действие',
-                'value' => function($model){
-                    return ($model->next_execution_type == 'action')?'Вызов действия':"Проверка следующего условия";
-                }
-            ],
+//            [
+//                'attribute' => 'next_execution_type',
+//                'header' => 'Следующее действие',
+//                'value' => function($model){
+//                    return ($model->next_execution_type == 'action')?'Вызов действия':"Проверка следующего условия";
+//                }
+//            ],
             [
                 'attribute' => 'true_action_id',
                 'header' => 'Действие истина',
+                'format' => 'html',
                 'value' => function($model){
-                    if(!empty($model->trueAction) && $model->next_execution_type == 'action') {
+                    if(!empty($model->trueAction) && $model->true_next_exec_type == 'action') {
                         return $model->trueAction->title;
                     }
                 }
@@ -52,8 +54,9 @@ use common\helpers\ActionColumnHelper;
             [
                 'attribute' => 'false_action_id',
                 'header' => 'Действие ложь',
+                'format' => 'html',
                 'value' => function($model){
-                    if(!empty($model->falseAction) && $model->next_execution_type == 'action') {
+                    if(!empty($model->falseAction) && $model->false_next_exec_type == 'action') {
                         return $model->falseAction->title;
                     }
                 }
@@ -61,8 +64,9 @@ use common\helpers\ActionColumnHelper;
             [
                 'attribute' => 'true_condition_id',
                 'header' => 'Условие истина',
+                'format' => 'html',
                 'value' => function($model){
-                    if(!empty($model->trueCondition) && $model->next_execution_type == 'condition') {
+                    if(!empty($model->trueCondition) && $model->true_next_exec_type == 'condition') {
                         return $model->trueCondition->title;
                     }
                 }
@@ -70,8 +74,9 @@ use common\helpers\ActionColumnHelper;
             [
                 'attribute' => 'false_condition_id',
                 'header' => 'Условие ложь',
+                'format' => 'html',
                 'value' => function($model){
-                    if(!empty($model->falseCondition) && $model->next_execution_type == 'condition') {
+                    if(!empty($model->falseCondition) && $model->false_next_exec_type == 'condition') {
                         return $model->falseCondition->title;
                     }
                 }
@@ -97,12 +102,28 @@ use common\helpers\ActionColumnHelper;
 
 </div>
 
-<ul>
-    <?php foreach($model->conditions as $condition){ ?>
-        <li><var style="color: blue;">если</var> ( <?=$condition->title?> ) <var style="color: blue;">тогда {</var>
-            <?=$condition->getConditionAddUrl()?>
-            <?=$condition->getActionAddUrl()?>
-            <var>}</var>
-        </li>
+<!--<ul>-->
+<!--    --><?php //foreach($model->conditions as $condition){ ?>
+<!--        <li style="font-size: large; list-style: none;"><var style="color: blue;">если</var> ( --><?//=$condition->title?><!-- ) <var style="color: blue;">тогда </var>{-->
+<!--            --><?php //if($condition->true_next_exec_type == 'condition') {?>
+<!--                --><?//=!empty($condition->trueCondition)?$condition->trueCondition->title:''?>
+<!--                --><?//=$condition->getTrueActionAddUrl()?>
+<!---->
+<!--            --><?php //}else{ ?>
+<!--                --><?//=!empty($condition->trueAction)?$condition->trueAction->title:''?>
+<!--                --><?//=$condition->getTrueConditionAddUrl()?>
+<!--            --><?php //} ?>
+<!--            <var>} <var style="color: blue;">иначе</var> {</var>-->
+<!--            --><?//=$condition->getFalseConditionAddUrl()?>
+<!--            --><?//=$condition->getFalseActionAddUrl()?>
+<!--            <var>}</var>-->
+<!--            --><?//=$condition->getDeleteUrl()?>
+<!--        </li>-->
+<!--    --><?php //} ?>
+<!--</ul>-->
+
+<?php foreach($model->conditions as $condition){ ?>
+    <?php if(empty($condition->parentFalseCondition) && empty($condition->parentFalseCondition)){?>
+        <?=$condition->render()?>
     <?php } ?>
-</ul>
+<?php } ?>
