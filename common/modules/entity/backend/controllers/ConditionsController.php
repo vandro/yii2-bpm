@@ -174,7 +174,7 @@ class ConditionsController extends Controller
         $model->true_next_exec_type = 'action';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['process-nodes/view', 'id' => $model->node_id, 'tab' => 5]);
         } else {
             return $this->render('_addTrueActionForm', [
                 'model' => $model,
@@ -188,7 +188,7 @@ class ConditionsController extends Controller
         $model->false_next_exec_type = 'action';
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['process-nodes/view', 'id' => $model->node_id, 'tab' => 5]);
         } else {
             return $this->render('_addFalseActionForm', [
                 'model' => $model,
@@ -206,7 +206,7 @@ class ConditionsController extends Controller
             $parent = $this->findModel($parent_id);
             $parent->true_condition_id = $model->id;
             if($parent->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['process-nodes/view', 'id' => $model->node_id, 'tab' => 5]);
             }
         } else {
             return $this->render('_addConditionForm', [
@@ -223,9 +223,9 @@ class ConditionsController extends Controller
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $parent = $this->findModel($parent_id);
-            $parent->true_condition_id = $model->id;
+            $parent->false_condition_id = $model->id;
             if($parent->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+                return $this->redirect(['process-nodes/view', 'id' => $model->node_id, 'tab' => 5]);
             }
         } else {
             return $this->render('_addConditionForm', [
