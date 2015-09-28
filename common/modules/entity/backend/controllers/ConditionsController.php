@@ -167,4 +167,70 @@ class ConditionsController extends Controller
         }
         echo json_encode($arItems);
     }
+
+    public function actionAddTrueAction($id)
+    {
+        $model = $this->findModel($id);
+        $model->true_next_exec_type = 'action';
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('_addTrueActionForm', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionAddFalseAction($id)
+    {
+        $model = $this->findModel($id);
+        $model->false_next_exec_type = 'action';
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('_addFalseActionForm', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionAddTrueCondition($node_id, $parent_id)
+    {
+        $model = new NodesConditions();
+        $model->node_id = $node_id;
+        $model->true_next_exec_type = 'condition';
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $parent = $this->findModel($parent_id);
+            $parent->true_condition_id = $model->id;
+            if($parent->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        } else {
+            return $this->render('_addConditionForm', [
+                'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionAddFalseCondition($node_id, $parent_id)
+    {
+        $model = new NodesConditions();
+        $model->node_id = $node_id;
+        $model->false_next_exec_type = 'condition';
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $parent = $this->findModel($parent_id);
+            $parent->true_condition_id = $model->id;
+            if($parent->save()) {
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
+        } else {
+            return $this->render('_addConditionForm', [
+                'model' => $model,
+            ]);
+        }
+    }
 }
