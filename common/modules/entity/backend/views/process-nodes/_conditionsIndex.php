@@ -28,6 +28,7 @@ use common\helpers\ActionColumnHelper;
             ['class' => 'yii\grid\SerialColumn'],
             [
                 'header' => 'Условие',
+                'format' => 'html',
                 'value' => function($model){
                     return $model->title;
                 }
@@ -98,6 +99,10 @@ use common\helpers\ActionColumnHelper;
 
 <ul>
     <?php foreach($model->conditions as $condition){ ?>
-        <li><?=$condition->title?></li>
+        <li><var style="color: blue;">если</var> ( <?=$condition->title?> ) <var style="color: blue;">тогда {</var>
+            <?=$condition->getConditionAddUrl()?>
+            <?=$condition->getActionAddUrl()?>
+            <var>}</var>
+        </li>
     <?php } ?>
 </ul>
