@@ -15,7 +15,8 @@ use yii\helpers\Html;
  *
  * @property integer $id
  * @property integer $node_id
- * @property string $next_execution_type
+ * @property string $true_next_exec_type
+ * @property string $false_next_exec_type
  * @property integer $true_action_id
  * @property integer $false_action_id
  * @property integer $true_condition_id
@@ -59,9 +60,9 @@ class NodesConditions extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['node_id', 'next_execution_type'], 'required'],
+            [['node_id'], 'required'],
             [['node_id', 'true_action_id', 'false_action_id', 'true_condition_id', 'false_condition_id', 'operand_1_entity_id', 'operand_1_field_id'], 'integer'],
-            [['next_execution_type', 'operator', 'operand_2'], 'string']
+            [['operator', 'operand_2', 'true_next_exec_type', 'false_next_exec_type'], 'string']
         ];
     }
 
@@ -73,7 +74,8 @@ class NodesConditions extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'node_id' => Yii::t('app', 'Node ID'),
-            'next_execution_type' => Yii::t('app', 'Next Execution Type'),
+            'true_next_exec_type' => Yii::t('app', 'True Next Execution Type'),
+            'false_next_exec_type' => Yii::t('app', 'False Next Execution Type'),
             'true_action_id' => Yii::t('app', 'True Action ID'),
             'false_action_id' => Yii::t('app', 'False Action ID'),
             'true_condition_id' => Yii::t('app', 'True Condition ID'),
@@ -112,6 +114,14 @@ class NodesConditions extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getParentFalseCondition()
+    {
+        return $this->hasOne(NodesConditions::className(), ['false_condition_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getNodesConditions()
     {
         return $this->hasMany(NodesConditions::className(), ['false_condition_id' => 'id']);
@@ -123,6 +133,14 @@ class NodesConditions extends \yii\db\ActiveRecord
     public function getTrueCondition()
     {
         return $this->hasOne(NodesConditions::className(), ['id' => 'true_condition_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParentTrueCondition()
+    {
+        return $this->hasOne(NodesConditions::className(), ['true_condition_id' => 'id']);
     }
 
     /**
@@ -188,20 +206,96 @@ class NodesConditions extends \yii\db\ActiveRecord
                 $operator = '==';
                 break;
         }
-        return '<var style="color: red;">'.$this->operand1Entity->title.'.'.$this->operand1Field->title.'</var> <var style="color: blue;">'.$operator.'</var> <var style="color: green;">'.$this->operand_2.'</var>';
+        return '<var style="color: red;">'.$this->operand1Entity->title.'.'.$this->operand1Field->title.'</var> <var style="color: blue;">'.$operator.'</var> <var style="color: green;">"'.$this->operand_2.'"</var>';
     }
 
-    public function getActionAddUrl()
+    public function getTrueActionAddUrl()
     {
-        $customUrl = Yii::$app->getUrlManager()->createUrl(['entity/conditions/addAction', 'node_id' => $this->node_id, 'parent_id' => $this->id]);
+        $customUrl = Yii::$app->getUrlManager()->createUrl(['entity/conditions/add-true-action', 'id' => $this->id]);
         return Html::a( '<span class="glyphicon glyphicon-info-sign"></span>', $customUrl,
             ['title' => Yii::t('yii', 'Add action'), 'data-pjax' => 0]);
     }
 
-    public function getConditionAddUrl()
+    public function getFalseActionAddUrl()
     {
-        $customUrl = Yii::$app->getUrlManager()->createUrl(['entity/conditions/addCondition', 'node_id' => $this->node_id, 'parent_id' => $this->id]);
+        $customUrl = Yii::$app->getUrlManager()->createUrl(['entity/conditions/add-false-action', 'id' => $this->id]);
+        return Html::a( '<span class="glyphicon glyphicon-info-sign"></span>', $customUrl,
+            ['title' => Yii::t('yii', 'Add action'), 'data-pjax' => 0]);
+    }
+
+    public function getTrueConditionAddUrl()
+    {
+        $customUrl = Yii::$app->getUrlManager()->createUrl(['entity/conditions/add-true-condition', 'node_id' => $this->node_id, 'parent_id' => $this->id]);
         return Html::a( '<span class="glyphicon glyphicon-question-sign"></span>', $customUrl,
             ['title' => Yii::t('yii', 'Add condition'), 'data-pjax' => 0]);
+    }
+
+    public function getFalseConditionAddUrl()
+    {
+        $customUrl = Yii::$app->getUrlManager()->createUrl(['entity/conditions/add-false-condition', 'node_id' => $this->node_id, 'parent_id' => $this->id]);
+        return Html::a( '<span class="glyphicon glyphicon-question-sign"></span>', $customUrl,
+            ['title' => Yii::t('yii', 'Add condition'), 'data-pjax' => 0]);
+    }
+
+    public function getDeleteUrl()
+    {
+        $customUrl = Yii::$app->getUrlManager()->createUrl(['entity/conditions/delete', 'id' => $this->id]);
+        return Html::a( '<span class="glyphicon glyphicon-trash"></span>', $customUrl,
+            ['title' => Yii::t('yii', 'Add condition'), 'data-pjax' => 0]);
+    }
+
+    public function render()
+    {
+        $html = '<ul>';
+        $html .= '<li style="font-size: large; list-style: none;"><var style="color: blue;">если</var> ( '.$this->title.' ) <var style="color: blue;">тогда </var>{';
+
+        if($this->true_next_exec_type == 'condition') {
+            if(!empty($this->trueCondition)) {
+                $html .= $this->trueCondition->render();
+                $html .= $this->getTrueActionAddUrl();
+            }else{
+                $html .= $this->getTrueConditionAddUrl();
+                $html .= $this->getTrueActionAddUrl();
+            }
+        }else{
+            if(!empty($this->trueAction)) {
+                $html .= '<ul><li style="font-size: large; list-style: none;">';
+                $html .= $this->trueAction->title;
+                $html .= $this->getTrueConditionAddUrl();
+                $html .= '</li></ul>';
+            }else{
+                $html .= $this->getTrueConditionAddUrl();
+                $html .= $this->getTrueActionAddUrl();
+            }
+        }
+
+        $html .= '<var>} <var style="color: blue;">иначе</var> {</var>';
+
+        if($this->false_next_exec_type == 'condition') {
+            if(!empty($this->falseCondition)) {
+                $html .= $this->falseCondition->render();
+                $html .= $this->getFalseActionAddUrl();
+            }else{
+                $html .= $this->getFalseConditionAddUrl();
+                $html .= $this->getFalseActionAddUrl();
+            }
+        }else{
+            if(!empty($this->falseAction)) {
+                $html .= '<ul><li style="font-size: large; list-style: none;">';
+                $html .= $this->falseAction->title;
+                $html .= $this->getFalseConditionAddUrl();
+                $html .= '</li></ul>';
+            }else{
+                $html .= $this->getFalseConditionAddUrl();
+                $html .= $this->getFalseActionAddUrl();
+            }
+        }
+
+        $html .= '<var>}</var>';
+        $html .= $this->getDeleteUrl();
+        $html .= '</li>';
+        $html .= '</ul>';
+
+        return $html;
     }
 }
