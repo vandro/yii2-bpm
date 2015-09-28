@@ -254,8 +254,10 @@ class NodesConditions extends \yii\db\ActiveRecord
                 $html .= $this->trueCondition->render();
                 $html .= $this->getTrueActionAddUrl();
             }else{
+                $html .= '<ul><li style="font-size: large; list-style: none;">';
                 $html .= $this->getTrueConditionAddUrl();
                 $html .= $this->getTrueActionAddUrl();
+                $html .= '</li></ul>';
             }
         }else{
             if(!empty($this->trueAction)) {
@@ -264,8 +266,10 @@ class NodesConditions extends \yii\db\ActiveRecord
                 $html .= $this->getTrueConditionAddUrl();
                 $html .= '</li></ul>';
             }else{
+                $html .= '<ul><li style="font-size: large; list-style: none;">';
                 $html .= $this->getTrueConditionAddUrl();
                 $html .= $this->getTrueActionAddUrl();
+                $html .= '</li></ul>';
             }
         }
 
@@ -276,8 +280,10 @@ class NodesConditions extends \yii\db\ActiveRecord
                 $html .= $this->falseCondition->render();
                 $html .= $this->getFalseActionAddUrl();
             }else{
+                $html .= '<ul><li style="font-size: large; list-style: none;">';
                 $html .= $this->getFalseConditionAddUrl();
                 $html .= $this->getFalseActionAddUrl();
+                $html .= '</li></ul>';
             }
         }else{
             if(!empty($this->falseAction)) {
@@ -286,8 +292,10 @@ class NodesConditions extends \yii\db\ActiveRecord
                 $html .= $this->getFalseConditionAddUrl();
                 $html .= '</li></ul>';
             }else{
+                $html .= '<ul><li style="font-size: large; list-style: none;">';
                 $html .= $this->getFalseConditionAddUrl();
                 $html .= $this->getFalseActionAddUrl();
+                $html .= '</li></ul>';
             }
         }
 
