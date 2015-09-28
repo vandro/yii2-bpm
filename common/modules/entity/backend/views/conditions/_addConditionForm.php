@@ -35,21 +35,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'operand_2')->textInput() ?>
 
-    <hr>
-
-    <?= $form->field($model, 'true_next_exec_type')->dropDownList(['action' => 'Action', 'condition' => 'Condition'], ['prompt' => 'Choose true next execution type', 'onchange' => 'showNextExecutionType(this)']) ?>
-
-    <?= $form->field($model, 'false_next_exec_type')->dropDownList(['action' => 'Action', 'condition' => 'Condition'], ['prompt' => 'Choose false next execution type', 'onchange' => 'showNextExecutionType(this)']) ?>
-
-    <?= $form->field($model, 'true_action_id')->dropDownList($model->node->getNodeActions(), ['prompt' => 'Choose true action']) ?>
-
-    <?= $form->field($model, 'false_action_id')->dropDownList($model->node->getNodeActions(), ['prompt' => 'Choose false action']) ?>
-
-    <?= $form->field($model, 'true_condition_id')->dropDownList($model->node->getNodeConditions(), ['prompt' => 'Choose true condition']) ?>
-
-    <?= $form->field($model, 'false_condition_id')->dropDownList($model->node->getNodeConditions(), ['prompt' => 'Choose false condition']) ?>
-
-
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
@@ -59,39 +44,6 @@ use yii\widgets\ActiveForm;
 </div>
 
 <script>
-
-    function showNextExecutionType(next_execution_type){
-        if(next_execution_type.value == 'action'){
-            $('.field-nodesconditions-true_action_id').show();
-            $('.field-nodesconditions-false_action_id').show();
-            $('.field-nodesconditions-true_condition_id').hide();
-            $('.field-nodesconditions-false_condition_id').hide();
-        }else{
-            $('.field-nodesconditions-true_action_id').hide();
-            $('.field-nodesconditions-false_action_id').hide();
-            $('.field-nodesconditions-true_condition_id').show();
-            $('.field-nodesconditions-false_condition_id').show();
-
-        }
-    }
-
-    window.onload = function(){
-        $('.field-nodesconditions-true_action_id').hide();
-        $('.field-nodesconditions-false_action_id').hide();
-        $('.field-nodesconditions-true_condition_id').hide();
-        $('.field-nodesconditions-false_condition_id').hide();
-        var next_execution_type = document.getElementById("nodesconditions-next_execution_type")
-        if(next_execution_type.value == 'action'){
-            $('.field-nodesconditions-true_action_id').show();
-            $('.field-nodesconditions-false_action_id').show();
-        }else{
-            $('.field-nodesconditions-true_condition_id').show();
-            $('.field-nodesconditions-false_condition_id').show();
-
-        }
-
-    };
-
     function getFields(entity_type)
     {
         $.ajax({

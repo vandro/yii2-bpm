@@ -32,7 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'id',
             'node_id',
-            'next_execution_type',
+            'true_next_exec_type',
+            'false_next_exec_type',
             'true_action_id',
             'false_action_id',
             'true_condition_id',
