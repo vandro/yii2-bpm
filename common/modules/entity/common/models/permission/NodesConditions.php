@@ -143,6 +143,13 @@ class NodesConditions extends \yii\db\ActiveRecord
         return $this->hasOne(NodesConditions::className(), ['true_condition_id' => 'id']);
     }
 
+    public function hasParent()
+    {
+        $trueCondition = NodesConditions::find()->where(['true_condition_id' => $this->id])->one();
+        $falseCondition = NodesConditions::find()->where(['false_condition_id' => $this->id])->one();
+        return !empty($trueCondition) or !empty($falseCondition);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
@@ -212,14 +219,14 @@ class NodesConditions extends \yii\db\ActiveRecord
     public function getTrueActionAddUrl()
     {
         $customUrl = Yii::$app->getUrlManager()->createUrl(['entity/conditions/add-true-action', 'id' => $this->id]);
-        return Html::a( '<span class="glyphicon glyphicon-info-sign"></span>', $customUrl,
+        return Html::a( '<span class="glyphicon glyphicon-cog"></span>', $customUrl,
             ['title' => Yii::t('yii', 'Add action'), 'data-pjax' => 0]);
     }
 
     public function getFalseActionAddUrl()
     {
         $customUrl = Yii::$app->getUrlManager()->createUrl(['entity/conditions/add-false-action', 'id' => $this->id]);
-        return Html::a( '<span class="glyphicon glyphicon-info-sign"></span>', $customUrl,
+        return Html::a( '<span class="glyphicon glyphicon-cog"></span>', $customUrl,
             ['title' => Yii::t('yii', 'Add action'), 'data-pjax' => 0]);
     }
 
