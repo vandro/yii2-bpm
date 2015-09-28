@@ -22,83 +22,83 @@ use common\helpers\ActionColumnHelper;
         <?= Html::a('Add conditions', ['conditions/create', 'parent_id' => $model->id], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?= GridView::widget([
-        'dataProvider' => $model->getConditionsAdp(),
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-            'id',
-            [
-                'header' => 'Условие',
-                'format' => 'html',
-                'value' => function($model){
-                    return $model->title;
-                }
-            ],
+<!--    --><?//= GridView::widget([
+//        'dataProvider' => $model->getConditionsAdp(),
+//        'columns' => [
+//            ['class' => 'yii\grid\SerialColumn'],
+//            'id',
 //            [
-//                'attribute' => 'next_execution_type',
-//                'header' => 'Следующее действие',
+//                'header' => 'Условие',
+//                'format' => 'html',
 //                'value' => function($model){
-//                    return ($model->next_execution_type == 'action')?'Вызов действия':"Проверка следующего условия";
+//                    return $model->title;
 //                }
 //            ],
-            [
-                'attribute' => 'true_action_id',
-                'header' => 'Действие истина',
-                'format' => 'html',
-                'value' => function($model){
-                    if(!empty($model->trueAction) && $model->true_next_exec_type == 'action') {
-                        return $model->trueAction->title;
-                    }
-                }
-            ],
-            [
-                'attribute' => 'false_action_id',
-                'header' => 'Действие ложь',
-                'format' => 'html',
-                'value' => function($model){
-                    if(!empty($model->falseAction) && $model->false_next_exec_type == 'action') {
-                        return $model->falseAction->title;
-                    }
-                }
-            ],
-            [
-                'attribute' => 'true_condition_id',
-                'header' => 'Условие истина',
-                'format' => 'html',
-                'value' => function($model){
-                    if(!empty($model->trueCondition) && $model->true_next_exec_type == 'condition') {
-                        return $model->trueCondition->title;
-                    }
-                }
-            ],
-            [
-                'attribute' => 'false_condition_id',
-                'header' => 'Условие ложь',
-                'format' => 'html',
-                'value' => function($model){
-                    if(!empty($model->falseCondition) && $model->false_next_exec_type == 'condition') {
-                        return $model->falseCondition->title;
-                    }
-                }
-            ],
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template'=>'{view} {update} {delete}',
-                'buttons'=>[
-                    'view'=>function ($url, $model) {
-                        return ActionColumnHelper::view($url,$model,'entity/conditions');
-                    },
-                    'update'=>function ($url, $model) {
-                        return ActionColumnHelper::update($url,$model,'entity/conditions');
-                    },
-                    'delete'=>function ($url, $model) {
-                        return ActionColumnHelper::delete($url,$model,'entity/conditions');
-                    },
-                ],
-
-            ],
-        ],
-    ]); ?>
+////            [
+////                'attribute' => 'next_execution_type',
+////                'header' => 'Следующее действие',
+////                'value' => function($model){
+////                    return ($model->next_execution_type == 'action')?'Вызов действия':"Проверка следующего условия";
+////                }
+////            ],
+//            [
+//                'attribute' => 'true_action_id',
+//                'header' => 'Действие истина',
+//                'format' => 'html',
+//                'value' => function($model){
+//                    if(!empty($model->trueAction) && $model->true_next_exec_type == 'action') {
+//                        return $model->trueAction->title;
+//                    }
+//                }
+//            ],
+//            [
+//                'attribute' => 'false_action_id',
+//                'header' => 'Действие ложь',
+//                'format' => 'html',
+//                'value' => function($model){
+//                    if(!empty($model->falseAction) && $model->false_next_exec_type == 'action') {
+//                        return $model->falseAction->title;
+//                    }
+//                }
+//            ],
+//            [
+//                'attribute' => 'true_condition_id',
+//                'header' => 'Условие истина',
+//                'format' => 'html',
+//                'value' => function($model){
+//                    if(!empty($model->trueCondition) && $model->true_next_exec_type == 'condition') {
+//                        return $model->trueCondition->title;
+//                    }
+//                }
+//            ],
+//            [
+//                'attribute' => 'false_condition_id',
+//                'header' => 'Условие ложь',
+//                'format' => 'html',
+//                'value' => function($model){
+//                    if(!empty($model->falseCondition) && $model->false_next_exec_type == 'condition') {
+//                        return $model->falseCondition->title;
+//                    }
+//                }
+//            ],
+//            [
+//                'class' => 'yii\grid\ActionColumn',
+//                'template'=>'{view} {update} {delete}',
+//                'buttons'=>[
+//                    'view'=>function ($url, $model) {
+//                        return ActionColumnHelper::view($url,$model,'entity/conditions');
+//                    },
+//                    'update'=>function ($url, $model) {
+//                        return ActionColumnHelper::update($url,$model,'entity/conditions');
+//                    },
+//                    'delete'=>function ($url, $model) {
+//                        return ActionColumnHelper::delete($url,$model,'entity/conditions');
+//                    },
+//                ],
+//
+//            ],
+//        ],
+//    ]); ?>
 
 </div>
 
@@ -123,7 +123,8 @@ use common\helpers\ActionColumnHelper;
 <!--</ul>-->
 
 <?php foreach($model->conditions as $condition){ ?>
-    <?php if(empty($condition->parentFalseCondition) && empty($condition->parentFalseCondition)){?>
+    <?php if(!$condition->hasParent()){?>
         <?=$condition->render()?>
+        <hr style="border-color: #002240">
     <?php } ?>
 <?php } ?>
