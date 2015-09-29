@@ -11,4 +11,5 @@ namespace common\modules\entity\common\config;
 class Config
 {
     const MODULE_NAME = 'bpm';
+    const BACKEND_MODULE_NAME = 'entity';
 }

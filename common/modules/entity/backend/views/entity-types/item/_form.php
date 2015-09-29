@@ -17,8 +17,8 @@ use backend\models\Dictionary;
 
     <?php
         foreach($model->fields as $field) {
-            if($field->visible) {
-                if (empty($field->dictionary_id)) {
+//            if($field->visible) {
+//                if (empty($field->dictionary_id)) {
                     if ($field->type == 'VARCHAR') {
                         echo $form->field($itemModel, $field->code)->textInput(['maxlength' => $field->length]);
                     } elseif ($field->type == 'TEXT') {
@@ -26,11 +26,11 @@ use backend\models\Dictionary;
                     } else {
                         echo $form->field($itemModel, $field->code)->textInput(['maxlength' => true]);
                     }
-                } else {
-                    $dictionaryItemModel = DictionaryItemFactory::getInstance(Dictionary::findOne($field->dictionary_id));
-                    echo $form->field($itemModel, $field->code)->dropDownList(ArrayHelper::map($dictionaryItemModel::find()->all(), 'id', 'title'), ['prompt' => ' -- Выберите ' . $field->title . ' --']);
-                }
-            }
+//                } else {
+//                    $dictionaryItemModel = DictionaryItemFactory::getInstance(Dictionary::findOne($field->dictionary_id));
+//                    echo $form->field($itemModel, $field->code)->dropDownList(ArrayHelper::map($dictionaryItemModel::find()->all(), 'id', 'title'), ['prompt' => ' -- Выберите ' . $field->title . ' --']);
+//                }
+//            }
         }
     ?>
 

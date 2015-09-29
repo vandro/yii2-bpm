@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\modules\entity\common\factories\EntityContainerFactory;
+use common\modules\entity\common\config\Config;
 
 /**
  * EntityTypesController implements the CRUD actions for EntityTypes model.
@@ -33,7 +34,7 @@ class EntityTypesController extends Controller
 //                        'allow' => true,
 //                    ],
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'build'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'build', 'item-view', 'item-create', 'item-update', 'item-delete'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -148,5 +149,74 @@ class EntityTypesController extends Controller
         $container = EntityContainerFactory::getInstance($model);
         $container->build();
         return $this->redirect(['view', 'id' => $model->id]);
+    }
+
+    /**
+     * Displays a single EntityType model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionItemView($id,$item_id)
+    {
+        $itemModel = Yii::$app->modules[Config::BACKEND_MODULE_NAME]->entityFactory->getFullEntityModel($id, $item_id);
+
+        return $this->render('item/view', [
+            'model' => $itemModel->entityType,
+            'itemModel' => $itemModel,
+        ]);
+    }
+
+    /**
+     * Creates a new EntityType item model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+    public function actionItemCreate($id)
+    {
+        $itemModel = Yii::$app->modules[Config::BACKEND_MODULE_NAME]->entityFactory->getInstanceById($id);
+
+        if ($itemModel->load(Yii::$app->request->post()) && $itemModel->save()) {
+            return $this->redirect(['view', 'id' => $itemModel->entityType->id, 'tab' => 6]);
+        } else {
+            return $this->render('item/create', [
+                'model' => $itemModel->entityType,
+                'itemModel' => $itemModel,
+            ]);
+        }
+    }
+
+    /**
+     * Updates an existing Entity model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionItemUpdate($id,$item_id)
+    {
+        $itemModel = Yii::$app->modules[Config::BACKEND_MODULE_NAME]->entityFactory->getFullEntityModel($id, $item_id);
+
+        if ($itemModel->load(Yii::$app->request->post()) && $itemModel->save()) {
+            return $this->redirect(['view', 'id' => $itemModel->entityType->id, 'tab' => 6]);
+        } else {
+            return $this->render('item/update', [
+                'model' => $itemModel->entityType,
+                'itemModel' => $itemModel,
+            ]);
+        }
+    }
+
+    /**
+     * Deletes an existing Entity model.
+     * If deletion is successful, the browser will be redirected to the 'index' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionItemDelete($id,$item_id)
+    {
+        $itemModel = Yii::$app->modules[Config::BACKEND_MODULE_NAME]->entityFactory->getFullEntityModel($id, $item_id);
+        $entity_id = $itemModel->entityType->id;
+        $itemModel->delete();
+
+        return $this->redirect(['view', 'id' => $entity_id, 'tab' => 6]);
     }
 }

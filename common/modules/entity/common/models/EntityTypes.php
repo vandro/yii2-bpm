@@ -5,6 +5,7 @@ namespace common\modules\entity\common\models;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
+use common\modules\entity\common\config\Config;
 
 /**
  * This is the model class for table "entity_types".
@@ -164,5 +165,63 @@ class EntityTypes extends \yii\db\ActiveRecord
         ]);
 
         return $dataProvider;
+    }
+
+    public function getItemFieldsForGridView()
+    {
+        $fields = [];
+
+        foreach($this->fields as $field){
+            //if(empty($field->dictionary_id)) {
+                //if($field->visible) {
+                    $fields[] = $field->code;
+                //}
+//            }else{
+//                //if($field->visible) {
+//                    $dictionary = Dictionary::findOne($field->dictionary_id);
+//                    $code = $field->code;
+//                    $fields[] = [
+//                        'attribute' => $dictionary->title,
+//                        'format' => 'raw',
+//                        'value' => function ($data) use ($code, $dictionary) {
+//                            $dictionaryItemModel = DictionaryItemFactory::getInstance($dictionary);
+//                            $element = $dictionaryItemModel::findOne($data->{$code});
+//                            if(!empty($element)) {
+//                                return $element->title;
+//                            }
+//                        },
+//                    ];
+//                //}
+//            }
+        }
+
+        return $fields;
+    }
+
+    public function getItemFieldsForDetailView($itemModel)
+    {
+        $fields = [];
+
+        foreach($this->fields as $field){
+//            if(empty($field->dictionary_id)) {
+                $fields[] = $field->code;
+//            }else{
+//                $code = $field->code;
+//                $dictionary = Dictionary::findOne($field->dictionary_id);
+//                $dictionaryItemModel = DictionaryItemFactory::getInstance($dictionary);
+//                $fields[] = [
+//                    'label' => $dictionary->title,
+//                    'format' => 'raw',
+//                    'value' => $dictionaryItemModel::findOne($itemModel->$code)->title
+//                ];
+//            }
+        }
+
+        return $fields;
+    }
+
+    public function getItemSearchModel()
+    {
+        return Yii::$app->modules[Config::BACKEND_MODULE_NAME]->entityFactory->getInstance($this);
     }
 }

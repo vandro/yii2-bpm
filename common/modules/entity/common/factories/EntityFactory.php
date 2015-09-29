@@ -59,7 +59,7 @@ class EntityFactory extends Component
         return $model;
     }
 
-    public static function getFullEntityModel($entity_id, $taskId)
+    public static function getFullEntityModelByTaskId($entity_id, $taskId)
     {
         $entityType = self::getEntityType($entity_id);
         $model = self::getModel();
@@ -67,8 +67,25 @@ class EntityFactory extends Component
         $model->setEntityType($entityType);
 
         $entityItemLink = TasksEntitiesLink::find()->where(['task_id' => $taskId, 'entity_id' => $entity_id])->one();
-//
+
         if (($itemModel = $model::findOne($entityItemLink->entity_item_id)) !== null) {
+            return $itemModel;
+        } else {
+            throw new NotFoundHttpException('The requested entity item does not exist.');
+        }
+
+
+        return $model;
+    }
+
+    public static function getFullEntityModel($entity_id, $item_id)
+    {
+        $entityType = self::getEntityType($entity_id);
+        $model = self::getModel();
+        $model->modelInit(self::getFullConfig($entityType));
+        $model->setEntityType($entityType);
+
+        if (($itemModel = $model::findOne($item_id)) !== null) {
             return $itemModel;
         } else {
             throw new NotFoundHttpException('The requested entity item does not exist.');
@@ -82,7 +99,7 @@ class EntityFactory extends Component
     {
         self::$entityTypes[$entityType->id] = $entityType;
         $model = self::getModel();
-        $model->modelInit(self::getConfig($entityType));
+        $model->modelInit(self::getFullConfig($entityType));
         $model->setEntityType($entityType);
 
         return $model;
@@ -102,7 +119,7 @@ class EntityFactory extends Component
     {
         $entityType = self::getEntityType($id);
         $model = self::getModel();
-        $model->modelInit(self::getConfig($entityType));
+        $model->modelInit(self::getFullConfig($entityType));
         $model->setEntityType($entityType);
 
         return $model;

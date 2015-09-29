@@ -15,7 +15,10 @@ class Module extends \yii\base\Module
             'components' => [
                 'factory' => [
                     'class' => 'common\modules\entity\common\factories\Factory'
-                ]
+                ],
+                'entityFactory' => [
+                    'class' => 'common\modules\entity\common\factories\EntityFactory'
+                ],
             ]
         ]);
     }
