@@ -53,7 +53,7 @@ class ConditionHelper
 
     protected static function setEntityFieldValue($condition, $taskId)
     {
-        $entityModel = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getForCondition($condition, $taskId);
+        $entityModel = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getFullEntityModel($condition->operand_1_entity_id, $taskId);
 
         self::$entityModel = $entityModel;
         self::$fieldValue = $entityModel->{$condition->operand1Field->code};
