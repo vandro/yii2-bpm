@@ -47,6 +47,15 @@ AppAsset::register($this);
         $menuItems[] = ['label' => 'Roles', 'url' => ['/entity/roles/index']];
         $menuItems[] = ['label' => 'Rights', 'url' => ['/entity/rights/index']];
         $menuItems[] = ['label' => 'Organizations', 'url' => ['/entity/organizations/index']];
+        $menuItems[] = ['label' => 'SMI', /*'url' => ['/entity/organizations/index'],*/
+            'items' => [
+                ['label' => 'Smi reestr', 'url' => ['/entity/smi-reestr/index']],
+                ['label' => 'Languages', 'url' => ['/entity/languages/index']],
+                ['label' => 'Smi founders', 'url' => ['/entity/smi-founders/index']],
+                ['label' => 'Smi specialization', 'url' => ['/entity/smi-specialization/index']],
+                ['label' => 'Smi type', 'url' => ['/entity/smi-type/index']],
+            ]
+        ];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
             'url' => ['/site/logout'],
