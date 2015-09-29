@@ -59,14 +59,14 @@ class EntityFactory extends Component
         return $model;
     }
 
-    public static function getFullEntityModel($condition, $taskId)
+    public static function getFullEntityModel($entity_id, $taskId)
     {
-        $entityType = self::getEntityType($condition->operand_1_entity_id);
+        $entityType = self::getEntityType($entity_id);
         $model = self::getModel();
         $model->modelInit(self::getFullConfig($entityType));
         $model->setEntityType($entityType);
 
-        $entityItemLink = TasksEntitiesLink::find()->where(['task_id' => $taskId, 'entity_id' => $condition->operand_1_entity_id])->one();
+        $entityItemLink = TasksEntitiesLink::find()->where(['task_id' => $taskId, 'entity_id' => $entity_id])->one();
 //
         if (($itemModel = $model::findOne($entityItemLink->entity_item_id)) !== null) {
             return $itemModel;
