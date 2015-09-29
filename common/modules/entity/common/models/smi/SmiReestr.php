@@ -3,6 +3,7 @@
 namespace common\modules\entity\common\models\smi;
 
 use common\modules\entity\common\models\Languages;
+use common\modules\entity\common\models\Regions;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
@@ -185,6 +186,11 @@ class SmiReestr extends \yii\db\ActiveRecord
     public function getAllTypes()
     {
         return ArrayHelper::map(SmiType::find()->all(), 'id', 'title');
+    }
+
+    public function getAllRegions()
+    {
+        return ArrayHelper::map(Regions::find()->all(), 'id', 'title');
     }
 
     public function getTypeFilter($searchModel)
