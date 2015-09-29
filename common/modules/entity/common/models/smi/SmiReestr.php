@@ -45,7 +45,7 @@ class SmiReestr extends \yii\db\ActiveRecord
     {
         return [
             [['type_id', 'title'], 'required'],
-            [['type_id', 'begin_at', 'frequency_times'], 'integer'],
+            [['type_id', 'begin_at', 'frequency_times', 'region_id'], 'integer'],
             [['frequency_period', 'address', 'phones'], 'string'],
             [['title', 'chief_editor_full_name', 'certificate_number'], 'string', 'max' => 255]
         ];
@@ -63,6 +63,7 @@ class SmiReestr extends \yii\db\ActiveRecord
             'begin_at' => Yii::t('app', 'Чиқа бошлаган даври'),
             'frequency_period' => Yii::t('app', 'Даврийлиги периоди'),
             'frequency_times' => Yii::t('app', 'Даврийлиги мартаси'),
+            'region_id' => Yii::t('app', 'Ҳудуд'),
             'address' => Yii::t('app', 'Таҳририят манзили'),
             'chief_editor_full_name' => Yii::t('app', 'Бош муҳаррир фамилияси, исми, шарифи'),
             'phones' => Yii::t('app', 'Бош муҳаррир телефонлари'),
