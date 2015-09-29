@@ -22,6 +22,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'frequency_times')->textInput() ?>
 
+    <?= $form->field($model, 'region_id')->dropDownList($model->getAllRegions(),   ['prompt' => ' -- Ҳудуд танланг--' ]) ?>
+
     <?= $form->field($model, 'address')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'chief_editor_full_name')->textInput(['maxlength' => true]) ?>

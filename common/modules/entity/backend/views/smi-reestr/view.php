@@ -41,7 +41,14 @@ $this->params['breadcrumbs'][] = $this->title;
                         'title',
                         'begin_at',
                         'frequency_period',
-                        'frequency_times:datetime',
+                        [
+                            'attribute' => 'frequency_times',
+                            'value' => !empty($model->frequency_times)?$model->frequency_times.' марта':'',
+                        ],
+                        [
+                            'attribute' => 'region_id',
+                            'value' => !empty($model->region)?$model->region->title:'',
+                        ],
                         'address:ntext',
                         'chief_editor_full_name',
                         'phones:ntext',

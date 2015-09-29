@@ -142,6 +142,14 @@ class SmiReestr extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getRegion()
+    {
+        return $this->hasOne(Regions::className(), ['id' => 'region_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getSmiSpecializationLinks()
     {
         return $this->hasMany(SmiSpecializationLink::className(), ['smi_reestr_id' => 'id']);
