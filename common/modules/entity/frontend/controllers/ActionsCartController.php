@@ -232,7 +232,7 @@ class ActionsCartController extends Controller
 
     protected function setTasksEntitiesLink($task_id, $entity_id, $action, $node_id = null, $prev_node_id = null)
     {
-        if($action->form->mode == 'create'){
+        if($action->form->mode != 'update'){
             $model = new TasksEntitiesLink;
             $model->entity_id = $action->form->entity_id;
             $model->task_id = $task_id;
