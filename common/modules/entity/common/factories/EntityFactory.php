@@ -59,6 +59,25 @@ class EntityFactory extends Component
         return $model;
     }
 
+    public static function getFullEntityModel($condition, $taskId)
+    {
+        $entityType = self::getEntityType($condition->operand_1_entity_id);
+        $model = self::getModel();
+        $model->modelInit(self::getFullConfig($entityType));
+        $model->setEntityType($entityType);
+
+        $entityItemLink = TasksEntitiesLink::find()->where(['task_id' => $taskId, 'entity_id' => $condition->operand_1_entity_id])->one();
+//
+        if (($itemModel = $model::findOne($entityItemLink->entity_item_id)) !== null) {
+            return $itemModel;
+        } else {
+            throw new NotFoundHttpException('The requested entity item does not exist.');
+        }
+
+
+        return $model;
+    }
+
     public static function getInstance($entityType = null)
     {
         self::$entityTypes[$entityType->id] = $entityType;
@@ -160,6 +179,29 @@ class EntityFactory extends Component
         return  self::$configs[$entityType->code];
     }
 
+    public static function getFullConfig($entityType)
+    {
+        if(empty(self::$configs[$entityType->code])) {
+            self::$entityType = $entityType;
+            self::setFullRules();
+            self::setFullSearchRules();
+            self::setFullSearchParams();
+            self::setFullLabels();
+
+            $config = [
+                Entity::TABLE => self::$entityType->code,
+                Entity::RULES => self::$rules,
+                Entity::LABELS => self::$labels,
+                Entity::SEARCH_RULES => self::$searchRules,
+                Entity::SEARCH_PARAMS => self::$searchParams,
+            ];
+
+            self::$configs[$entityType->code] = $config;
+        }
+
+        return  self::$configs[$entityType->code];
+    }
+
     public static function setRules()
     {
         $rulesTypes = [];
@@ -167,6 +209,26 @@ class EntityFactory extends Component
 
         foreach (self::$form->rules as $rule) {
             $rulesTypes[$rule->code][] = $rule->field->code;
+        }
+
+        foreach($rulesTypes as $key => $value){
+            $rules[] = [$value, $key];
+        }
+
+        self::$rules = $rules;
+    }
+
+    public static function setFullRules()
+    {
+        $rulesTypes = [];
+        $rules = [];
+
+        foreach (self::$entityType->fields as $field) {
+            if($field->type == 'VARCHAR' || $field->type == 'TEXT') {
+                $rulesTypes['string'][] = $field->code;
+            }elseif($field->type == 'INT'){
+                $rulesTypes['integer'][] = $field->code;
+            }
         }
 
         foreach($rulesTypes as $key => $value){
@@ -195,6 +257,25 @@ class EntityFactory extends Component
         self::$searchRules = $rules;
     }
 
+    public static function setFullSearchRules()
+    {
+        $rules = [];
+
+        foreach(self::$entityType->fields as $field) {
+            if($field->type == 'VARCHAR' || $field->type == 'TEXT'){
+                $rulesTypes['string'][] = $field->code;
+            }elseif($field->type == 'INT') {
+                $rulesTypes['integer'][] = $field->code;
+            }
+        }
+
+        foreach($rulesTypes as $key => $value){
+            $rules[] = [$value, $key];
+        }
+
+        self::$searchRules = $rules;
+    }
+
     public static function setSearchParams()
     {
         foreach(self::$form->rules as $rule) {
@@ -206,10 +287,28 @@ class EntityFactory extends Component
         }
     }
 
+    public static function setFullSearchParams()
+    {
+        foreach(self::$entityType->fields as $field) {
+            if($field->type == 'VARCHAR' || $field->type == 'TEXT'){
+                self::$searchParams[$field->code] = 'like';
+            }elseif($field->type == 'INT') {
+                self::$searchParams[$field->code] = '=';
+            }
+        }
+    }
+
     public static function setLabels()
     {
         foreach(self::$form->rules as $rule) {
             self::$labels[$rule->field->code] = $rule->field->title;
+        }
+    }
+
+    public static function setFullLabels()
+    {
+        foreach(self::$entityType->fields as $field) {
+            self::$labels[$field->code] = $field->title;
         }
     }
 
