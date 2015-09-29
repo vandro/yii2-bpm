@@ -23,6 +23,10 @@ use yii\widgets\ActiveForm;
             'less_than' => 'Less than (operand_1 < operand_2)',
             'greater_than_or_equal_to' => 'Greater than or equal to (operand_1 >= operand_2)',
             'less_than_or_equal_to' => 'Less than or equal to (operand_1 <= operand_2)',
+            'contains' => 'Contains (operand_2 contains in operand_1)',
+            'not_contains' => 'Not contains (operand_2 not contains in operand_1)',
+            'begin_with' => 'Begin with (operand_1 begin_with operand_2)',
+            'end_with' => 'End with (operand_1 end_with operand_2)',
         ],
         [
             'prompt' => 'Chose operator'
