@@ -224,4 +224,9 @@ class EntityTypes extends \yii\db\ActiveRecord
     {
         return Yii::$app->modules[Config::BACKEND_MODULE_NAME]->entityFactory->getInstance($this);
     }
+
+    public function getItemSearchModelForFrontend()
+    {
+        return Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getInstance($this);
+    }
 }
