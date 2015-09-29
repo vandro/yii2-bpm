@@ -50,6 +50,11 @@ AppAsset::register($this);
         }
         $menuItems[] = ['label' => Yii::t('app', 'Services'), 'url' => ['/bpm/services'], 'items' => $subMenuItems];
         $menuItems[] = ['label' => Yii::t('app', 'Tasks'), 'url' => ['/bpm/tasks-cart/active']];
+        $entityTypes = \common\modules\entity\common\models\EntityTypes::find()->all();
+        foreach($entityTypes as $entityType){
+            $subMenuItems[] = ['label' => Yii::t('app', $entityType->title), 'url' => ['/bpm/entity-data/index', 'id' => $entityType->id]];
+        }
+        $menuItems[] = ['label' => Yii::t('app', 'Entity Data'), 'url' => ['/bpm/entity-data'], 'items' => $subMenuItems];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
             'url' => ['/site/logout'],
