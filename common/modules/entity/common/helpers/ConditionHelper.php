@@ -53,18 +53,10 @@ class ConditionHelper
 
     protected static function setEntityFieldValue($condition, $taskId)
     {
+        $entityModel = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getForCondition($condition, $taskId);
 
-        $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getInstanceById($condition->operand1Entity);
-        $entityItemLink = TasksEntitiesLink::find()->where(['task_id' => $taskId, 'entity_id' => $condition->operand1Entity])->one();
-        if (($itemModel = $entity::findOne($entityItemLink->entity_item_id)) !== null) {
-            return $itemModel;
-        } else {
-            throw new NotFoundHttpException('The requested entity item does not exist.');
-        }
-
-        self::$entity = $entity;
-        self::$entityModel = $itemModel;
-        self::$fieldValue = $itemModel->{$condition->operand1Field->code};
+        self::$entityModel = $entityModel;
+        self::$fieldValue = $entityModel->{$condition->operand1Field->code};
     }
 
     protected static function equal($condition)
