@@ -291,7 +291,7 @@ class ProcessNodes extends \yii\db\ActiveRecord
             if(!$condition->hasParent()) {
                 $next = $condition->getNext($taskId);
                 if(!empty($next)) {
-                    return $next->id;
+                    return $next;
                 }else{
                     // A если пусто то отправить в конечную ноду;
                     return false;
