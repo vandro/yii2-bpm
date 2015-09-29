@@ -3,6 +3,7 @@
 namespace common\modules\entity\common\models\permission;
 
 use common\modules\entity\common\helpers\ConditionHelper;
+use common\modules\entity\common\helpers\ConditionHelper2;
 use common\modules\entity\common\models\EntityFields;
 use common\modules\entity\common\models\EntityTypes;
 use common\modules\entity\common\models\NodesActions;
@@ -317,7 +318,7 @@ class NodesConditions extends \yii\db\ActiveRecord
 
     protected function resolve($taskId)
     {
-        return ConditionHelper::resolve($this,$taskId);
+        return ConditionHelper2::resolve($this,$taskId);
     }
 
     public function getNext($taskId)
