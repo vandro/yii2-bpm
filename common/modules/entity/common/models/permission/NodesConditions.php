@@ -2,6 +2,7 @@
 
 namespace common\modules\entity\common\models\permission;
 
+use common\modules\entity\common\helpers\ConditionHelper;
 use common\modules\entity\common\models\EntityFields;
 use common\modules\entity\common\models\EntityTypes;
 use common\modules\entity\common\models\NodesActions;
@@ -314,24 +315,24 @@ class NodesConditions extends \yii\db\ActiveRecord
         return $html;
     }
 
-    protected function resolve()
+    protected function resolve($taskId)
     {
-
+        return ConditionHelper::resolve($this,$taskId);
     }
 
-    public function getNext()
+    public function getNext($taskId)
     {
-        if($this->resolve()){
+        if($this->resolve($taskId)){
             //true
             if($this->true_next_exec_type == 'condition'){
-                return $this->trueCondition->getNext();
+                return $this->trueCondition->getNext($taskId);
             }else{
                 return $this->true_action_id;
             }
         }else{
             //false
             if($this->false_next_exec_type == 'condition'){
-                return $this->falseCondition->getNext();
+                return $this->falseCondition->getNext($taskId);
             }else{
                 return $this->false_action_id;
             }
