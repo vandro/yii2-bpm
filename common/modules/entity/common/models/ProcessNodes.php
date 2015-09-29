@@ -285,11 +285,11 @@ class ProcessNodes extends \yii\db\ActiveRecord
         }
     }
 
-    public function getNextActionId()
+    public function getNextActionId($taskId)
     {
         foreach($this->conditions as $condition){
             if(!$condition->hasParent()) {
-                $next = $condition->getNext();
+                $next = $condition->getNext($taskId);
                 if(!empty($next)) {
                     return $next->id;
                 }else{
