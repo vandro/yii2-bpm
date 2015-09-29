@@ -78,40 +78,15 @@ class NodesCartController extends Controller
         $node = $this->findModel($id);
         $user = \common\modules\entity\common\models\permission\User::findOne(Yii::$app->user->id);
         // Обработка условий ноды Начало
-//        $nextActionId = $node->getNextActionId();
-//        if($nextActionId){
-//            return $this->redirect(['actions-cart/form',
-//                'id' => $nextActionId,
-//                'task_id' => $task_id,
-//                'prevision_node_id' => $prevision_node_id,
-//            ]);
-//        } else {
-//            $task = TasksCart::findOne($task_id);
-//            if($user->hasViewAccess($node)) {
-//
-//                return $this->render('view', [
-//                    'model' => $node,
-//                    'task_id' => $task_id,
-//                    'task' => $task,
-//                ]);
-//            }else{
-//                // Переход на конечную ноду
-//                return $this->redirect(['view',
-//                    'id' => $task->process->lastNode->id,
-//                    'task_id' => $task_id,
-//                    'prevision_node_id' => $task->current_node_id,
-//                ]);
-//            }
-//        }
-        // Обработка условий ноды Конец
-
         if($node->is_automatic()){
+            $nextActionId = $node->getNextActionId($task_id);
+            $actionId = ($nextActionId != false) ? $nextActionId : $node->getAutomaticActionId();
             return $this->redirect(['actions-cart/form',
-                'id' => $node->getAutomaticActionId(),
+                'id' => $actionId,
                 'task_id' => $task_id,
                 'prevision_node_id' => $prevision_node_id,
             ]);
-        }else{
+        } else {
             $task = TasksCart::findOne($task_id);
             if($user->hasViewAccess($node)) {
 
@@ -129,6 +104,32 @@ class NodesCartController extends Controller
                 ]);
             }
         }
+        // Обработка условий ноды Конец
+
+//        if($node->is_automatic()){
+//            return $this->redirect(['actions-cart/form',
+//                'id' => $node->getAutomaticActionId(),
+//                'task_id' => $task_id,
+//                'prevision_node_id' => $prevision_node_id,
+//            ]);
+//        }else{
+//            $task = TasksCart::findOne($task_id);
+//            if($user->hasViewAccess($node)) {
+//
+//                return $this->render('view', [
+//                    'model' => $node,
+//                    'task_id' => $task_id,
+//                    'task' => $task,
+//                ]);
+//            }else{
+//                // Переход на конечную ноду
+//                return $this->redirect(['view',
+//                    'id' => $task->process->lastNode->id,
+//                    'task_id' => $task_id,
+//                    'prevision_node_id' => $task->current_node_id,
+//                ]);
+//            }
+//        }
     }
 
     /**
