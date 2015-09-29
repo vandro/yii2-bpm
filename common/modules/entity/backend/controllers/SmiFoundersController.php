@@ -4,7 +4,7 @@ namespace common\modules\entity\backend\controllers;
 
 use Yii;
 use common\modules\entity\common\models\smi\SmiFounders;
-use common\modules\entity\common\models\smSmiFoundersSearch;
+use common\modules\entity\common\models\smi\SmiFoundersSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -32,7 +32,7 @@ class SmiFoundersController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new smSmiFoundersSearch();
+        $searchModel = new SmiFoundersSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
