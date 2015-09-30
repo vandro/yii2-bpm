@@ -57,6 +57,8 @@ AppAsset::register($this);
         $menuItems[] = ['label' => Yii::t('app', 'Entity Data'), 'url' => ['/bpm/entity-data'], 'items' => $subMenuItems];
         $menuItems[] = ['label' => Yii::t('app', 'Reports'), 'url' => ['/bpm/entity-data'], 'items' => [
             ['label' => Yii::t('app', 'Давлат реестрига киритилган оммавий ахборот воситаларининг умумий сони'), 'url' => ['/bpm/report/index', 'id' => 1]],
+            ['label' => Yii::t('app', 'Давлатга қарашли бўлган ва қарашли бўлмаган ЭОАВ (ТВ, Радио) тўғрисида'), 'url' => ['/bpm/report/index', 'id' => 2]],
+            ['label' => Yii::t('app', 'Умумий ҳисобдаги давлатга қарашли бўлган ва қарашли бўлмаган ОАВ ҳақида'), 'url' => ['/bpm/report/index', 'id' => 3]],
         ]];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
