@@ -12,7 +12,9 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'type')->dropDownList($model->getAllTypes(),   ['prompt' => ' -- OAV турини танланг--' ]) ?>
+    <?= $form->field($model, 'kind_id')->dropDownList($model->getAllKinds(),   ['prompt' => ' -- ОАВнинг фалият куриниши--' ]) ?>
+
+    <?= $form->field($model, 'type_id')->dropDownList($model->getAllTypes(),   ['prompt' => ' -- ОАВнинг турини танланг--' ]) ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 

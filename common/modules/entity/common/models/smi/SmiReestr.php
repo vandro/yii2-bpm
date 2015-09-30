@@ -45,8 +45,8 @@ class SmiReestr extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type_id', 'title'], 'required'],
-            [['type_id', 'begin_at', 'frequency_times', 'region_id'], 'integer'],
+            [['type_id', 'kind_id', 'title'], 'required'],
+            [['type_id', 'kind_id', 'begin_at', 'frequency_times', 'region_id'], 'integer'],
             [['frequency_period', 'address', 'phones'], 'string'],
             [['title', 'chief_editor_full_name', 'certificate_number'], 'string', 'max' => 255]
         ];
@@ -60,6 +60,7 @@ class SmiReestr extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'type_id' => Yii::t('app', 'ОАВнинг тури'),
+            'kind_id' => Yii::t('app', 'ОАВнинг фалият куриниши'),
             'title' => Yii::t('app', 'Рўйхатга олинган ОАВнинг номи'),
             'begin_at' => Yii::t('app', 'Чиқа бошлаган даври'),
             'frequency_period' => Yii::t('app', 'Даврийлиги периоди'),
@@ -142,6 +143,14 @@ class SmiReestr extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getKind()
+    {
+        return $this->hasOne(SmiKind::className(), ['id' => 'kind_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getRegion()
     {
         return $this->hasOne(Regions::className(), ['id' => 'region_id']);
@@ -196,6 +205,11 @@ class SmiReestr extends \yii\db\ActiveRecord
         return ArrayHelper::map(SmiType::find()->all(), 'id', 'title');
     }
 
+    public function getAllKinds()
+    {
+        return ArrayHelper::map(SmiKind::find()->all(), 'id', 'title');
+    }
+
     public function getAllRegions()
     {
         return ArrayHelper::map(Regions::find()->all(), 'id', 'title');
@@ -207,7 +221,7 @@ class SmiReestr extends \yii\db\ActiveRecord
             [
                 'prompt' => '- Танланг -',
                 'class' => 'form-control',
-                'style'=>'width: 100px;'
+                'style'=>'width: 200px;'
             ]
         );
 

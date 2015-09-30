@@ -54,6 +54,7 @@ AppAsset::register($this);
                 ['label' => 'Smi founders', 'url' => ['/entity/smi-founders/index']],
                 ['label' => 'Smi specialization', 'url' => ['/entity/smi-specialization/index']],
                 ['label' => 'Smi type', 'url' => ['/entity/smi-type/index']],
+                ['label' => 'Smi Kind', 'url' => ['/entity/smi-kind/index']],
                 ['label' => 'Regions', 'url' => ['/entity/regions/index']],
             ]
         ];
