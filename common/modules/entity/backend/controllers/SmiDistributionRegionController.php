@@ -3,17 +3,20 @@
 namespace common\modules\entity\backend\controllers;
 
 use Yii;
-use common\modules\entity\common\models\smi\SmiReestr;
-use common\modules\entity\common\models\smi\SmiReestrSearch;
+use common\modules\entity\common\models\smi\SmiDistributionRegion;
+use common\modules\entity\common\models\smi\SmiDistributionRegionSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use common\modules\entity\common\models\Cities;
+
+use common\modules\entity\common\actions\CreateAction;
+use common\modules\entity\common\actions\UpdateAction;
+use common\modules\entity\common\actions\DeleteAction;
 
 /**
- * SmiReestrController implements the CRUD actions for SmiReestr model.
+ * SmiDistributionRegionController implements the CRUD actions for SmiDistributionRegion model.
  */
-class SmiReestrController extends Controller
+class SmiDistributionRegionController extends Controller
 {
     public function behaviors()
     {
@@ -27,13 +30,43 @@ class SmiReestrController extends Controller
         ];
     }
 
+    public function actions()
+    {
+        return [
+            'create' => [
+                'class' => CreateAction::className(),
+                'parent_id' => Yii::$app->request->get('parent_id'),
+                'tab' => 6,
+                'redirect_url' => 'smi-reestr/view',
+                'modelClass' => SmiDistributionRegion::className(),
+                'parent_id_filed' => 'smi_reestr_id',
+            ],
+            'update' => [
+                'class' => UpdateAction::className(),
+                'id' => Yii::$app->request->get('id'),
+                'tab' => 6,
+                'redirect_url' => 'smi-reestr/view',
+                'modelClass' => SmiDistributionRegion::className(),
+                'parent_id_filed' => 'smi_reestr_id',
+            ],
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'id' => Yii::$app->request->get('id'),
+                'tab' => 6,
+                'redirect_url' => 'smi-reestr/view',
+                'modelClass' => SmiDistributionRegion::className(),
+                'parent_id_filed' => 'smi_reestr_id',
+            ]
+        ];
+    }
+
     /**
-     * Lists all SmiReestr models.
+     * Lists all SmiDistributionRegion models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new SmiReestrSearch();
+        $searchModel = new SmiDistributionRegionSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -43,26 +76,25 @@ class SmiReestrController extends Controller
     }
 
     /**
-     * Displays a single SmiReestr model.
+     * Displays a single SmiDistributionRegion model.
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id, $tab = 1)
+    public function actionView($id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'tab' => $tab,
         ]);
     }
 
     /**
-     * Creates a new SmiReestr model.
+     * Creates a new SmiDistributionRegion model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new SmiReestr();
+        $model = new SmiDistributionRegion();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -74,7 +106,7 @@ class SmiReestrController extends Controller
     }
 
     /**
-     * Updates an existing SmiReestr model.
+     * Updates an existing SmiDistributionRegion model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -93,7 +125,7 @@ class SmiReestrController extends Controller
     }
 
     /**
-     * Deletes an existing SmiReestr model.
+     * Deletes an existing SmiDistributionRegion model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -106,33 +138,18 @@ class SmiReestrController extends Controller
     }
 
     /**
-     * Finds the SmiReestr model based on its primary key value.
+     * Finds the SmiDistributionRegion model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return SmiReestr the loaded model
+     * @return SmiDistributionRegion the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = SmiReestr::findOne($id)) !== null) {
+        if (($model = SmiDistributionRegion::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
-    }
-
-    /**
-     * Displays a data sets.
-     * @param string $params
-     * @return json
-     */
-    public function actionCities($id)
-    {
-        $arItems = [];
-        $items = Cities::find()->where(['region_id' => $id])->all();
-        foreach($items as $item){
-            $arItems[] = ['value' => $item->id, 'label' => $item->title];
-        }
-        echo json_encode($arItems);
     }
 }

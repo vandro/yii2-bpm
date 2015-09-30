@@ -35,19 +35,39 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attributes' => [
                         'id',
                         [
+                            'attribute' => 'kind_id',
+                            'value' => !empty($model->kind)?$model->kind->title:'',
+                        ],
+                        [
                             'attribute' => 'type_id',
                             'value' => !empty($model->type)?$model->type->title:'',
                         ],
+                        [
+                            'attribute' => 'national',
+                            'value' => ($model->national)?'давлат':'нодавлат',
+                        ],
                         'title',
                         'begin_at',
+                        [
+                            'attribute' => 'state',
+                            'value' => ($model->national)?'очилган':'тугатилган',
+                        ],
                         'frequency_period',
                         [
                             'attribute' => 'frequency_times',
                             'value' => !empty($model->frequency_times)?$model->frequency_times.' марта':'',
                         ],
                         [
+                            'attribute' => 'distribution_type_id',
+                            'value' => !empty($model->distributionType)?$model->distributionType->title:'',
+                        ],
+                        [
                             'attribute' => 'region_id',
                             'value' => !empty($model->region)?$model->region->title:'',
+                        ],
+                        [
+                            'attribute' => 'city_id',
+                            'value' => !empty($model->city)?$model->city->title:'',
                         ],
                         'address:ntext',
                         'chief_editor_full_name',
@@ -76,22 +96,22 @@ $this->params['breadcrumbs'][] = $this->title;
                 'content' => $this->render('_specializationIndex', [
                     'model' => $model,
                 ]),
+                'active' => ($tab == 4),
+            ],
+            [
+                'label' =>'Асослар',
+                'content' => $this->render('_reasonsIndex', [
+                    'model' => $model,
+                ]),
                 'active' => ($tab == 5),
             ],
-//            [
-//                'label' =>'Translate',
-//                'content' => $this->render('_langIndex', [
-//                    'model' => $model,
-//                ]),
-//                'active' => ($tab == 2),
-//            ],
-//            [
-//                'label' =>'Items',
-//                'content' => $this->render('_itemsIndex', [
-//                    'model' => $model,
-//                ]),
-//                'active' => ($tab == 6),
-//            ],
+            [
+                'label' =>'Тарқатиш ҳудуди',
+                'content' => $this->render('_distributionIndex', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 6),
+            ],
         ],
     ]);?>
 

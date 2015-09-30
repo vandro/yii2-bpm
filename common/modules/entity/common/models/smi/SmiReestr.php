@@ -2,6 +2,7 @@
 
 namespace common\modules\entity\common\models\smi;
 
+use common\modules\entity\common\models\Cities;
 use common\modules\entity\common\models\Languages;
 use common\modules\entity\common\models\Regions;
 use Yii;
@@ -45,8 +46,8 @@ class SmiReestr extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['type_id', 'kind_id', 'title'], 'required'],
-            [['type_id', 'kind_id', 'begin_at', 'frequency_times', 'region_id'], 'integer'],
+            [['type_id', 'kind_id', 'title', 'national', 'state'], 'required'],
+            [['type_id', 'kind_id', 'begin_at', 'frequency_times', 'region_id', 'city_id', 'national', 'state', 'distribution_type_id'], 'integer'],
             [['frequency_period', 'address', 'phones'], 'string'],
             [['title', 'chief_editor_full_name', 'certificate_number'], 'string', 'max' => 255]
         ];
@@ -61,11 +62,15 @@ class SmiReestr extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'type_id' => Yii::t('app', 'ОАВнинг тури'),
             'kind_id' => Yii::t('app', 'ОАВнинг фалият куриниши'),
+            'national' => Yii::t('app', 'Давлатга қарашли бўлган'),
             'title' => Yii::t('app', 'Рўйхатга олинган ОАВнинг номи'),
             'begin_at' => Yii::t('app', 'Чиқа бошлаган даври'),
+            'state' => Yii::t('app', 'Холати'),
             'frequency_period' => Yii::t('app', 'Даврийлиги периоди'),
             'frequency_times' => Yii::t('app', 'Даврийлиги мартаси'),
+            'distribution_type_id' => Yii::t('app', 'Тарқатиш усули'),
             'region_id' => Yii::t('app', 'Ҳудуд'),
+            'city_id' => Yii::t('app', 'Шахар'),
             'address' => Yii::t('app', 'Таҳририят манзили'),
             'chief_editor_full_name' => Yii::t('app', 'Бош муҳаррир фамилияси, исми, шарифи'),
             'phones' => Yii::t('app', 'Бош муҳаррир телефонлари'),
@@ -159,9 +164,25 @@ class SmiReestr extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getCity()
+    {
+        return $this->hasOne(Cities::className(), ['id' => 'city_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getSmiSpecializationLinks()
     {
         return $this->hasMany(SmiSpecializationLink::className(), ['smi_reestr_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSmiReasonLinks()
+    {
+        return $this->hasMany(SmiReestResonLink::className(), ['smi_reestr_id' => 'id']);
     }
 
     /**
@@ -173,6 +194,15 @@ class SmiReestr extends \yii\db\ActiveRecord
             ->via('smiSpecializationLinks');
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSmiReasons()
+    {
+        return $this->hasMany(SmiReasonToOpen::className(), ['id' => 'smi_reason_id'])
+            ->via('smiReasonLinks');
+    }
+
     public function getSpecializationAdp()
     {
         $dataProvider = new ActiveDataProvider([
@@ -182,6 +212,31 @@ class SmiReestr extends \yii\db\ActiveRecord
         return $dataProvider;
     }
 
+    public function getReasonsAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getSmiReasons(),
+        ]);
+
+        return $dataProvider;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getSmiDistributionRegionsLinks()
+    {
+        return $this->hasMany(SmiDistributionRegion::className(), ['smi_reestr_id' => 'id']);
+    }
+
+    public function getDistributionRegionsAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getSmiDistributionRegionsLinks(),
+        ]);
+
+        return $dataProvider;
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -215,6 +270,11 @@ class SmiReestr extends \yii\db\ActiveRecord
         return ArrayHelper::map(Regions::find()->all(), 'id', 'title');
     }
 
+    public function getAllCities()
+    {
+        return ArrayHelper::map(Cities::find()->where(['region_id' => $this->region_id ])->all(), 'id', 'title');
+    }
+
     public function getTypeFilter($searchModel)
     {
         return Html::activeDropDownList($searchModel, 'type_id', $this->getAllTypes(),
@@ -225,5 +285,15 @@ class SmiReestr extends \yii\db\ActiveRecord
             ]
         );
 
+    }
+
+    public function getDistributionType()
+    {
+        return $this->hasOne(SmiDistributionType::className(), ['id' => 'distribution_type_id']);
+    }
+
+    public function getAllDistributionType()
+    {
+        return ArrayHelper::map(SmiDistributionType::find()->all(), 'id', 'title');
     }
 }
