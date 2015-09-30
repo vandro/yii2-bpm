@@ -18,8 +18,8 @@ class SmiReestrSearch extends SmiReestr
     public function rules()
     {
         return [
-            [['id', 'type_id', 'begin_at', 'frequency_times'], 'integer'],
-            [['title','type_id', 'frequency_period', 'address', 'chief_editor_full_name', 'phones', 'certificate_number'], 'safe'],
+            [['id', 'type_id', 'begin_at', 'frequency_times', 'region_id'], 'integer'],
+            [['title','type_id', 'region_id', 'frequency_period', 'address', 'chief_editor_full_name', 'phones', 'certificate_number'], 'safe'],
         ];
     }
 
