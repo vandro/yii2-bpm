@@ -2,6 +2,7 @@
 
 namespace common\modules\entity\common\models;
 
+use common\modules\entity\common\models\smi\SmiReestr;
 use Yii;
 use yii\data\ActiveDataProvider;
 
@@ -57,6 +58,11 @@ class Regions extends \yii\db\ActiveRecord
     public function getCities()
     {
         return $this->hasMany(Cities::className(),['region_id' => 'id']);
+    }
+
+    public function getSmi()
+    {
+        return $this->hasMany(SmiReestr::className(),['region_id' => 'id']);
     }
 
     public function getCitiesAdp()

@@ -56,6 +56,9 @@ AppAsset::register($this);
             $subMenuItems[] = ['label' => Yii::t('app', $entityType->title), 'url' => ['/bpm/entity-data/index', 'id' => $entityType->id]];
         }
         $menuItems[] = ['label' => Yii::t('app', 'Entity Data'), 'url' => ['/bpm/entity-data'], 'items' => $subMenuItems];
+        $menuItems[] = ['label' => Yii::t('app', 'Reports'), 'url' => ['/bpm/entity-data'], 'items' => [
+            ['label' => Yii::t('app', 'Давлат реестрига киритилган оммавий ахборот воситаларининг умумий сони'), 'url' => ['/bpm/report/index', 'id' => 1]],
+        ]];
         $menuItems[] = [
             'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
             'url' => ['/site/logout'],
