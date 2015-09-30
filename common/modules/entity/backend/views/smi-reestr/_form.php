@@ -12,17 +12,17 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'kind_id')->dropDownList($model->getAllKinds(),   ['prompt' => ' -- ОАВнинг фалият куриниши --' ]) ?>
 
     <?= $form->field($model, 'type_id')->dropDownList($model->getAllTypes(),   ['prompt' => ' -- ОАВнинг турини танланг --' ]) ?>
 
     <?= $form->field($model, 'national')->dropDownList([0 => 'нодавлат', 1 => 'давлат'],   ['prompt' => ' -- ОАВнинг қарашли бўлгани --' ]) ?>
 
-    <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
-
     <?= $form->field($model, 'begin_at')->textInput() ?>
 
-    <?= $form->field($model, 'state')->dropDownList([ 0 => 'тугатилган', 1 => 'очилган' ], ['prompt' => '-- ОАВнинг холати --']) ?>
+    <?= $form->field($model, 'state')->dropDownList([0 => 'тугатилган', 1 => 'очилган' ], ['prompt' => '-- ОАВнинг холати --']) ?>
 
     <?= $form->field($model, 'frequency_period')->dropDownList([ 'day' => 'Кун', 'week' => 'Ҳафта', 'month' => 'Ой', 'year' => 'Йил', ], ['prompt' => '']) ?>
 
