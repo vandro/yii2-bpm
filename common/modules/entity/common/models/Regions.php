@@ -3,6 +3,7 @@
 namespace common\modules\entity\common\models;
 
 use Yii;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "regions".
@@ -51,5 +52,19 @@ class Regions extends \yii\db\ActiveRecord
     public static function find()
     {
         return new RegionsQuery(get_called_class());
+    }
+
+    public function getCities()
+    {
+        return $this->hasMany(Cities::className(),['region_id' => 'id']);
+    }
+
+    public function getCitiesAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getCities(),
+        ]);
+
+        return $dataProvider;
     }
 }
