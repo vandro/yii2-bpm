@@ -3,16 +3,19 @@
 namespace common\modules\entity\backend\controllers;
 
 use Yii;
-use common\modules\entity\common\models\Regions;
-use common\modules\entity\common\models\RegionsSearch;
+use common\modules\entity\common\models\Cities;
+use common\modules\entity\common\models\CitiesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use common\modules\entity\common\actions\CreateAction;
+use common\modules\entity\common\actions\UpdateAction;
+use common\modules\entity\common\actions\DeleteAction;
 /**
- * RegionsController implements the CRUD actions for Regions model.
+ * CitiesController implements the CRUD actions for Cities model.
  */
-class RegionsController extends Controller
+class CitiesController extends Controller
 {
     public function behaviors()
     {
@@ -26,13 +29,43 @@ class RegionsController extends Controller
         ];
     }
 
+    public function actions()
+    {
+        return [
+            'create' => [
+                'class' => CreateAction::className(),
+                'parent_id' => Yii::$app->request->get('parent_id'),
+                'tab' => 2,
+                'redirect_url' => 'regions/view',
+                'modelClass' => Cities::className(),
+                'parent_id_filed' => 'region_id',
+            ],
+            'update' => [
+                'class' => UpdateAction::className(),
+                'id' => Yii::$app->request->get('id'),
+                'tab' => 2,
+                'redirect_url' => 'regions/view',
+                'modelClass' => Cities::className(),
+                'parent_id_filed' => 'region_id',
+            ],
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'id' => Yii::$app->request->get('id'),
+                'tab' => 2,
+                'redirect_url' => 'regions/view',
+                'modelClass' => Cities::className(),
+                'parent_id_filed' => 'region_id',
+            ]
+        ];
+    }
+
     /**
-     * Lists all Regions models.
+     * Lists all Cities models.
      * @return mixed
      */
     public function actionIndex()
     {
-        $searchModel = new RegionsSearch();
+        $searchModel = new CitiesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
@@ -42,26 +75,25 @@ class RegionsController extends Controller
     }
 
     /**
-     * Displays a single Regions model.
+     * Displays a single Cities model.
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id ,$tab = 1)
+    public function actionView($id)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
-            'tab' => $tab,
         ]);
     }
 
     /**
-     * Creates a new Regions model.
+     * Creates a new Cities model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Regions();
+        $model = new Cities();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -73,7 +105,7 @@ class RegionsController extends Controller
     }
 
     /**
-     * Updates an existing Regions model.
+     * Updates an existing Cities model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -92,7 +124,7 @@ class RegionsController extends Controller
     }
 
     /**
-     * Deletes an existing Regions model.
+     * Deletes an existing Cities model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -105,15 +137,15 @@ class RegionsController extends Controller
     }
 
     /**
-     * Finds the Regions model based on its primary key value.
+     * Finds the Cities model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Regions the loaded model
+     * @return Cities the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Regions::findOne($id)) !== null) {
+        if (($model = Cities::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

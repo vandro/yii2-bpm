@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\bootstrap\Tabs;
 
 /* @var $this yii\web\View */
 /* @var $model common\modules\entity\common\models\Regions */
@@ -25,13 +26,28 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'title',
-            'order',
+    <?= Tabs::widget([
+        'items' => [
+            [
+                'label' => 'Entity',
+                'content' => DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'id',
+                        'title',
+                        'order',
+                    ],
+                ]),
+                'active' => ($tab == 1),
+            ],
+            [
+                'label' =>'Cities',
+                'content' => $this->render('_citiesIndex', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 2),
+            ],
         ],
-    ]) ?>
+    ]);?>
 
 </div>
