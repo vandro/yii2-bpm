@@ -60,4 +60,9 @@ class SmiType extends \yii\db\ActiveRecord
     {
         return new SmiTypeQuery(get_called_class());
     }
+
+    public function getSmi()
+    {
+        return $this->hasMany(SmiReestr::className(),['type_id' => 'id']);
+    }
 }

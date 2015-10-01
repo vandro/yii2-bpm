@@ -31,6 +31,7 @@ class TotalCountByRegionsAndTypesReport extends Component
         $this->rTableBody();
         $this->rTableFooter();
         $this->rTableEnd();
+        $this->rFooter();
 
 
         return $this->html;
@@ -38,22 +39,30 @@ class TotalCountByRegionsAndTypesReport extends Component
 
     protected function rHeader()
     {
+        $this->html .= '<div class="panel panel-success"">';
+        $this->html .= '<div class="panel-heading">';
         $this->html .= '<p style="text-align: center">';
         $this->html .= 'Ўзбекистон Матбуот ва ахборот агентлиги томонидан рўйхатга олиниб<br>';
         $this->html .= 'Давлат реестрига киритилган оммавий ахборот воситаларининг умумий сони ҳақида<br>';
         $this->html .= 'М А Ъ Л У М О Т Н О М А<br>';
         $this->html .= '('.date('Y').'  йил '.date('d').' '.$this->getMonth((int) date('m')).' ҳолатига кўра)';
         $this->html .= '</p>';
+        $this->html .= '</div>';
+    }
+
+    protected function rFooter()
+    {
+        $this->html .= '</div>';
     }
 
     protected function rTableBegin()
     {
-        $this->html .= '<table class="table table-bordered">';
+        $this->html .= '<div class="panel-body" style="overflow: auto;"><table class="table table-bordered">';
     }
 
     protected function rTableEnd()
     {
-        $this->html .= '</table>';
+        $this->html .= '</table></div>';
     }
 
     protected function rTableHeader()
@@ -84,7 +93,7 @@ class TotalCountByRegionsAndTypesReport extends Component
 
     protected function rTableFooter()
     {
-        $this->html .= '<tr>';
+        $this->html .= '<tr class="success">';
         $this->html .= '<td></td>';
         $this->html .= '<td>Жами</td>';
         foreach($this->types as $type){

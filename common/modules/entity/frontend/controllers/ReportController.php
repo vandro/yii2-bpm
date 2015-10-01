@@ -9,6 +9,8 @@ use common\modules\entity\common\models\smi\SmiType;
 use common\modules\entity\common\reports\TotalCountByRegionsAndTypesReport;
 use common\modules\entity\common\reports\TotalCountByRegionsAndTypesGovReport;
 use common\modules\entity\common\reports\TotalCountByTypesGovReport;
+use common\modules\entity\common\reports\TotalCountByTypeAndBeginAtDateReport;
+use common\modules\entity\common\reports\TotalCountByKindAndBeginAtDateReport;
 use yii\web\Controller;
 
 class ReportController extends Controller
@@ -32,6 +34,10 @@ class ReportController extends Controller
                 return new TotalCountByRegionsAndTypesGovReport();
             case 3:
                 return new TotalCountByTypesGovReport();
+            case 4:
+                return new TotalCountByTypeAndBeginAtDateReport();
+            case 5;
+                return new TotalCountByKindAndBeginAtDateReport();
             default:
                 return false;
         }

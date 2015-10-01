@@ -7,23 +7,23 @@
  */
 namespace common\modules\entity\common\reports;
 
+use common\helpers\DebugHelper;
 use common\modules\entity\common\models\Regions;
+use common\modules\entity\common\models\smi\SmiBeginAtDates;
 use common\modules\entity\common\models\smi\SmiReestr;
 use common\modules\entity\common\models\smi\SmiType;
 use yii\base\Component;
 
-class TotalCountByRegionsAndTypesGovReport extends Component
+class TotalCountByTypeAndBeginAtDateReport extends Component
 {
-    protected $regions;
     protected $types;
-    protected $smis;
+    protected $years;
     protected $html = '';
 
     public function render()
     {
-        $this->regions = Regions::find()->all();
         $this->types = SmiType::find()->all();
-        $this->smis = SmiReestr::find();
+        $this->years = SmiBeginAtDates::find()->all();
 
         $this->rHeader();
         $this->rTableBegin();
@@ -43,7 +43,7 @@ class TotalCountByRegionsAndTypesGovReport extends Component
         $this->html .= '<div class="panel-heading">';
         $this->html .= '<p style="text-align: center">';
         $this->html .= 'Ўзбекистон Матбуот ва ахборот агентлиги томонидан рўйхатга олиниб<br>';
-        $this->html .= 'Давлатга қарашли бўлган ва қарашли бўлмаган ЭОАВ (ТВ, Радио) тўғрисида<br>';
+        $this->html .= 'Йиллар бўйича ОАВ тури сифатида рўйхатга олинган ҳақида <br>';
         $this->html .= 'М А Ъ Л У М О Т Н О М А<br>';
         $this->html .= '('.date('Y').'  йил '.date('d').' '.$this->getMonth((int) date('m')).' ҳолатига кўра)';
         $this->html .= '</p>';
@@ -68,41 +68,24 @@ class TotalCountByRegionsAndTypesGovReport extends Component
     protected function rTableHeader()
     {
         $this->html .= '<tr>';
-        $this->html .= '<td rowspan="2">№</td>';
-        $this->html .= '<td rowspan="2">Ҳудуд номи</td>';
-        foreach($this->types as $type){
-            $this->html .= '<td colspan="3">'.$type->title.'</td>';
+        $this->html .= '<td>№</td>';
+        $this->html .= '<td>ОАВ тури</td>';
+        foreach($this->years as $year){
+            $this->html .= '<td>'.$year->begin_at.'</td>';
         }
-        $this->html .= '<td colspan="3">Жами</td>';
-        $this->html .= '</tr>';
-
-        $this->html .= '<tr>';
-        foreach($this->types as $type){
-            $this->html .= '<td >умумий сони</td>';
-            $this->html .= '<td >давлат</td>';
-            $this->html .= '<td >нодавлат</td>';
-        }
-        $this->html .= '<td >умумий сони</td>';
-        $this->html .= '<td >давлат</td>';
-        $this->html .= '<td >нодавлат</td>';
         $this->html .= '</tr>';
     }
 
     protected function rTableBody()
     {
         $row = 1;
-        foreach($this->regions as $region) {
+        foreach($this->types as $type) {
             $this->html .= '<tr>';
             $this->html .= '<td>'.$row.'</td>';
-            $this->html .= '<td>'.$region->title.'</td>';
-            foreach ($this->types as $type) {
-                $this->html .= '<td>' . count($region->getSmi()->type($type)->all()) . '</td>';
-                $this->html .= '<td>' . count($region->getSmi()->type($type)->national(true)->all()) . '</td>';
-                $this->html .= '<td>' . count($region->getSmi()->type($type)->national(false)->all()) . '</td>';
+            $this->html .= '<td>'.$type->title.'</td>';
+            foreach ($this->years as $year) {
+                $this->html .= '<td>' . count(SmiReestr::find()->type($type)->begin_at($year->begin_at)->all()) . '</td>';
             }
-            $this->html .= '<td>' . count($region->getSmi()->all()) . '</td>';
-            $this->html .= '<td>' . count($region->getSmi()->national(true)->all()) . '</td>';
-            $this->html .= '<td>' . count($region->getSmi()->national(false)->all()) . '</td>';
             $this->html .= '</tr>';
             $row++;
         }
@@ -113,14 +96,9 @@ class TotalCountByRegionsAndTypesGovReport extends Component
         $this->html .= '<tr class="success">';
         $this->html .= '<td></td>';
         $this->html .= '<td>Жами</td>';
-        foreach($this->types as $type){
-            $this->html .= '<td>'.count(SmiReestr::find()->type_id($type->id)->all()).'</td>';
-            $this->html .= '<td>'.count(SmiReestr::find()->type_id($type->id)->national(true)->all()).'</td>';
-            $this->html .= '<td>'.count(SmiReestr::find()->type_id($type->id)->national(false)->all()).'</td>';
+        foreach($this->years as $year){
+            $this->html .= '<td>'.count(SmiReestr::find()->begin_at($year->begin_at)->all()).'</td>';
         }
-        $this->html .= '<td>'.count(SmiReestr::find()->all()).'</td>';
-        $this->html .= '<td>'.count(SmiReestr::find()->national(true)->all()).'</td>';
-        $this->html .= '<td>'.count(SmiReestr::find()->national(false)->all()).'</td>';
         $this->html .= '</tr>';
     }
 

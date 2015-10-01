@@ -14,3 +14,7 @@ FROM `tasks_entities_link` l
 LEFT JOIN task_cart t ON t.id = l.task_id
 LEFT JOIN request r ON l.entity_item_id = r.id
 LEFT JOIN user_data u ON l.entity_item_id = u.id
+
+
+CREATE VIEW smi_begin_at_dates AS
+SELECT DISTINCT `begin_at` FROM `smi_reestr` ORDER BY `begin_at`
