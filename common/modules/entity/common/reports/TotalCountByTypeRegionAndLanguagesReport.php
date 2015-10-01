@@ -53,7 +53,7 @@ class TotalCountByTypeRegionAndLanguagesReport extends Component
         $this->html .= '<div class="panel-heading">';
         $this->html .= '<p style="text-align: center">';
         $this->html .= 'Ўзбекистон Матбуот ва ахборот агентлиги томонидан рўйхатга олиниб<br>';
-        $this->html .= 'ЎзМАА томонидан рўйхатга олинган ОАВ тиллари бўйича  <br>';
+        $this->html .= 'ЎзМАА томонидан рўйхатга олинган ОАВ тиллар ва худудлар бўйича  <br>';
         $this->html .= 'М А Ъ Л У М О Т Н О М А<br>';
         $this->html .= '('.date('Y').'  йил '.date('d').' '.$this->getMonth((int) date('m')).' ҳолатига кўра)';
         $this->html .= '</p>';
