@@ -136,4 +136,32 @@ class SmiReestrQuery extends \yii\db\ActiveQuery
         $this->andWhere(['city_id' => $city_id]);
         return $this;
     }
+
+    public function specialization($specialization)
+    {
+        $this->joinWith('smiSpecialization')
+            ->andWhere(['`smi_specialization`.`id`' => $specialization->id]);
+        return $this;
+    }
+
+    public function specialization_id($specialization_id)
+    {
+        $this->joinWith('smiSpecialization')
+            ->andWhere(['`smi_specialization`.`id`' => $specialization_id]);
+        return $this;
+    }
+
+    public function founder($founder)
+    {
+        $this->joinWith('smiFounders')
+            ->andWhere(['`smi_founders`.`id`' => $founder->id]);
+        return $this;
+    }
+
+    public function founder_id($founder_id)
+    {
+        $this->joinWith('smiFounders')
+            ->andWhere(['`smi_founders`.`id`' => $founder_id]);
+        return $this;
+    }
 }
