@@ -34,19 +34,26 @@ use common\helpers\ActionColumnHelper;
 //                    return $model->title;
 //                }
 //            ],
-////            [
-////                'attribute' => 'next_execution_type',
-////                'header' => 'Следующее действие',
-////                'value' => function($model){
-////                    return ($model->next_execution_type == 'action')?'Вызов действия':"Проверка следующего условия";
-////                }
-////            ],
+//            [
+//                'attribute' => 'true_next_exec_type',
+//                'header' => 'Следующее действие',
+//                'value' => function($model){
+//                    return ($model->true_next_exec_type == 'action')?'Вызов действия':"Проверка следующего условия";
+//                }
+//            ],
+//            [
+//                'attribute' => 'false_next_exec_type',
+//                'header' => 'Следующее действие',
+//                'value' => function($model){
+//                    return ($model->false_next_exec_type == 'action')?'Вызов действия':"Проверка следующего условия";
+//                }
+//            ],
 //            [
 //                'attribute' => 'true_action_id',
 //                'header' => 'Действие истина',
 //                'format' => 'html',
 //                'value' => function($model){
-//                    if(!empty($model->trueAction) && $model->true_next_exec_type == 'action') {
+//                    if(!empty($model->trueAction)) {//&& $model->true_next_exec_type == 'action') {
 //                        return $model->trueAction->title;
 //                    }
 //                }
@@ -56,7 +63,7 @@ use common\helpers\ActionColumnHelper;
 //                'header' => 'Действие ложь',
 //                'format' => 'html',
 //                'value' => function($model){
-//                    if(!empty($model->falseAction) && $model->false_next_exec_type == 'action') {
+//                    if(!empty($model->falseAction)) { // && $model->false_next_exec_type == 'action') {
 //                        return $model->falseAction->title;
 //                    }
 //                }
@@ -66,7 +73,7 @@ use common\helpers\ActionColumnHelper;
 //                'header' => 'Условие истина',
 //                'format' => 'html',
 //                'value' => function($model){
-//                    if(!empty($model->trueCondition) && $model->true_next_exec_type == 'condition') {
+//                    if(!empty($model->trueCondition)) { //  && $model->true_next_exec_type == 'condition') {
 //                        return $model->trueCondition->title;
 //                    }
 //                }
@@ -76,7 +83,7 @@ use common\helpers\ActionColumnHelper;
 //                'header' => 'Условие ложь',
 //                'format' => 'html',
 //                'value' => function($model){
-//                    if(!empty($model->falseCondition) && $model->false_next_exec_type == 'condition') {
+//                    if(!empty($model->falseCondition)) { //  && $model->false_next_exec_type == 'condition') {
 //                        return $model->falseCondition->title;
 //                    }
 //                }

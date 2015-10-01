@@ -206,13 +206,13 @@ class ConditionsController extends Controller
     {
         $model = new NodesConditions();
         $model->node_id = $node_id;
-        $model->true_next_exec_type = 'condition';
         $model->true_action_id = null;
 
         //Здесь необходимо добавить процесс удаления цепочки условй
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $parent = $this->findModel($parent_id);
+            $parent->true_next_exec_type = 'condition';
             $parent->true_condition_id = $model->id;
             if($parent->save()) {
                 return $this->redirect(['process-nodes/view', 'id' => $model->node_id, 'tab' => 5]);
@@ -228,13 +228,13 @@ class ConditionsController extends Controller
     {
         $model = new NodesConditions();
         $model->node_id = $node_id;
-        $model->false_next_exec_type = 'condition';
         $model->false_action_id = null;
 
         //Здесь необходимо добавить процесс удаления цепочки условй
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             $parent = $this->findModel($parent_id);
+            $parent->false_next_exec_type = 'condition';
             $parent->false_condition_id = $model->id;
             if($parent->save()) {
                 return $this->redirect(['process-nodes/view', 'id' => $model->node_id, 'tab' => 5]);
