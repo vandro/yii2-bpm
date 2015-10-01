@@ -7,6 +7,7 @@
  */
 namespace common\modules\entity\common\reports;
 
+use common\helpers\DebugHelper;
 use common\modules\entity\common\models\Regions;
 use common\modules\entity\common\models\smi\SmiReestr;
 use common\modules\entity\common\models\smi\SmiType;
@@ -16,6 +17,8 @@ class TotalCountByRegionsAndTypesGovReport extends Component
 {
     protected $regions;
     protected $types;
+    protected $checkedTypes;
+    protected $type_id;
     protected $smis;
     protected $html = '';
 
@@ -24,8 +27,16 @@ class TotalCountByRegionsAndTypesGovReport extends Component
         $this->regions = Regions::find()->all();
         $this->types = SmiType::find()->all();
         $this->smis = SmiReestr::find();
+        $this->setCheckedTypes();
+
+//        $types = \Yii::$app->request->get('types');
+//        $checkedTypes = [$this->types[0]->id => 'on'];
+//        $this->checkedTypes = !empty($types)?$types:$checkedTypes ;
+
+        //DebugHelper::printSingleObjectAndDie($types);
 
         $this->rHeader();
+        $this->rFilter();
         $this->rTableBegin();
         $this->rTableHeader();
         $this->rTableBody();
@@ -55,6 +66,27 @@ class TotalCountByRegionsAndTypesGovReport extends Component
         $this->html .= '</div>';
     }
 
+    protected function rFilter()
+    {
+        $this->html .= '<div class="panel-body">';
+        $this->html .= '<form action="index" method="get" class="form-inline">';
+        $this->html .= '<input type="hidden" value="2" name="id">';
+        $this->html .= '<div class="form-group">';
+        $this->html .= '<label for="exampleInputEmail1">ОАВ турлари</label> ';
+        foreach($this->types as $type) {
+            $checked = (in_array($type->id, $this->checkedTypes))?'checked':'';
+            $this->html .= '<label class="checkbox-inline">';
+            $this->html .= '<input type="checkbox" name="types['.$type->id.']" '.$checked.'> '.$type->title;
+            $this->html .= '</label>';
+        }
+
+        $this->html .= ' <button type="submit" class="btn btn-success">Submit</button>';
+        $this->html .= '</form>';
+        $this->html .= '</div>';
+        $this->html .= '</div>';
+
+    }
+
     protected function rTableBegin()
     {
         $this->html .= '<div class="panel panel-success" style="overflow: auto;margin-bottom: 0px;">';
@@ -72,16 +104,20 @@ class TotalCountByRegionsAndTypesGovReport extends Component
         $this->html .= '<td rowspan="2">№</td>';
         $this->html .= '<td rowspan="2">Ҳудуд номи</td>';
         foreach($this->types as $type){
-            $this->html .= '<td colspan="3">'.$type->title.'</td>';
+            if(in_array($type->id, $this->checkedTypes)) {
+                $this->html .= '<td colspan="3">' . $type->title . '</td>';
+            }
         }
         $this->html .= '<td colspan="3">Жами</td>';
         $this->html .= '</tr>';
 
         $this->html .= '<tr>';
         foreach($this->types as $type){
-            $this->html .= '<td >умумий сони</td>';
-            $this->html .= '<td >давлат</td>';
-            $this->html .= '<td >нодавлат</td>';
+            if(in_array($type->id, $this->checkedTypes)) {
+                $this->html .= '<td >умумий сони</td>';
+                $this->html .= '<td >давлат</td>';
+                $this->html .= '<td >нодавлат</td>';
+            }
         }
         $this->html .= '<td >умумий сони</td>';
         $this->html .= '<td >давлат</td>';
@@ -97,13 +133,15 @@ class TotalCountByRegionsAndTypesGovReport extends Component
             $this->html .= '<td>'.$row.'</td>';
             $this->html .= '<td>'.$region->title.'</td>';
             foreach ($this->types as $type) {
-                $this->html .= '<td>' . count($region->getSmi()->type($type)->all()) . '</td>';
-                $this->html .= '<td>' . count($region->getSmi()->type($type)->national(true)->all()) . '</td>';
-                $this->html .= '<td>' . count($region->getSmi()->type($type)->national(false)->all()) . '</td>';
+                if(in_array($type->id, $this->checkedTypes)) {
+                    $this->html .= '<td>' . count($region->getSmi()->type($type)->all()) . '</td>';
+                    $this->html .= '<td>' . count($region->getSmi()->type($type)->national(true)->all()) . '</td>';
+                    $this->html .= '<td>' . count($region->getSmi()->type($type)->national(false)->all()) . '</td>';
+                }
             }
-            $this->html .= '<td>' . count($region->getSmi()->all()) . '</td>';
-            $this->html .= '<td>' . count($region->getSmi()->national(true)->all()) . '</td>';
-            $this->html .= '<td>' . count($region->getSmi()->national(false)->all()) . '</td>';
+            $this->html .= '<td>' . count($region->getSmi()->types_id_in($this->checkedTypes)->all()) . '</td>';
+            $this->html .= '<td>' . count($region->getSmi()->types_id_in($this->checkedTypes)->national(true)->all()) . '</td>';
+            $this->html .= '<td>' . count($region->getSmi()->types_id_in($this->checkedTypes)->national(false)->all()) . '</td>';
             $this->html .= '</tr>';
             $row++;
         }
@@ -115,13 +153,15 @@ class TotalCountByRegionsAndTypesGovReport extends Component
         $this->html .= '<td></td>';
         $this->html .= '<td>Жами</td>';
         foreach($this->types as $type){
-            $this->html .= '<td>'.count(SmiReestr::find()->type_id($type->id)->all()).'</td>';
-            $this->html .= '<td>'.count(SmiReestr::find()->type_id($type->id)->national(true)->all()).'</td>';
-            $this->html .= '<td>'.count(SmiReestr::find()->type_id($type->id)->national(false)->all()).'</td>';
+            if(in_array($type->id, $this->checkedTypes)) {
+                $this->html .= '<td>' . count(SmiReestr::find()->type_id($type->id)->all()) . '</td>';
+                $this->html .= '<td>' . count(SmiReestr::find()->type_id($type->id)->national(true)->all()) . '</td>';
+                $this->html .= '<td>' . count(SmiReestr::find()->type_id($type->id)->national(false)->all()) . '</td>';
+            }
         }
-        $this->html .= '<td>'.count(SmiReestr::find()->all()).'</td>';
-        $this->html .= '<td>'.count(SmiReestr::find()->national(true)->all()).'</td>';
-        $this->html .= '<td>'.count(SmiReestr::find()->national(false)->all()).'</td>';
+        $this->html .= '<td>'.count(SmiReestr::find()->types_id_in($this->checkedTypes)->all()).'</td>';
+        $this->html .= '<td>'.count(SmiReestr::find()->types_id_in($this->checkedTypes)->national(true)->all()).'</td>';
+        $this->html .= '<td>'.count(SmiReestr::find()->types_id_in($this->checkedTypes)->national(false)->all()).'</td>';
         $this->html .= '</tr>';
     }
 
@@ -152,5 +192,19 @@ class TotalCountByRegionsAndTypesGovReport extends Component
         }else{
             return $operand1/$operand2;
         }
+    }
+
+    protected function setCheckedTypes()
+    {
+        $types = \Yii::$app->request->get('types');
+        $checkedTypes = [];
+        if(!empty($types)) {
+            foreach ($types as $key => $value) {
+                $checkedTypes[] = $key;
+            }
+        }else{
+            $checkedTypes = [$this->types[0]->id];
+        }
+        $this->checkedTypes = $checkedTypes;
     }
 }

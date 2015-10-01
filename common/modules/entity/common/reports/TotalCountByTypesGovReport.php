@@ -97,9 +97,9 @@ class TotalCountByTypesGovReport extends Component
             $no_national = count(SmiReestr::find()->type($type)->national(false)->all());
 
             $this->html .= '<td>'.$national.'</td>';
-            $this->html .= '<td>'.($this->deviseByZero($national,$total)*100).'%</td>';
+            $this->html .= '<td>'.round(($this->deviseByZero($national,$total)*100),2).'%</td>';
             $this->html .= '<td>'.$no_national.'</td>';
-            $this->html .= '<td>'.($this->deviseByZero($no_national,$total)*100).'%</td>';
+            $this->html .= '<td>'.round(($this->deviseByZero($no_national,$total)*100),2).'%</td>';
             $this->html .= '<td>'.$total.'</td>';
 
             $this->html .= '</tr>';
@@ -118,9 +118,9 @@ class TotalCountByTypesGovReport extends Component
         $no_national = count(SmiReestr::find()->national(false)->all());
 
         $this->html .= '<td><b>'.$national.'</b></td>';
-        $this->html .= '<td><b>'.($this->deviseByZero($national,$total)*100).'%</b></td>';
+        $this->html .= '<td><b>'.round(($this->deviseByZero($national,$total)*100),2).'%</b></td>';
         $this->html .= '<td><b>'.$no_national.'</b></td>';
-        $this->html .= '<td><b>'.($this->deviseByZero($no_national,$total)*100).'%</b></td>';
+        $this->html .= '<td><b>'.round(($this->deviseByZero($no_national,$total)*100),2).'%</b></td>';
         $this->html .= '<td><b>'.$total.'</b></td>';
         $this->html .= '</tr>';
     }

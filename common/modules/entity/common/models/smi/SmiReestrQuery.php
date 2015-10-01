@@ -45,6 +45,12 @@ class SmiReestrQuery extends \yii\db\ActiveQuery
         return $this;
     }
 
+    public function types_id_in($types_id)
+    {
+        $this->andWhere(['in', 'type_id', $types_id]);
+        return $this;
+    }
+
     public function kind($kind)
     {
         $this->andWhere(['kind_id' => $kind->id]);
