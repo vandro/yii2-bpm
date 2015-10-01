@@ -206,7 +206,7 @@ class SmiReestr extends \yii\db\ActiveRecord
     public function getSpecializationAdp()
     {
         $dataProvider = new ActiveDataProvider([
-            'query' => $this->getSmiSpecialization(),
+            'query' => $this->getSmiSpecializationLinks(),
         ]);
 
         return $dataProvider;

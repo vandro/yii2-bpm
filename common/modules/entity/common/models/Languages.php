@@ -41,4 +41,13 @@ class Languages extends \yii\db\ActiveRecord
             'title' => Yii::t('app', 'Title'),
         ];
     }
+
+    /**
+     * @inheritdoc
+     * @return SmiBeginAtDatesQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new LanguagesQuery(get_called_class());
+    }
 }

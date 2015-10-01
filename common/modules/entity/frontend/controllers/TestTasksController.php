@@ -3,6 +3,7 @@
 namespace common\modules\entity\frontend\controllers;
 
 //use common\modules\entity\common\factories\BehaviorClassFactory;
+use common\modules\entity\common\models\smi\SmiReestr;
 use Yii;
 use common\modules\entity\common\models\permission\Tasks;
 use common\modules\entity\common\models\permission\TasksSearch;
@@ -151,6 +152,6 @@ class TestTasksController extends Controller
 
     public function actionTest()
     {
-        DebugHelper::printSingleObject('dsafd');
+        return $this->render('index2');
     }
 }

@@ -26,7 +26,11 @@ use common\helpers\ActionColumnHelper;
         'dataProvider' => $model->getSpecializationAdp(),
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'title',
+            [
+                'value' => function($model){
+                    return !empty($model->specialization)?$model->specialization->title:'';
+                }
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {update} {delete} ',
