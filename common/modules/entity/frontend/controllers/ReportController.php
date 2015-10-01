@@ -11,6 +11,8 @@ use common\modules\entity\common\reports\TotalCountByRegionsAndTypesGovReport;
 use common\modules\entity\common\reports\TotalCountByTypesGovReport;
 use common\modules\entity\common\reports\TotalCountByTypeAndBeginAtDateReport;
 use common\modules\entity\common\reports\TotalCountByKindAndBeginAtDateReport;
+use common\modules\entity\common\reports\TotalCountByTypeAndLanguagesReport;
+use common\modules\entity\common\reports\TotalCountByTypeRegionAndLanguagesReport;
 use yii\web\Controller;
 
 class ReportController extends Controller
@@ -38,6 +40,10 @@ class ReportController extends Controller
                 return new TotalCountByTypeAndBeginAtDateReport();
             case 5;
                 return new TotalCountByKindAndBeginAtDateReport();
+            case 6:
+                return new TotalCountByTypeAndLanguagesReport();
+            case 7;
+                return new TotalCountByTypeRegionAndLanguagesReport();
             default:
                 return false;
         }

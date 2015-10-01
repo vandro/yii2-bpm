@@ -57,7 +57,8 @@ class TotalCountByRegionsAndTypesReport extends Component
 
     protected function rTableBegin()
     {
-        $this->html .= '<div class="panel-body" style="overflow: auto;"><table class="table table-bordered">';
+        $this->html .= '<div class="panel panel-success" style="overflow: auto;margin-bottom: 0px;">';
+        $this->html .= '<table class="table table-bordered">';
     }
 
     protected function rTableEnd()
