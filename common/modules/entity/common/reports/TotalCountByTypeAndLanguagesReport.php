@@ -16,15 +16,18 @@ use common\modules\entity\common\models\smi\SmiReestr;
 use common\modules\entity\common\models\smi\SmiType;
 use yii\base\Component;
 
-class TotalCountByLanguagesReport extends Component
+class TotalCountByTypeAndLanguagesReport extends Component
 {
     protected $languages;
+    protected $languageCombinations;
     protected $types;
     protected $html = '';
 
     public function render()
     {
         $this->languages = Languages::find()->all();
+        $this->languageCombinations = $this->getLanguagesCombinationsKeys();
+
         $this->types = SmiType::find()->all();
 
         $this->rHeader();
@@ -71,9 +74,16 @@ class TotalCountByLanguagesReport extends Component
     {
         $this->html .= '<tr>';
         $this->html .= '<td>№</td>';
-        $this->html .= '<td>ОАВнинг фалият куриниши</td>';
-        foreach($this->years as $year){
-            $this->html .= '<td>'.$year->begin_at.'</td>';
+        $this->html .= '<td>ОАВнинг тури</td>';
+        $langCombinationsCount = $this->getLanguagesCombinationsCounts(SmiReestr::find()->all());
+        foreach($this->languageCombinations as $combinations){
+            $this->html .= '<td>';
+            $str = $combinations;
+            foreach($langCombinationsCount[$combinations]['languages'] as $language){
+                $str = str_replace($language->id, $language->title, $str);
+            }
+            $this->html .= $str;
+            $this->html .= '</td>';
         }
         $this->html .= '</tr>';
     }
@@ -81,12 +91,17 @@ class TotalCountByLanguagesReport extends Component
     protected function rTableBody()
     {
         $row = 1;
-        foreach($this->kinds as $kind) {
+        foreach($this->types as $type) {
             $this->html .= '<tr>';
             $this->html .= '<td>'.$row.'</td>';
-            $this->html .= '<td>'.$kind->title.'</td>';
-            foreach ($this->years as $year) {
-                $this->html .= '<td>' . count(SmiReestr::find()->kind($kind)->begin_at($year->begin_at)->all()) . '</td>';
+            $this->html .= '<td>'.$type->title.'</td>';
+            $langCombinationsCount = $this->getLanguagesCombinationsCounts(SmiReestr::find()->type($type)->all());
+            foreach ($this->languageCombinations as $combinations) {
+                if(isset($langCombinationsCount[$combinations]['value'])) {
+                    $this->html .= '<td>' . $langCombinationsCount[$combinations]['value'] . '</td>';
+                }else{
+                    $this->html .= '<td>0</td>';
+                }
             }
             $this->html .= '</tr>';
             $row++;
@@ -98,8 +113,13 @@ class TotalCountByLanguagesReport extends Component
         $this->html .= '<tr class="success">';
         $this->html .= '<td></td>';
         $this->html .= '<td>Жами</td>';
-        foreach($this->years as $year){
-            $this->html .= '<td>'.count(SmiReestr::find()->begin_at($year->begin_at)->all()).'</td>';
+        $langCombinationsCount = $this->getLanguagesCombinationsCounts(SmiReestr::find()->all());
+        foreach ($this->languageCombinations as $combinations) {
+            if(isset($langCombinationsCount[$combinations]['value'])) {
+                $this->html .= '<td>' . $langCombinationsCount[$combinations]['value'] . '</td>';
+            }else{
+                $this->html .= '<td>0</td>';
+            }
         }
         $this->html .= '</tr>';
     }
