@@ -130,6 +130,10 @@ class ActionsCartController extends Controller
                     'formModel' => $action->form,
                     'entity' => $entity,
                     'task' => $this->findTaskModel($task_id),
+                    'task_id' => $task_id,
+                    'node_id' => $task->current_node_id,
+                    'action_id' => $id,
+
                 ]);
             }else{
                 // Переход на конечную ноду
