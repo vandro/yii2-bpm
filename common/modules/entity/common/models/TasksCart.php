@@ -158,7 +158,8 @@ class TasksCart extends \yii\db\ActiveRecord
                 [
                     'format' => 'html',
                     'value' => function($model){
-                        return Html::a( $model->name, $model->urlPath, ['title' => Yii::t('yii', $model->name)]);
+                        $path = Yii::$app->getUrlManager()->createAbsoluteUrl($model->urlPath);
+                        return Html::a( $model->name, $path, ['title' => Yii::t('yii', $model->name)]);
                     }
                 ],
 
