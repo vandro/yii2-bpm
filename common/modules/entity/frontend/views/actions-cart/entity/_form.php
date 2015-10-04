@@ -15,20 +15,34 @@ use common\modules\upload\widgets\MegaFileUploadWidget;
 ?>
 
 
-    <div class="panel-body">
-        <?php $form = ActiveForm::begin(); ?>
-            <?= $formModel->render($form, $entity) ?>
-        <?php ActiveForm::end(); ?>
-    </div>
+<div class="panel-body">
+    <?php $form = ActiveForm::begin([
+        'options' => [
+            'id' => 'node-action-form',
+            'name' => 'node-action-form',
+        ]
+    ]); ?>
+        <?= $formModel->render($form, $entity) ?>
+    <?php ActiveForm::end(); ?>
+</div>
 
-    <div class="panel-body">
-        <?= MegaFileUploadWidget::widget() ?>
+<div class="panel-body">
+    <?= MegaFileUploadWidget::widget([
+        'taskId' => $task_id,
+        'nodeId' => $node_id,
+        'actionId' => $action_id,
+    ]) ?>
+</div>
+<div class="panel-footer">
+    <div class="form-group">
+        <?= Html::button('Create' , ['class' => 'btn btn-default', 'onclick' => 'submitForm()']) ?>
     </div>
-    <div class="panel-footer">
-        <div class="form-group">
-            <?= Html::submitButton('Create' , ['class' => 'btn btn-default']) ?>
-        </div>
-    </div>
+</div>
 
-
+<script>
+function submitForm()
+{
+    $('#node-action-form').submit();
+}
+</script>
 
