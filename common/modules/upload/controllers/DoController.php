@@ -4,6 +4,7 @@ namespace common\modules\upload\controllers;
 
 use yii\web\Controller;
 use common\modules\upload\components\FileUpload;
+use common\modules\upload\models\TasksFiles;
 
 class DoController extends Controller
 {
@@ -43,7 +44,7 @@ class DoController extends Controller
         echo json_encode(array('success' => true, 'pct' => $pct, 'size' => $size));
     }
 
-    public function actionFileUpload($uploadFile)
+    public function actionFileUpload($task_id,$node_id,$action_id,$uploadFile)
     {
         $upload_dir = '/var/www/yagonaoyna/development/dev1/frontend/web/uploads'; ///var/www/yagonaoyna/development/dev1/common/modules/upload/controllers
 
@@ -56,8 +57,25 @@ class DoController extends Controller
             exit(json_encode(array('success' => false, 'msg' => $uploader->getErrorMsg())));
         }
 
-        echo json_encode(array('success' => true));
-//        echo __DIR__.'/../../../frontend/web/uploads';
+        $taskFile = new TasksFiles();
+        $taskFile->task_id = $task_id;
+        $taskFile->node_id = $node_id;
+        $taskFile->action_id = $action_id;
+        $taskFile->name = $uploader->getFileName();
+        $taskFile->ext = $uploader->getExtension();
+        $taskFile->directoryPath = $uploader->getSavedFile();
+        $taskFile->urlPath = '/uploads/'.$uploader->getFileName();
+        if($taskFile->save()) {
+            echo json_encode([
+                'success' => true,
+                'task_id' => $task_id,
+                'node_id' => $node_id,
+                'action_id' => $action_id,
+            ]);
+        }else{
+            echo json_encode(['success' => false, 'msg' => 'Несохранен путь к файлу в задаче']);
+        }
+
     }
 
     public function beforeAction($action) {

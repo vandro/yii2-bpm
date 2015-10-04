@@ -62,7 +62,7 @@
             },
             onSubmit: function(filename, extension) {
                 //msgBox.innerHTML = ''; // empty the message box
-                btn.innerHTML = 'Uploading...'; // change button text to "Uploading..."
+                btn.innerHTML = 'Идет загрузка...'; // change button text to "Uploading..."
                 // Create the elements of our progress bar
                 var progress = document.createElement('div'), // container for progress bar
                     bar = document.createElement('div'), // actual progress bar
