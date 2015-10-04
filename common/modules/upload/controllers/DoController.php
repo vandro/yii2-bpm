@@ -2,6 +2,7 @@
 
 namespace common\modules\upload\controllers;
 
+use common\helpers\DebugHelper;
 use yii\web\Controller;
 use common\modules\upload\components\FileUpload;
 use common\modules\upload\models\TasksFiles;
@@ -46,11 +47,10 @@ class DoController extends Controller
 
     public function actionFileUpload($task_id,$node_id,$action_id,$uploadFile)
     {
-        $upload_dir = '/var/www/yagonaoyna/development/dev1/frontend/web/uploads'; ///var/www/yagonaoyna/development/dev1/common/modules/upload/controllers
+        $upload_dir = $this->getUploadDirectory($task_id);
 
         $uploader = new FileUpload('uploadFile');
 
-        // Handle the upload
         $result = $uploader->handleUpload($upload_dir);
 
         if (!$result) {
@@ -64,7 +64,7 @@ class DoController extends Controller
         $taskFile->name = $uploader->getFileName();
         $taskFile->ext = $uploader->getExtension();
         $taskFile->directoryPath = $uploader->getSavedFile();
-        $taskFile->urlPath = '/uploads/'.$uploader->getFileName();
+        $taskFile->urlPath = '/uploads/'.date('Y').'/'.date('m').'/'.$task_id.'/'.$uploader->getFileName();
         if($taskFile->save()) {
             echo json_encode([
                 'success' => true,
@@ -81,6 +81,23 @@ class DoController extends Controller
     public function beforeAction($action) {
         $this->enableCsrfValidation = false;
         return parent::beforeAction($action);
+    }
+
+    private function getUploadDirectory($task_id)
+    {
+        $uploadDirectory = \Yii::$app->basePath.'/web/uploads/'.date('Y');
+        if(!is_dir($uploadDirectory)){
+            mkdir($uploadDirectory);
+        }
+        $uploadDirectory = $uploadDirectory.'/'.date('m');
+        if(!is_dir($uploadDirectory)){
+            mkdir($uploadDirectory);
+        }
+        $uploadDirectory = $uploadDirectory.'/'.$task_id;
+        if(!is_dir($uploadDirectory)){
+            mkdir($uploadDirectory);
+        }
+        return $uploadDirectory;
     }
 
 }
