@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\bootstrap\Tabs;
 use common\modules\entity\common\config\Config;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model common\modules\entity\common\models\ProcessNodes */
@@ -81,6 +82,35 @@ $this->title = $model->title;
 </style>
 
     <?php $task->renderViews($model); ?>
+    <?= $task->renderFiles(); ?>
 
+
+<!--    --><?//= GridView::widget([
+//        'dataProvider' => $task->getFilesAdp(),
+//        'showHeader' => false,
+//        'summary' => 'Файлы',
+//        'columns' => [
+//            //['class' => 'yii\grid\SerialColumn'],
+//
+////            'id',
+////            'task_id',
+////            'node_id',
+////            'action_id',
+//            //'name',
+//            [
+//                'format' => 'html',
+//                'value' => function($model){
+//                    //$customUrl = Yii::$app->getUrlManager()->createUrl([]);
+//                    return Html::a( $model->name, $model->urlPath,
+//                        ['title' => Yii::t('yii', $model->name)]);
+//                }
+//            ],
+//            // 'ext',
+//            // 'directoryPath:ntext',
+//            // 'urlPath:ntext',
+//
+//            //['class' => 'yii\grid\ActionColumn'],
+//        ],
+//    ]); ?>
 
 </div>

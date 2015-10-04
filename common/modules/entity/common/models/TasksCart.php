@@ -5,7 +5,11 @@ namespace common\modules\entity\common\models;
 use common\helpers\DebugHelper;
 use backend\models\User;
 use common\modules\entity\common\config\Config;
+use common\modules\upload\models\TasksFiles;
 use Yii;
+use yii\data\ActiveDataProvider;
+use yii\grid\GridView;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "tasks_cart".
@@ -120,5 +124,48 @@ class TasksCart extends \yii\db\ActiveRecord
 //            }
 //
 //        }
+    }
+
+    public function getFiles()
+    {
+        return $this->hasMany(TasksFiles::className(), ['task_id' => 'id']);
+    }
+
+    public function getFilesAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getFiles(),
+        ]);
+
+        return $dataProvider;
+    }
+
+    public function renderFiles()
+    {
+        $html = '<div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Прикрепленные файлы</h3>
+                    </div>';
+        $html .= GridView::widget([
+            'dataProvider' => $this->getFilesAdp(),
+            'showHeader' => false,
+            'summary' => '',
+            'tableOptions' => [
+                'style' => 'margin-bottom: 0;',
+                'class' => 'table table-striped table-bordered',
+            ],
+            'columns' => [
+                [
+                    'format' => 'html',
+                    'value' => function($model){
+                        return Html::a( $model->name, $model->urlPath, ['title' => Yii::t('yii', $model->name)]);
+                    }
+                ],
+
+            ],
+        ]);
+        $html .= '</div>';
+
+        return $html;
     }
 }
