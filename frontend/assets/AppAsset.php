@@ -23,8 +23,12 @@ class AppAsset extends AssetBundle
 
     public $css = [
         'css/site.css',
+        'css/mega_upload_styles.css'
     ];
     public $js = [
+        'js/raphael-min.js',
+        'js/uploader.min.js',
+        //'js/graffle.js',
     ];
     public $depends = [
         'yii\web\YiiAsset',

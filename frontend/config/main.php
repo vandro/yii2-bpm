@@ -15,6 +15,9 @@ return [
         'bpm' => [
             'class' => 'common\modules\entity\frontend\Module',
         ],
+        'upload' => [
+            'class' => 'common\modules\upload\Module',
+        ],
     ],
     'components' => [
         'view' => [
