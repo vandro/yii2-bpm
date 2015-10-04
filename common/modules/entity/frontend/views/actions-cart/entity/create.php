@@ -27,5 +27,4 @@ use yii\helpers\Html;
             'entity' => $entity,
         ]) ?>
     </div>
-
 </div>
