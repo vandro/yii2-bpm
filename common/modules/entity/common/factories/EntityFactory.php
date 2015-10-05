@@ -258,6 +258,7 @@ class EntityFactory extends Component
     public static function setSearchRules()
     {
         $rules = [];
+        $rulesTypes = [];
 
         foreach(self::$form->rules as $rule) {
             if($rule->field->type == 'VARCHAR' || $rule->field->type == 'TEXT'){
@@ -277,6 +278,7 @@ class EntityFactory extends Component
     public static function setFullSearchRules()
     {
         $rules = [];
+        $rulesTypes = [];
 
         foreach(self::$entityType->fields as $field) {
             if($field->type == 'VARCHAR' || $field->type == 'TEXT'){
