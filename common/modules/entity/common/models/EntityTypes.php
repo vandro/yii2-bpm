@@ -2,10 +2,12 @@
 
 namespace common\modules\entity\common\models;
 
+use common\helpers\DebugHelper;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
 use common\modules\entity\common\config\Config;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "entity_types".
@@ -228,5 +230,12 @@ class EntityTypes extends \yii\db\ActiveRecord
     public function getItemSearchModelForFrontend()
     {
         return Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getInstance($this);
+    }
+
+    public function getSelectData($field)
+    {
+        $options = json_decode($field->options, true);
+        $entity = $this->getItemSearchModelForFrontend();
+        return ArrayHelper::map($entity::find()->all(),$options['key'], $options['value']);
     }
 }
