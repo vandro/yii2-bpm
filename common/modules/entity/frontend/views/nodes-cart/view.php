@@ -56,7 +56,12 @@ $this->title = $model->title;
             'model' => $model,
             'attributes' => [
                 //'id',
+                [
+                    'attribute' => 'id',
+                    'value' => $task->id,
+                ],
                 'title',
+
                 //'code',
             ],
         ])?>
