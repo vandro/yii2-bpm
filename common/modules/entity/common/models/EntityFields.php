@@ -2,6 +2,7 @@
 
 namespace common\modules\entity\common\models;
 
+use common\helpers\DebugHelper;
 use Yii;
 use yii\data\ActiveDataProvider;
 use common\modules\entity\common\config\Config;
@@ -132,5 +133,18 @@ class EntityFields extends \yii\db\ActiveRecord
     public function getWidget($entity, $activeForm, $form)
     {
         return Yii::$app->modules[Config::MODULE_NAME]->widgetFactory->get($this,$entity, $activeForm, $form);
+    }
+
+    public function getDictionaryValue($entity_id, $value)
+    {
+        $options = json_decode($this->options, true);
+        $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getInstanceById($entity_id);
+        $model = $entity::findOne($value);
+        if(!empty($model)) {
+            return $model->{$options['value']};
+        }else{
+            return 'Нет значения';
+        }
+
     }
 }

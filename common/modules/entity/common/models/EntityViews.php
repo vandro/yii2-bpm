@@ -130,11 +130,19 @@ class EntityViews extends \yii\db\ActiveRecord
             ->via('rules');
     }
 
-    protected function getFieldsCodesArray()
+    protected function getFieldsCodesArray($entityModel)
     {
         $fieldsCodes = [];
         foreach($this->fields as $field){
-            $fieldsCodes[] = $field->code;
+            if(empty($field->dictionary_id)) {
+                $fieldsCodes[] = $field->code;
+            }else{
+                $fieldsCodes[] = [
+                    'attribute' => $field->code,
+                    'format' => 'html',
+                    'value' => $field->getDictionaryValue($field->dictionary_id,$entityModel->{$field->code}),
+                ];
+            }
         }
         return $fieldsCodes;
     }
@@ -154,7 +162,7 @@ class EntityViews extends \yii\db\ActiveRecord
                                 </div>';
             $html .= DetailView::widget([
                         'model' => $entityModel,
-                        'attributes' => $this->getFieldsCodesArray(),
+                        'attributes' => $this->getFieldsCodesArray($entityModel),
                     ]);
 
             $html .= '</div>';
