@@ -135,7 +135,7 @@ class EntityForms extends \yii\db\ActiveRecord
         $html = $this->html;
 
         foreach($this->fields as $field){
-            $html = str_replace('{%'.$field->code.'%}', $field->getWidget($entity,$activeForm), $html);
+            $html = str_replace('{%'.$field->code.'%}', $field->getWidget($entity,$activeForm,$this), $html);
         }
 
         return $html;
