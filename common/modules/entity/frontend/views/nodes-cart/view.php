@@ -83,6 +83,9 @@ $this->title = $model->title;
 
     <?php $task->renderViews($model); ?>
     <?= $task->renderFiles(); ?>
+    <?=\common\modules\log\widgets\LogWidget::widget([
+        'task_id' => $task->id,
+    ])?>
 
 
 <!--    --><?//= GridView::widget([

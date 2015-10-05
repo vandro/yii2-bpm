@@ -8,6 +8,7 @@ use common\modules\entity\common\models\permission\User;
 use common\modules\entity\common\models\Tasks;
 use common\modules\entity\common\models\TasksCart;
 use common\modules\entity\common\models\TasksEntitiesLink;
+use common\modules\log\models\TaskLog;
 use Yii;
 use common\modules\entity\common\models\NodesActions;
 use common\modules\entity\common\models\NodesActionsSearch;
@@ -97,7 +98,7 @@ class ActionsCartController extends Controller
         $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->get($action, $task);
         $user = User::findOne(Yii::$app->user->id);
 
-        if ($entity->load(Yii::$app->request->post()) && $entity->save()) {
+        if ($entity->load(Yii::$app->request->post()) && $entity->save() && $this->loggingAction($task, $task->currentNode, $action)) {
 
             if($this->setTasksEntitiesLink($task_id,$entity->id,$action, $task->currentNode, $prevision_node_id)) {
 
@@ -251,6 +252,22 @@ class ActionsCartController extends Controller
             }
         }else{
             return true;
+        }
+    }
+
+    protected function loggingAction($task, $node, $action)
+    {
+        $log = new TaskLog();
+        $log->process_id = $task->process_id;
+        $log->task_id = $task->id;
+        $log->node_id = $node->id;
+        $log->action_id = $action->id;
+        $log->user_id = Yii::$app->user->id;
+
+        if($log->save()) {
+            return true;
+        }else {
+            return false;
         }
     }
 }

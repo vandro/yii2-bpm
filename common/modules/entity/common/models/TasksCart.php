@@ -152,7 +152,7 @@ class TasksCart extends \yii\db\ActiveRecord
             'summary' => '',
             'tableOptions' => [
                 'style' => 'margin-bottom: 0;',
-                'class' => 'table table-striped table-bordered',
+                'class' => 'table table-striped',
             ],
             'columns' => [
                 [
