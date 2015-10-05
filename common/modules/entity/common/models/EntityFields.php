@@ -52,8 +52,6 @@ class EntityFields extends \yii\db\ActiveRecord
             [['title', 'code', 'type'], 'required'],
             [['entity_id', 'length', 'dictionary_id','added'], 'integer'],
             [['title', 'code', 'type', 'options'], 'string'],
-            [['code'], 'unique'],
-            [['title'], 'unique']
         ];
     }
 
@@ -131,8 +129,8 @@ class EntityFields extends \yii\db\ActiveRecord
         return $this->hasMany(ViewsRules::className(), ['field_id' => 'id']);
     }
 
-    public function getWidget($entity, $activeForm)
+    public function getWidget($entity, $activeForm, $form)
     {
-        return Yii::$app->modules[Config::MODULE_NAME]->widgetFactory->get($this,$entity, $activeForm);
+        return Yii::$app->modules[Config::MODULE_NAME]->widgetFactory->get($this,$entity, $activeForm, $form);
     }
 }
