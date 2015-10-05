@@ -33,9 +33,10 @@ use common\modules\entity\common\models\EntityTypes;
 
     <?= $form->field($model, 'widget')->textInput() ?>
 
-    <?= $form->field($model, 'options')->textarea(['rows' => 6]) ?>
-
     <?= $form->field($model, 'dictionary_id')->dropDownList(ArrayHelper::map(EntityTypes::find()->all(), 'id', 'title'), ['prompt'=> ' -- Выберите справочник --']) ?>
+    <p> Если указываете справочник то должны в опциях (options) указать какое поле будет ключом, и какое поле будет значением в таблице справочика <br> Пример {"key":"id","value":"title"}</p>
+
+    <?= $form->field($model, 'options')->textarea(['rows' => 6]) ?>
 
     <?php if($model->added) {
         echo $form->field($model, 'added')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Добавить']);
