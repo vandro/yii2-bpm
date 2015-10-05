@@ -98,7 +98,7 @@ class ActionsCartController extends Controller
         $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->get($action, $task);
         $user = User::findOne(Yii::$app->user->id);
 
-        if ($entity->load(Yii::$app->request->post()) && $entity->save() && $this->loggingAction($task, $task->currentNode, $action)) {
+        if ($this->loggingAction($task, $task->currentNode, $action) && $entity->load(Yii::$app->request->post()) && $entity->save()) {
 
             if($this->setTasksEntitiesLink($task_id,$entity->id,$action, $task->currentNode, $prevision_node_id)) {
 
