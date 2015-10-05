@@ -74,13 +74,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
                 'active' => ($tab == 2),
             ],
-            [
-                'label' =>'Items',
-                'content' => $this->render('_itemsIndex', [
-                    'model' => $model,
-                ]),
-                'active' => ($tab == 6),
-            ],
+//            [
+//                'label' =>'Items',
+//                'content' => $this->render('_itemsIndex', [
+//                    'model' => $model,
+//                ]),
+//                'active' => ($tab == 6),
+//            ],
         ],
     ]);?>
 
