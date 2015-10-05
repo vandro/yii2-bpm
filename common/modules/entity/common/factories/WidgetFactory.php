@@ -7,20 +7,23 @@
  */
 namespace common\modules\entity\common\factories;
 
+use common\helpers\DebugHelper;
+use common\modules\entity\common\models\EntityTypes;
+use common\modules\entity\common\models\TasksCart;
 use yii\base\Component;
 
 class WidgetFactory extends Component
 {
     protected $_entity = null;
     protected $_field = null;
+    protected $_activeForm = null;
     protected $_form = null;
 
-
-
-    public function get($field, $entity, $form)
+    public function get($field, $entity, $activeForm, $form)
     {
         $this->field = $field;
         $this->entity = $entity;
+        $this->activeForm = $activeForm;
         $this->form = $form;
 
         return $this->getHtml();
@@ -28,10 +31,21 @@ class WidgetFactory extends Component
 
     protected function getHtml()
     {
+        $entity = $this->entity;
         if($this->field->type == 'VARCHAR' || $this->field->type == 'INT'){
-            return $this->form->field($this->entity, $this->field->code)->textInput();
+            if(empty($this->field->dictionary)) {
+                return $this->activeForm->field($this->entity, $this->field->code)->textInput();
+            }else{
+                if($this->form->mode == 'create') {
+                    $entity->{$this->field->code} = '';
+                }
+                $dictionary = $this->field->dictionary;
+                return $this->activeForm->field($entity, $this->field->code)->dropDownList($dictionary->getSelectData($this->field),[
+                    'prompt' => ' -- Выберите --'
+                ]);
+            }
         }elseif($this->field->type == 'TEXT'){
-            return $this->form->field($this->entity, $this->field->code)->textArea();
+            return $this->activeForm->field($this->entity, $this->field->code)->textArea();
         }
     }
 
@@ -65,6 +79,22 @@ class WidgetFactory extends Component
     public function setEntity($entity)
     {
         $this->_entity = $entity;
+    }
+
+    /**
+     * @return null
+     */
+    public function getActiveForm()
+    {
+        return $this->_activeForm;
+    }
+
+    /**
+     * @param null $activeForm
+     */
+    public function setActiveForm($activeForm)
+    {
+        $this->_activeForm = $activeForm;
     }
 
     /**
