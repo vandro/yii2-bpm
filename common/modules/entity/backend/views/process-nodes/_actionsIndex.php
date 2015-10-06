@@ -46,6 +46,12 @@ use common\helpers\ActionColumnHelper;
             ],
             'execution_type',
             [
+                'attribute' => 'has_file_upload',
+                'value' => function($model){
+                    return !empty($model->has_file_upload)?'Да':'Нет';
+                }
+            ],
+            [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {update} {delete}',
                 'buttons'=>[

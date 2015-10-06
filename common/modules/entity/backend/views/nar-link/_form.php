@@ -24,7 +24,7 @@ use common\modules\entity\common\models\ProcessNodes;
 
     <?= $form->field($model, 'execution_type')->dropDownList(['semiautomatic' => 'Полуавтоматический', 'automatic' => 'Автоматический'], ['prompt' => ' -- Выберите тип исполнения действия --']) ?>
 
-    <?= $form->field($model, 'node_id')->hiddenInput()->label('') ?>
+    <?= $form->field($model, 'has_file_upload')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => ' -- Выберите --']) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
