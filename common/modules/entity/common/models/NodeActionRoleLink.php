@@ -43,7 +43,7 @@ class NodeActionRoleLink extends \yii\db\ActiveRecord
     {
         return [
             [['action_id', 'role_id'], 'required'],
-            [['node_id', 'action_id', 'role_id', 'next_node_id', 'only_one_entity'], 'integer'],
+            [['node_id', 'action_id', 'role_id', 'next_node_id', 'only_one_entity', 'has_file_upload'], 'integer'],
             [['execution_type'], 'string'],
         ];
     }
@@ -60,6 +60,7 @@ class NodeActionRoleLink extends \yii\db\ActiveRecord
             'next_node_id' => Yii::t('app', 'Next Node ID'),
             'execution_type' => Yii::t('app', 'Execution type'),
             'only_one_entity' => Yii::t('app', 'Only one entity (yes/no)'),
+            'has_file_upload' => Yii::t('app', 'Has file upload (yes/no)'),
         ];
     }
 
