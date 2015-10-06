@@ -2,7 +2,10 @@
 
 namespace common\modules\epigu\models;
 
+use common\modules\entity\common\models\Processes;
 use Yii;
+use yii\helpers\ArrayHelper;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "integration_actions".
@@ -67,6 +70,15 @@ class IntegrationActions extends \yii\db\ActiveRecord
         return $this->hasMany(InActionEntityLink::className(), ['integration_action_id' => 'id']);
     }
 
+    public function getInActionEntityLinksAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getInActionEntityLinks(),
+        ]);
+
+        return $dataProvider;
+    }
+
     /**
      * @inheritdoc
      * @return IntegrationActionsQuery the active query used by this AR class.
@@ -74,5 +86,15 @@ class IntegrationActions extends \yii\db\ActiveRecord
     public static function find()
     {
         return new IntegrationActionsQuery(get_called_class());
+    }
+
+    public function getAllProcess()
+    {
+        return ArrayHelper::map(Processes::find()->all(), 'id', 'title');
+    }
+
+    public function getProcess()
+    {
+        return $this->hasOne(Processes::className(),['id' => 'process_id']);
     }
 }

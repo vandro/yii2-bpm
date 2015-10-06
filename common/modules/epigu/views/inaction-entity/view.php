@@ -2,12 +2,14 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\bootstrap\Tabs;
 
 /* @var $this yii\web\View */
 /* @var $model common\modules\epigu\models\InActionEntityLink */
 
-$this->title = $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'In Action Entity Links'), 'url' => ['index']];
+$this->title = $model->entityType->title;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Integration Actions'), 'url' => ['integration-actions/index']];
+$this->params['breadcrumbs'][] = ['label' => $model->integrationAction->title, 'url' => ['integration-actions/view', 'id' => $model->integration_action_id, 'tab' => 2]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="in-action-entity-link-view">
@@ -25,13 +27,34 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'integration_action_id',
-            'entity_type_id',
+    <?= Tabs::widget([
+        'items' => [
+            [
+                'label' => 'Integration Action',
+                'content' => DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'id',
+                        [
+                            'attribute' => 'integration_action_id',
+                            'value' => !empty($model->integrationAction)?$model->integrationAction->title:'',
+                        ],
+                        [
+                            'attribute' => 'entity_type_id',
+                            'value' => !empty($model->entityType)?$model->entityType->title:'',
+                        ],
+                    ],
+                ]),
+                'active' => ($tab == 1),
+            ],
+            [
+                'label' =>'Entity Type',
+                'content' => $this->render('_epiguEntityFieldsIndex', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 2),
+            ],
         ],
-    ]) ?>
+    ]);?>
 
 </div>

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\bootstrap\Tabs;
 
 /* @var $this yii\web\View */
 /* @var $model common\modules\epigu\models\IntegrationActions */
@@ -25,14 +26,32 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'title',
-            'code',
-            'process_id',
+    <?= Tabs::widget([
+        'items' => [
+            [
+                'label' => 'Integration Action',
+                'content' => DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'id',
+                        'title',
+                        'code',
+                        [
+                            'attribute' => 'process_id',
+                            'value' => !empty($model->process)?$model->process->title:'',
+                        ],
+                    ],
+                ]),
+                'active' => ($tab == 1),
+            ],
+            [
+                'label' =>'Entity Type',
+                'content' => $this->render('_entityTypesIndex', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 2),
+            ],
         ],
-    ]) ?>
+    ]);?>
 
 </div>

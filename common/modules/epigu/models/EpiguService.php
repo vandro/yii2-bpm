@@ -3,6 +3,8 @@
 namespace common\modules\epigu\models;
 
 use Yii;
+use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "epigu_service".
@@ -77,11 +79,40 @@ class EpiguService extends \yii\db\ActiveRecord
     }
 
     /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFields()
+    {
+        return $this->hasMany(EpiguServiceFileds::className(), ['epigu_service_id' => 'id']);
+    }
+
+    /**
      * @inheritdoc
      * @return EpiguServiceQuery the active query used by this AR class.
      */
     public static function find()
     {
         return new EpiguServiceQuery(get_called_class());
+    }
+
+    public function getFieldsAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getEpiguServiceFileds(),
+        ]);
+
+        return $dataProvider;
+    }
+
+    public function getAllFields($entityType)
+    {
+        $names = [];
+        foreach($entityType->fields as $field){
+            $names[] = $field->code;
+        }
+        $epiguServiceFields = $this->hasMany(EpiguServiceFileds::className(), ['epigu_service_id' => 'id'])
+            ->where(['not in', 'name', $names])
+            ->all();
+        return ArrayHelper::map($epiguServiceFields, 'id', 'label_ru');
     }
 }

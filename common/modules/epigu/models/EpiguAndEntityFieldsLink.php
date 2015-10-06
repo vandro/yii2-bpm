@@ -2,7 +2,10 @@
 
 namespace common\modules\epigu\models;
 
+use common\modules\entity\common\models\EntityFields;
+use common\modules\entity\common\models\EntityTypes;
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "epigu_and_entity_fields_link".
@@ -86,6 +89,16 @@ class EpiguAndEntityFieldsLink extends \yii\db\ActiveRecord
         return $this->hasOne(InActionEntityLink::className(), ['id' => 'in_action_entity_link_id']);
     }
 
+    public function getEntityType()
+    {
+        return $this->hasOne(EntityTypes::className(), ['id' => 'entity_type_id']);
+    }
+
+    public function getEntityTypeField()
+    {
+        return $this->hasOne(EntityFields::className(), ['id' => 'entity_type_fields_id']);
+    }
+
     /**
      * @inheritdoc
      * @return EpiguAndEntityFieldsLinkQuery the active query used by this AR class.
@@ -93,5 +106,25 @@ class EpiguAndEntityFieldsLink extends \yii\db\ActiveRecord
     public static function find()
     {
         return new EpiguAndEntityFieldsLinkQuery(get_called_class());
+    }
+
+    public function getAllEpiguServices()
+    {
+        return ArrayHelper::map(EpiguService::find()->all(), 'id', 'title');
+    }
+
+    public function getAllEpiguServicesFields()
+    {
+        return ArrayHelper::map(EpiguServiceFileds::find()->where(['epigu_service_id' => $this->epigu_service_id])->all(), 'id', 'label_ru');
+    }
+
+    public function getAllEntityType()
+    {
+        return ArrayHelper::map(EntityTypes::find()->all(), 'id', 'title');
+    }
+
+    public function getAllEntityTypeFields()
+    {
+        return ArrayHelper::map(EntityFields::find()->where(['entity_id' => $this->entity_type_id])->all(), 'id', 'title');
     }
 }

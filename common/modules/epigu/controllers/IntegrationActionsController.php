@@ -46,10 +46,11 @@ class IntegrationActionsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($id, $tab = 1)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'tab' => $tab,
         ]);
     }
 

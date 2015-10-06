@@ -9,6 +9,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use common\modules\entity\common\actions\CreateAction;
+use common\modules\entity\common\actions\UpdateAction;
+use common\modules\entity\common\actions\DeleteAction;
 /**
  * EpiguServiceFiledsController implements the CRUD actions for EpiguServiceFileds model.
  */
@@ -23,6 +26,36 @@ class EpiguServiceFiledsController extends Controller
                     'delete' => ['post'],
                 ],
             ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'create' => [
+                'class' => CreateAction::className(),
+                'parent_id' => Yii::$app->request->get('parent_id'),
+                'tab' => 2,
+                'redirect_url' => 'epigu-service/view',
+                'modelClass' => EpiguServiceFileds::className(),
+                'parent_id_filed' => 'epigu_service_id',
+            ],
+            'update' => [
+                'class' => UpdateAction::className(),
+                'id' => Yii::$app->request->get('id'),
+                'tab' => 2,
+                'redirect_url' => 'epigu-service/view',
+                'modelClass' => EpiguServiceFileds::className(),
+                'parent_id_filed' => 'epigu_service_id',
+            ],
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'id' => Yii::$app->request->get('id'),
+                'tab' => 2,
+                'redirect_url' => 'epigu-service/view',
+                'modelClass' => EpiguServiceFileds::className(),
+                'parent_id_filed' => 'epigu_service_id',
+            ]
         ];
     }
 

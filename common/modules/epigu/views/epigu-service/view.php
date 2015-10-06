@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\bootstrap\Tabs;
+use yii\helpers\ArrayHelper;
+use common\modules\entity\common\models\EntityTypes;
 
 /* @var $this yii\web\View */
 /* @var $model common\modules\epigu\models\EpiguService */
@@ -24,15 +27,40 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
+<!--    <form class="form-inline" action="add-entity-fields" method="get">-->
+<!--        --><?//= Html::hiddenInput('id',$model->id)?>
+<!--        <div class="form-group">-->
+<!--            --><?//= Html::dropDownList('entity_type_id', '', ArrayHelper::map(EntityTypes::find()->all(), 'id', 'title'),['prompt' => '-- Choose entity type --','class' => 'form-control'])?>
+<!--        </div>-->
+<!--        <div class="form-group">-->
+<!--            <button type="submit" class="btn btn-default">Add fields</button>-->
+<!--        </div>-->
+<!--    </form>-->
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'epugi_id',
-            'title',
-            'code',
+    <br>
+    <?= Tabs::widget([
+        'items' => [
+            [
+                'label' => 'Service',
+                'content' => DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'id',
+                        'epugi_id',
+                        'title',
+                        'code',
+                    ],
+                ]),
+                'active' => ($tab == 1),
+            ],
+            [
+                'label' =>'Fields',
+                'content' => $this->render('_fieldsIndex', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 2),
+            ],
         ],
-    ]) ?>
+    ]);?>
 
 </div>

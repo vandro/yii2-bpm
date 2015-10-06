@@ -12,9 +12,7 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'integration_action_id')->textInput() ?>
-
-    <?= $form->field($model, 'entity_type_id')->textInput() ?>
+    <?= $form->field($model, 'entity_type_id')->dropDownList($model->getAllEntityType(), ['prompt' => 'Выбрать'])?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

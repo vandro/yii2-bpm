@@ -2,6 +2,10 @@
 
 namespace common\modules\epigu\controllers;
 
+use common\helpers\DebugHelper;
+use common\modules\entity\common\models\EntityTypes;
+use common\modules\epigu\components\Integration;
+use common\modules\epigu\models\EpiguServiceFileds;
 use Yii;
 use common\modules\epigu\models\EpiguService;
 use common\modules\epigu\models\EpiguServiceSearch;
@@ -46,10 +50,11 @@ class EpiguServiceController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($id, $tab = 1)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'tab' => $tab,
         ]);
     }
 
@@ -113,6 +118,69 @@ class EpiguServiceController extends Controller
     protected function findModel($id)
     {
         if (($model = EpiguService::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+
+    /**
+     * Add fields to an existing EpiguService model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionAddFields($id)
+    {
+        $model = $this->findModel($id);
+        $config = json_decode(Integration::getConfig($model->epugi_id), true);
+
+        foreach($config['fields'] as $field){
+            $searchField = EpiguServiceFileds::find()->where(['name' => $field['name']])->one();
+            if(empty($searchField)) {
+                $fieldModel = new EpiguServiceFileds();
+                $fieldModel->attributes = $field;
+                $fieldModel->epigu_service_id = $id;
+                $fieldModel->epigu_fileld_id = $field['id'];
+                $fieldModel->group = is_array($field['group']) ? json_encode($field['group']) : '';
+                $fieldModel->save();
+            }
+        }
+
+        return $this->redirect(['view', 'id' => $model->id, 'tab' => 2]);
+    }
+
+    /**
+     * Delete all fields from an existing EpiguService model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDeleteFields($id)
+    {
+        $model = $this->findModel($id);
+
+        foreach($model->epiguServiceFileds as $field){
+            $field->delete();
+        }
+
+        return $this->redirect(['view', 'id' => $model->id, 'tab' => 2]);
+    }
+
+    public function actionAddEntityFields($id, $entity_type_id)
+    {
+        $model = $this->findModel($id);
+        $entityType = $this->findEntityType($entity_type_id);
+
+        return $this->render('addFieldsView', [
+            'model' => $model,
+            'entityType' => $entityType,
+        ]);
+    }
+
+    protected function findEntityType($id)
+    {
+        if (($model = EntityTypes::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');

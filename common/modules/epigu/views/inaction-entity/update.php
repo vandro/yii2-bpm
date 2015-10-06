@@ -7,9 +7,10 @@ use yii\helpers\Html;
 
 $this->title = Yii::t('app', 'Update {modelClass}: ', [
     'modelClass' => 'In Action Entity Link',
-]) . ' ' . $model->id;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'In Action Entity Links'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+]) . ' ' . $model->entityType->title;
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Integration Actions'), 'url' => ['integration-actions/index']];
+$this->params['breadcrumbs'][] = ['label' => $model->integrationAction->title, 'url' => ['integration-actions/view', 'id' => $model->integration_action_id, 'tab' => 2]];
+$this->params['breadcrumbs'][] = ['label' => $model->entityType->title, 'url' => ['view', 'id' => $model->id]];
 $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 ?>
 <div class="in-action-entity-link-update">

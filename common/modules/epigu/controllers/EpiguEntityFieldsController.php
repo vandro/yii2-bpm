@@ -2,6 +2,8 @@
 
 namespace common\modules\epigu\controllers;
 
+use common\modules\entity\common\models\EntityFields;
+use common\modules\epigu\models\EpiguServiceFileds;
 use Yii;
 use common\modules\epigu\models\EpiguAndEntityFieldsLink;
 use common\modules\epigu\models\EpiguAndEntityFieldsLinkSearch;
@@ -9,6 +11,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use common\modules\entity\common\actions\CreateAction;
+use common\modules\entity\common\actions\UpdateAction;
+use common\modules\entity\common\actions\DeleteAction;
 /**
  * EpiguEntityFieldsController implements the CRUD actions for EpiguAndEntityFieldsLink model.
  */
@@ -23,6 +28,36 @@ class EpiguEntityFieldsController extends Controller
                     'delete' => ['post'],
                 ],
             ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'create' => [
+                'class' => CreateAction::className(),
+                'parent_id' => Yii::$app->request->get('parent_id'),
+                'tab' => 2,
+                'redirect_url' => 'inaction-entity/view',
+                'modelClass' => EpiguAndEntityFieldsLink::className(),
+                'parent_id_filed' => 'in_action_entity_link_id',
+            ],
+            'update' => [
+                'class' => UpdateAction::className(),
+                'id' => Yii::$app->request->get('id'),
+                'tab' => 2,
+                'redirect_url' => 'inaction-entity/view',
+                'modelClass' => EpiguAndEntityFieldsLink::className(),
+                'parent_id_filed' => 'in_action_entity_link_id',
+            ],
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'id' => Yii::$app->request->get('id'),
+                'tab' => 2,
+                'redirect_url' => 'inaction-entity/view',
+                'modelClass' => EpiguAndEntityFieldsLink::className(),
+                'parent_id_filed' => 'in_action_entity_link_id',
+            ]
         ];
     }
 
@@ -117,5 +152,35 @@ class EpiguEntityFieldsController extends Controller
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    /**
+     * Displays a data sets.
+     * @param string $params
+     * @return json
+     */
+    public function actionEpiguServiceFields($id)
+    {
+        $arItems = [];
+        $items = EpiguServiceFileds::find()->where(['epigu_service_id' => $id])->all();
+        foreach($items as $item){
+            $arItems[] = ['value' => $item->id, 'label' => $item->label_ru];
+        }
+        echo json_encode($arItems);
+    }
+
+    /**
+     * Displays a data sets.
+     * @param string $params
+     * @return json
+     */
+    public function actionEntityFields($id)
+    {
+        $arItems = [];
+        $items = EntityFields::find()->where(['entity_id' => $id])->all();
+        foreach($items as $item){
+            $arItems[] = ['value' => $item->id, 'label' => $item->title];
+        }
+        echo json_encode($arItems);
     }
 }

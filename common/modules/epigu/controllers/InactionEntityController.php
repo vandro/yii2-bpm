@@ -9,6 +9,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
+use common\modules\entity\common\actions\CreateAction;
+use common\modules\entity\common\actions\UpdateAction;
+use common\modules\entity\common\actions\DeleteAction;
 /**
  * InactionEntityController implements the CRUD actions for InActionEntityLink model.
  */
@@ -23,6 +26,36 @@ class InactionEntityController extends Controller
                     'delete' => ['post'],
                 ],
             ],
+        ];
+    }
+
+    public function actions()
+    {
+        return [
+            'create' => [
+                'class' => CreateAction::className(),
+                'parent_id' => Yii::$app->request->get('parent_id'),
+                'tab' => 2,
+                'redirect_url' => 'integration-actions/view',
+                'modelClass' => InActionEntityLink::className(),
+                'parent_id_filed' => 'integration_action_id',
+            ],
+            'update' => [
+                'class' => UpdateAction::className(),
+                'id' => Yii::$app->request->get('id'),
+                'tab' => 2,
+                'redirect_url' => 'integration-actions/view',
+                'modelClass' => InActionEntityLink::className(),
+                'parent_id_filed' => 'integration_action_id',
+            ],
+            'delete' => [
+                'class' => DeleteAction::className(),
+                'id' => Yii::$app->request->get('id'),
+                'tab' => 2,
+                'redirect_url' => 'integration-actions/view',
+                'modelClass' => InActionEntityLink::className(),
+                'parent_id_filed' => 'integration_action_id',
+            ]
         ];
     }
 
@@ -46,10 +79,11 @@ class InactionEntityController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
+    public function actionView($id, $tab = 1)
     {
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'tab' => $tab,
         ]);
     }
 

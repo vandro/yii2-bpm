@@ -7,7 +7,8 @@ use yii\helpers\Html;
 /* @var $model common\modules\epigu\models\InActionEntityLink */
 
 $this->title = Yii::t('app', 'Create In Action Entity Link');
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'In Action Entity Links'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Integration Actions'), 'url' => ['integration-actions/index']];
+$this->params['breadcrumbs'][] = ['label' => $model->integrationAction->title, 'url' => ['integration-actions/view', 'id' => $model->integration_action_id, 'tab' => 2]];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="in-action-entity-link-create">

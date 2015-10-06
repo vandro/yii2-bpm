@@ -2,7 +2,10 @@
 
 namespace common\modules\epigu\models;
 
+use common\modules\entity\common\models\EntityTypes;
 use Yii;
+use yii\helpers\ArrayHelper;
+use yii\data\ActiveDataProvider;
 
 /**
  * This is the model class for table "in_action_entity_link".
@@ -78,5 +81,27 @@ class InActionEntityLink extends \yii\db\ActiveRecord
     public static function find()
     {
         return new InActionEntityLinkQuery(get_called_class());
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEntityType()
+    {
+        return $this->hasOne(EntityTypes::className(), ['id' => 'entity_type_id']);
+    }
+
+    public function getAllEntityType()
+    {
+        return ArrayHelper::map(EntityTypes::find()->all(), 'id', 'title');
+    }
+
+    public function getEpiguAndEntityFieldsLinksAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getEpiguAndEntityFieldsLinks(),
+        ]);
+
+        return $dataProvider;
     }
 }
