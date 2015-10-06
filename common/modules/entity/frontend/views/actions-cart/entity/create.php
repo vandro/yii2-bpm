@@ -28,6 +28,7 @@ use yii\helpers\Html;
             'task_id' => $task_id,
             'node_id' => $node_id,
             'action_id' => $action_id,
+            'has_file_upload' =>  $has_file_upload,
         ]) ?>
     </div>
 </div>

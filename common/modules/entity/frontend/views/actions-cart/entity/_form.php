@@ -25,14 +25,15 @@ use common\modules\upload\widgets\MegaFileUploadWidget;
         <?= $formModel->render($form, $entity) ?>
     <?php ActiveForm::end(); ?>
 </div>
-
-<div class="panel-body">
-    <?= MegaFileUploadWidget::widget([
-        'taskId' => $task_id,
-        'nodeId' => $node_id,
-        'actionId' => $action_id,
-    ]) ?>
-</div>
+<?php if($has_file_upload){?>
+    <div class="panel-body">
+        <?= MegaFileUploadWidget::widget([
+            'taskId' => $task_id,
+            'nodeId' => $node_id,
+            'actionId' => $action_id,
+        ]) ?>
+    </div>
+<?php } ?>
 <div class="panel-footer">
     <div class="form-group">
         <?= Html::button('Create' , ['class' => 'btn btn-default', 'onclick' => 'submitForm()']) ?>

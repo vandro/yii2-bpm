@@ -134,7 +134,7 @@ class ActionsCartController extends Controller
                     'task_id' => $task_id,
                     'node_id' => $task->current_node_id,
                     'action_id' => $id,
-
+                    'has_file_upload' => $action->getHasFileUploads($task->current_node_id),
                 ]);
             }else{
                 // Переход на конечную ноду
