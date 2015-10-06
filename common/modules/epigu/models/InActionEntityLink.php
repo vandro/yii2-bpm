@@ -1,0 +1,82 @@
+<?php
+
+namespace common\modules\epigu\models;
+
+use Yii;
+
+/**
+ * This is the model class for table "in_action_entity_link".
+ *
+ * @property integer $id
+ * @property integer $integration_action_id
+ * @property integer $entity_type_id
+ *
+ * @property EpiguAndEntityFieldsLink[] $epiguAndEntityFieldsLinks
+ * @property IntegrationActions $integrationAction
+ */
+class InActionEntityLink extends \yii\db\ActiveRecord
+{
+    /**
+     * @inheritdoc
+     */
+    public static function tableName()
+    {
+        return 'in_action_entity_link';
+    }
+
+    /**
+     * @return \yii\db\Connection the database connection used by this AR class.
+     */
+    public static function getDb()
+    {
+        return Yii::$app->get('edb');
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            [['integration_action_id', 'entity_type_id'], 'required'],
+            [['integration_action_id', 'entity_type_id'], 'integer']
+        ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function attributeLabels()
+    {
+        return [
+            'id' => Yii::t('app', 'ID'),
+            'integration_action_id' => Yii::t('app', 'Integration Action ID'),
+            'entity_type_id' => Yii::t('app', 'Entity Type ID'),
+        ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getEpiguAndEntityFieldsLinks()
+    {
+        return $this->hasMany(EpiguAndEntityFieldsLink::className(), ['in_action_entity_link_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getIntegrationAction()
+    {
+        return $this->hasOne(IntegrationActions::className(), ['id' => 'integration_action_id']);
+    }
+
+    /**
+     * @inheritdoc
+     * @return InActionEntityLinkQuery the active query used by this AR class.
+     */
+    public static function find()
+    {
+        return new InActionEntityLinkQuery(get_called_class());
+    }
+}
