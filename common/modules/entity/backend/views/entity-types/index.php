@@ -16,7 +16,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Entity Types', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Entity Type', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Create Entity Type From EPIGU Service data', ['/epigu/epigu-service/create-entity'], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= GridView::widget([
