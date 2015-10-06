@@ -238,4 +238,9 @@ class EntityTypes extends \yii\db\ActiveRecord
         $entity = $this->getItemSearchModelForFrontend();
         return ArrayHelper::map($entity::find()->all(),$options['key'], $options['value']);
     }
+
+    public function getAllFields()
+    {
+        return ArrayHelper::map($this->fields, 'id', 'title');
+    }
 }
