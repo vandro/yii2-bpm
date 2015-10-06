@@ -9,7 +9,7 @@
 
 <div class="row">
     <div class="col-xs-2">
-        <button id="uploadBtn" class="btn btn-large btn-success">Выбрать файл</button>
+        <button id="uploadBtn" class="btn btn-large">Выбрать файл</button>
     </div>
     <div class="col-xs-10">
         <div id="progressOuter" class="progress progress-striped active" style="display:none;">
