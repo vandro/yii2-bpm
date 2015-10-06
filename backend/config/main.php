@@ -15,6 +15,9 @@ return [
         'entity' => [
             'class' => 'common\modules\entity\backend\Module',
         ],
+        'epigu' => [
+            'class' => 'common\modules\epigu\Module',
+        ],
     ],
     'components' => [
         'view' => [
