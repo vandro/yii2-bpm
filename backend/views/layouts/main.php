@@ -42,7 +42,7 @@ AppAsset::register($this);
     } else {
         $menuItems[] = ['label' => 'Entity Types', 'url' => ['/entity/entity-types/index']];
         $menuItems[] = ['label' => 'Processes', 'url' => ['/entity/processes/index']];
-        $menuItems[] = ['label' => 'Actions', 'url' => ['/entity/nodes-actions/index']];
+        $menuItems[] = ['label' => 'Actions', 'url' => ['/epigu/integration-actions/index']];
         $menuItems[] = ['label' => 'Users', 'url' => ['/entity/user/index']];
         $menuItems[] = ['label' => 'Roles', 'url' => ['/entity/roles/index']];
         $menuItems[] = ['label' => 'Rights', 'url' => ['/entity/rights/index']];
