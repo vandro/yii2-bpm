@@ -107,7 +107,7 @@ class TotalCountByTypeRegionAndLanguagesReport extends Component
             $this->html .= '<td>';
             $str = $combinations;
             foreach($langCombinationsCount[$combinations]['languages'] as $language){
-                $str = str_replace($language->id, $language->title, $str);
+                $str = str_replace($language->id, ' '.$language->title, $str);
             }
             $this->html .= $str;
             $this->html .= '</td>';
@@ -234,7 +234,7 @@ class TotalCountByTypeRegionAndLanguagesReport extends Component
             $arLanguageCountValues[$key] = [
                 'key' => $key,
                 'value' => $value,
-                'languages' => Languages::find()->in($key)->all(),
+                'languages' => !empty($key)?Languages::find()->in($key)->all():[],
             ];
         }
         return $arLanguageCountValues;

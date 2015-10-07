@@ -81,7 +81,7 @@ class TotalCountByTypeAndLanguagesReport extends Component
             $this->html .= '<td>';
             $str = $combinations;
             foreach($langCombinationsCount[$combinations]['languages'] as $language){
-                $str = str_replace($language->id, $language->title, $str);
+                $str = str_replace($language->id, ' '.$language->title, $str);
             }
             $this->html .= $str;
             $this->html .= '</td>';
@@ -205,10 +205,11 @@ class TotalCountByTypeAndLanguagesReport extends Component
         $arCountValues = array_count_values($arLandCombinations);
         $arLanguageCountValues = [];
         foreach($arCountValues as $key => $value){
+
             $arLanguageCountValues[$key] = [
                 'key' => $key,
                 'value' => $value,
-                'languages' => Languages::find()->in($key)->all(),
+                'languages' => !empty($key)?Languages::find()->in($key)->all():[],
             ];
         }
         return $arLanguageCountValues;
