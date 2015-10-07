@@ -42,8 +42,13 @@ AppAsset::register($this);
     } else {
         $menuItems[] = ['label' => 'Entity Types', 'url' => ['/entity/entity-types/index']];
         $menuItems[] = ['label' => 'Processes', 'url' => ['/entity/processes/index']];
-        $menuItems[] = ['label' => 'Integration', 'url' => ['/epigu/integration-actions/index']];
-        $menuItems[] = ['label' => 'EPIGU', 'url' => ['/epigu/epigu-service/index']];
+        $menuItems[] = ['label' => 'System',
+            'items' => [
+                ['label' => 'EPIGU Services', 'url' => ['/epigu/epigu-service/index']],
+                ['label' => 'Integration', 'url' => ['/epigu/integration-actions/index']],
+                ['label' => 'Handlers', 'url' => ['/entity/handlers/index']],
+            ]
+        ];
         $menuItems[] = ['label' => 'Users', 'url' => ['/entity/user/index']];
         $menuItems[] = ['label' => 'Roles', 'url' => ['/entity/roles/index']];
         $menuItems[] = ['label' => 'Rights', 'url' => ['/entity/rights/index']];
