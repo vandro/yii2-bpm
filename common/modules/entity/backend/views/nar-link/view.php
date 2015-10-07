@@ -5,7 +5,7 @@ use yii\widgets\DetailView;
 use common\modules\entity\common\models\ProcessNodes;
 use common\modules\entity\common\models\NodesActions;
 use common\modules\entity\common\models\Roles;
-
+use yii\bootstrap\Tabs;
 /* @var $this yii\web\View */
 /* @var $model common\modules\entity\common\models\NodeActionRoleLink */
 
@@ -30,23 +30,38 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
+<?= Tabs::widget([
+        'items' => [
             [
-                'attribute' => 'node_id',
-                'value' => ProcessNodes::findOne($model['node_id'])->title,
+                'label' => 'Action',
+                'content' => DetailView::widget([
+                    'model' => $model,
+                    'attributes' => [
+                        'id',
+                        [
+                            'attribute' => 'node_id',
+                            'value' => ProcessNodes::findOne($model['node_id'])->title,
+                        ],
+                        [
+                            'attribute' => 'action_id',
+                            'value' => NodesActions::findOne($model['action_id'])->title,
+                        ],
+                        [
+                            'attribute' => 'role_id',
+                            'value' => Roles::findOne($model['role_id'])->title,
+                        ],
+                    ],
+                ]),
+                'active' => ($tab == 1),
             ],
             [
-                'attribute' => 'action_id',
-                'value' => NodesActions::findOne($model['action_id'])->title,
-            ],
-            [
-                'attribute' => 'role_id',
-                'value' => Roles::findOne($model['role_id'])->title,
+                'label' =>'Handlers',
+                'content' => $this->render('_handlersIndex', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 2),
             ],
         ],
-    ]) ?>
+])?>
 
 </div>

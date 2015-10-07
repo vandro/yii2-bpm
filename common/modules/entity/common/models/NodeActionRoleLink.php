@@ -3,7 +3,7 @@
 namespace common\modules\entity\common\models;
 
 use Yii;
-
+use yii\data\ActiveDataProvider;
 /**
  * This is the model class for table "node_action_role_link".
  *
@@ -99,5 +99,19 @@ class NodeActionRoleLink extends \yii\db\ActiveRecord
     public function is_automatic()
     {
         return $this->execution_type == 'automatic';
+    }
+
+    public function getHandlers()
+    {
+        return $this->hasMany(ActionHandlerLink::className(), ['action_id' => 'action_id']);
+    }
+
+    public function getHandlersAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getHandlers(),
+        ]);
+
+        return $dataProvider;
     }
 }

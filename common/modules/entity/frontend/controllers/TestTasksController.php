@@ -3,7 +3,9 @@
 namespace common\modules\entity\frontend\controllers;
 
 //use common\modules\entity\common\factories\BehaviorClassFactory;
+use common\modules\entity\common\models\smi\SmiFounders;
 use common\modules\entity\common\models\smi\SmiReestr;
+use common\modules\entity\common\models\smi\SmiSpecialization;
 use Yii;
 use common\modules\entity\common\models\permission\Tasks;
 use common\modules\entity\common\models\permission\TasksSearch;
@@ -152,6 +154,22 @@ class TestTasksController extends Controller
 
     public function actionTest()
     {
-        return $this->render('index2');
+        $specializations = SmiSpecialization::find()->all();
+        $founders = SmiFounders::find()->all();
+
+        foreach($founders as $founder) {
+            DebugHelper::printSingleObject(count(SmiReestr::find()->founder($founder)->all()));
+        }
+//        return $this->render('index2');
+    }
+
+    public function actionDraw()
+    {
+        return $this->render('draw');
+    }
+
+    public function actionConfig($id)
+    {
+        DebugHelper::printSingleObject(json_decode(file_get_contents('http://official2.gov.uz/getConfig/'.$id)));
     }
 }
