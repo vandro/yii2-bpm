@@ -66,6 +66,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
                 'active' => ($tab == 4),
             ],
+            [
+                'label' =>'Child forms',
+                'content' => $this->render('_childFormsIndex', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 5),
+            ],
         ],
     ]);?>
 
