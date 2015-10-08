@@ -4,6 +4,7 @@ namespace common\modules\entity\common\models;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\web\HttpException;
 
 /**
  * This is the model class for table "nodes_actions".
@@ -147,8 +148,14 @@ class NodesActions extends \yii\db\ActiveRecord
         foreach($this->actionHandlerLinks as $link){
             $handlerClass = $link->handler->class;
             $handler = new $handlerClass(json_decode($link->settings, true));
-            $handler->run();
+            if($handler->run()){
+                continue;
+            }else{
+                throw new HttpException(404, 'Handler "'.$link->$link->handler->class.'" failed');
+            }
         }
+
+        return true;
     }
 
 //    public function runHandlers()
