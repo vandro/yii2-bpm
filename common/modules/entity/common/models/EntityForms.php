@@ -165,4 +165,21 @@ class EntityForms extends \yii\db\ActiveRecord
 
         return $dataProvider;
     }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChildForms()
+    {
+        return $this->hasMany(EntityChildForm::className(), ['parent_form_id' => 'id']);
+    }
+
+    public function getChildFormsAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getChildForms(),
+        ]);
+
+        return $dataProvider;
+    }
 }
