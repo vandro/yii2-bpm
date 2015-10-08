@@ -129,4 +129,40 @@ class NodesActions extends \yii\db\ActiveRecord
     {
         return $this->type == 'automatic';
     }
+
+    public function getActionHandlerLinks()
+    {
+        return $this->hasMany(ActionHandlerLink::className(), ['action_id' => 'id'])
+            ->via('nodeActionRoleLinks');
+    }
+
+    public function getHandlers()
+    {
+        return $this->hasMany(Handlers::className(), ['id' => 'handler_id'])
+            ->via('actionHandlerLinks');
+    }
+
+    public function runHandlers()
+    {
+        foreach($this->actionHandlerLinks as $link){
+            $handlerClass = $link->handler->class;
+            $handler = new $handlerClass(json_decode($link->settings, true));
+            $handler->run();
+        }
+    }
+
+//    public function runHandlers()
+//    {
+//        foreach($this->actionHandlerLinks as $link){
+//            $container = new Container;
+//            $container->set($link->handler->code, [
+//                'class' => $link->handler->class,
+//                'settings' => json_decode($link->settings,true),
+//            ]);
+//
+//            $handler = $container->get($link->handler->code);
+//
+//            $handler->run();
+//        }
+//    }
 }
