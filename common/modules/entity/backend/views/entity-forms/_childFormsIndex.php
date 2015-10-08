@@ -27,11 +27,14 @@ use common\modules\entity\common\models\EntityFields;
         'dataProvider' => $model->getChildFormsAdp(),
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+            [
+                'attribute' => 'entity_type_id',
+                'value' => function($model){
+                    return !empty($model->parentForm)?$model->parentForm->title:'';
+                }
+            ],
             'title',
             'code',
-            'type',
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {update} {delete}',
