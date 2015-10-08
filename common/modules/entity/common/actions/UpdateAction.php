@@ -8,6 +8,7 @@
 namespace common\modules\entity\common\actions;
 
 use Yii;
+use yii\web\NotFoundHttpException;
 
 class UpdateAction extends \yii\base\Action
 {
