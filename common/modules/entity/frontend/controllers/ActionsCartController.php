@@ -100,7 +100,7 @@ class ActionsCartController extends Controller
 
         if ($this->loggingAction($task, $task->currentNode, $action) && $entity->load(Yii::$app->request->post()) && $entity->save()) {
 
-            if($this->setTasksEntitiesLink($task_id,$entity->id,$action, $task->currentNode, $prevision_node_id)) {
+            if($this->setTasksEntitiesLink($task_id,$entity->id,$action, $task->currentNode, $prevision_node_id)) { // && $action->runHandlers()) {
 
 //                $task = $this->findTaskModel($task_id);
                 $nextNodeId = $task->currentNode->getNextNodeId($action);
@@ -118,11 +118,20 @@ class ActionsCartController extends Controller
                         ]);
                     }
                 } else {
-                    DebugHelper::printSingleObjectAndDie(['nodes-cart/view', 'id' => $nextNodeId, 'task_id' => $task_id]);
+//                    DebugHelper::printSingleObjectAndDie(['nodes-cart/view', 'id' => $nextNodeId, 'task_id' => $task_id]);
                     //Завершить обработку заявки.
                     // Принять (перенести) задачу из таблицы корзины в основную таблицу
                     // и перенести все сущности из таблиц корзины в основные таблицы соответсвующих сущностей
                     // Вывести сообщение о принятий
+                    return $this->render('warning', [
+                        'params' => [
+                            'action' => $action->attributes,
+                            'task' => $task->attributes,
+                            'currentNode' => $task->currentNode->attributes,
+                            'entity' => $entity->attributes,
+                            //'role' => $user->attributes,
+                        ]
+                    ]);
                 }
             }
         } else {
