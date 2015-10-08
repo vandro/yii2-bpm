@@ -49,8 +49,8 @@ class EntityChildForm extends \yii\db\ActiveRecord
     {
         return [
             [['parent_form_id', 'entity_type_id', 'title', 'code'], 'required'],
-            [['parent_form_id', 'foreign_key_field_id', 'title', 'code', 'options', 'html', 'mode'], 'string'],
-            [['entity_type_id', 'widget', 'added'], 'integer'],
+            [['title', 'code', 'options', 'html', 'mode'], 'string'],
+            [['parent_form_id', 'foreign_key_field_id', 'entity_type_id', 'widget', 'added'], 'integer'],
             [['code'], 'unique'],
             [['title'], 'unique']
         ];
