@@ -41,8 +41,8 @@ class Regions extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'title' => Yii::t('app', 'Title'),
-            'order' => Yii::t('app', 'Order'),
+            'title' => Yii::t('app', 'Наименования'),
+            'order' => Yii::t('app', 'Порядка'),
         ];
     }
 

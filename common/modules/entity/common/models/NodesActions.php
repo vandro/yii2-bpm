@@ -59,11 +59,11 @@ class NodesActions extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'form_id' => Yii::t('app', 'Form ID'),
-            'next_node_id' => Yii::t('app', 'Next Node ID'),
-            'title' => Yii::t('app', 'Title'),
-            'code' => Yii::t('app', 'Code'),
-            'type' => Yii::t('app', 'Type'),
+            'form_id' => Yii::t('app', 'Таблица'),
+            'next_node_id' => Yii::t('app', 'Следуший шаг'),
+            'title' => Yii::t('app', 'Наименования'),
+            'code' => Yii::t('app', 'Код'),
+            'type' => Yii::t('app', 'Тип'),
         ];
     }
 

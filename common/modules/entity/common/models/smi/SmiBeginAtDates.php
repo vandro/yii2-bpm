@@ -35,7 +35,7 @@ class SmiBeginAtDates extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'begin_at' => Yii::t('app', 'Чиқа бошлаган даври'),
+            'begin_at' => Yii::t('app', 'Дата начало'),
         ];
     }
 

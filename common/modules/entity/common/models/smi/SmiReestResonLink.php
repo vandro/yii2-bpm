@@ -40,8 +40,8 @@ class SmiReestResonLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'smi_reestr_id' => Yii::t('app', 'Smi Reestr ID'),
-            'smi_reason_id' => Yii::t('app', 'Smi Reason ID'),
+            'smi_reestr_id' => Yii::t('app', 'Реестр СМИ'),
+            'smi_reason_id' => Yii::t('app', 'Причина СМИ'),
         ];
     }
 

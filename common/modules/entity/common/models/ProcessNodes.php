@@ -64,11 +64,11 @@ class ProcessNodes extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'process_id' => Yii::t('app', 'Process ID'),
-            'title' => Yii::t('app', 'Title'),
-            'code' => Yii::t('app', 'Code'),
-            'order_status' => Yii::t('app', 'Order status'),
-            'execution_type' => Yii::t('app', 'Execution Type'),
+            'process_id' => Yii::t('app', 'Процесс'),
+            'title' => Yii::t('app', 'Наименования'),
+            'code' => Yii::t('app', 'Код'),
+            'order_status' => Yii::t('app', 'Порядка статус'),
+            'execution_type' => Yii::t('app', 'Выполнения'),
         ];
     }
 

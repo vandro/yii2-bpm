@@ -59,18 +59,18 @@ class User extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'organisation_id' => Yii::t('app', 'Organisation ID'),
-            'department_id' => Yii::t('app', 'Department ID'),
-            'username' => Yii::t('app', 'Username'),
-            'email' => Yii::t('app', 'Email'),
-            'password_hash' => Yii::t('app', 'Password Hash'),
-            'status' => Yii::t('app', 'Status'),
-            'role' => Yii::t('app', 'Role'),
-            'auth_key' => Yii::t('app', 'Auth Key'),
-            'password_reset_token' => Yii::t('app', 'Password Reset Token'),
-            'account_activation_token' => Yii::t('app', 'Account Activation Token'),
-            'created_at' => Yii::t('app', 'Created At'),
-            'updated_at' => Yii::t('app', 'Updated At'),
+            'organisation_id' => Yii::t('app', 'Организация'),
+            'department_id' => Yii::t('app', 'Отдел'),
+            'username' => Yii::t('app', 'Имя пользователя'),
+            'email' => Yii::t('app', 'Эл.адрес'),
+            'password_hash' => Yii::t('app', 'Хэш пароля'),
+            'status' => Yii::t('app', 'Статус'),
+            'role' => Yii::t('app', 'Роль'),
+            'auth_key' => Yii::t('app', 'Ключ Авт'),
+            'password_reset_token' => Yii::t('app', 'Токен восстановления пароля'),
+            'account_activation_token' => Yii::t('app', 'Токен активизация учетной записи'),
+            'created_at' => Yii::t('app', 'Дата добавлено'),
+            'updated_at' => Yii::t('app', 'Дата обновлено'),
         ];
     }
 

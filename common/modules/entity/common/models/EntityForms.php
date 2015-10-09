@@ -60,12 +60,12 @@ class EntityForms extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'entity_id' => 'Entity ID',
-            'title' => 'Title',
-            'code' => 'Code',
+            'entity_id' => 'Объект',
+            'title' => 'Наименования',
+            'code' => 'Код',
             'html' => 'Html',
-            'mode' => 'Mode',
-            'added' => 'Added',
+            'mode' => 'Режим',
+            'added' => 'Добавленной',
         ];
     }
 

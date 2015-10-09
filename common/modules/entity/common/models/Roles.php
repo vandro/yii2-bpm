@@ -52,8 +52,8 @@ class Roles extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'title' => Yii::t('app', 'Title'),
-            'code' => Yii::t('app', 'Code'),
+            'title' => Yii::t('app', 'Наименования'),
+            'code' => Yii::t('app', 'Код'),
         ];
     }
 

@@ -53,9 +53,9 @@ class EntityViewsLang extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'main' => Yii::t('app', 'Main'),
-            'lang' => Yii::t('app', 'Lang'),
-            'title' => Yii::t('app', 'Title'),
+            'main' => Yii::t('app', 'Главный'),
+            'lang' => Yii::t('app', 'Языки'),
+            'title' => Yii::t('app', 'Наименования'),
         ];
     }
 

@@ -44,9 +44,9 @@ class Gridviews extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'title' => Yii::t('app', 'Title'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'default' => Yii::t('app', 'Default'),
+            'title' => Yii::t('app', 'Наименования'),
+            'user_id' => Yii::t('app', 'Ползователь'),
+            'default' => Yii::t('app', 'По умолчанию'),
         ];
     }
 

@@ -53,8 +53,8 @@ class InActionEntityLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'integration_action_id' => Yii::t('app', 'Integration Action ID'),
-            'entity_type_id' => Yii::t('app', 'Entity Type ID'),
+            'integration_action_id' => Yii::t('app', 'Интеграционный действий'),
+            'entity_type_id' => Yii::t('app', 'Тип объекта'),
         ];
     }
 

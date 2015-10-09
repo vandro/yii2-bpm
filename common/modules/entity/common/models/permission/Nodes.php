@@ -62,11 +62,11 @@ class Nodes extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'process_id' => Yii::t('app', 'Process ID'),
-            'title' => Yii::t('app', 'Title'),
-            'code' => Yii::t('app', 'Code'),
-            'order_status' => Yii::t('app', 'Order Status'),
-            'execution_type' => Yii::t('app', 'Execution Type'),
+            'process_id' => Yii::t('app', 'Процесс'),
+            'title' => Yii::t('app', 'Наименования'),
+            'code' => Yii::t('app', 'Код'),
+            'order_status' => Yii::t('app', 'Статус порядок'),
+            'execution_type' => Yii::t('app', 'Выполнение'),
         ];
     }
 

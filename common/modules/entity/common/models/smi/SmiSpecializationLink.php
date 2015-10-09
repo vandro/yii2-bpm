@@ -43,8 +43,8 @@ class SmiSpecializationLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'smi_reestr_id' => Yii::t('app', 'Smi Reestr ID'),
-            'specialization_id' => Yii::t('app', 'Specialization ID'),
+            'smi_reestr_id' => Yii::t('app', 'Реестр СМИ'),
+            'specialization_id' => Yii::t('app', 'Специализация'),
         ];
     }
 
