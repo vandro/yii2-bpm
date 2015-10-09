@@ -85,6 +85,7 @@ class EntityFormAction extends \yii\base\Action
 
     protected function goToNextNode($task, $action, $entity)
     {
+
         $nextNodeId = $task->currentNode->getNextNodeId($action);
 
         if (!empty($nextNodeId)) {
@@ -100,6 +101,12 @@ class EntityFormAction extends \yii\base\Action
                 ]);
             }
         } else {
+            DebugHelper::printSingleObject([
+                'action' => $action->attributes,
+                'task' => $task->attributes,
+                'currentNode' => $task->currentNode->attributes,
+                'entity' => $entity->attributes,
+            ]);
             return $this->controller->render('warning', [
                 'params' => [
                     'action' => $action->attributes,
