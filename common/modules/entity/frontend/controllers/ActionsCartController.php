@@ -16,6 +16,8 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use common\modules\entity\common\actions\CreateChildEntityElementAction;
+use common\modules\entity\common\actions\EntityFormAction;
 
 
 /**
@@ -57,6 +59,25 @@ class ActionsCartController extends Controller
 
     public $layout = 'main';
 
+    public function actions()
+    {
+        return [
+            'form' => [
+                'class' => EntityFormAction::className(),
+                'action_id' => Yii::$app->request->get('id'),
+                'task_id' => Yii::$app->request->get('task_id'),
+            ],
+            'createChild' => [
+                'class' => CreateChildEntityElementAction::className(),
+                'params' => Yii::$app->request->post(),
+                'action_id' => Yii::$app->request->get('action_id'),
+                'task_id' => Yii::$app->request->get('task_id'),
+                'form_id' => Yii::$app->request->get('form_id'),
+                'redirect_url' => 'form',
+            ],
+        ];
+    }
+
     /**
      * Lists all NodesActions models.
      * @return mixed
@@ -84,77 +105,77 @@ class ActionsCartController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single NodesActions model.
-     * @param integer $id
-     * @return mixed
-     */
-    public function actionForm($id, $task_id, $prevision_node_id = null)
-    {
-        $this->layout = 'mainWithNoLeftMenu';
-
-        $action = $this->findModel($id);
-        $task = $this->findTaskModel($task_id);
-        $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->get($action, $task);
-        $user = User::findOne(Yii::$app->user->id);
-
-        if ($this->loggingAction($task, $task->currentNode, $action) && $entity->load(Yii::$app->request->post()) && $entity->save()) {
-
-            if($this->setTasksEntitiesLink($task_id,$entity->id,$action, $task->currentNode, $prevision_node_id)) { // && $action->runHandlers()) {
-
-//                $task = $this->findTaskModel($task_id);
-                $nextNodeId = $task->currentNode->getNextNodeId($action);
-
-                if (!empty($nextNodeId)) {
-                    $previsionNodeId = $task->current_node_id;
-                    $task->current_node_id = $nextNodeId;
-
-                    if ($task->save()) {
-
-                        return $this->redirect(['nodes-cart/view',
-                            'id' => $nextNodeId,
-                            'task_id' => $task_id,
-                            'prevision_node_id' => $previsionNodeId,
-                        ]);
-                    }
-                } else {
-//                    DebugHelper::printSingleObjectAndDie(['nodes-cart/view', 'id' => $nextNodeId, 'task_id' => $task_id]);
-                    //Завершить обработку заявки.
-                    // Принять (перенести) задачу из таблицы корзины в основную таблицу
-                    // и перенести все сущности из таблиц корзины в основные таблицы соответсвующих сущностей
-                    // Вывести сообщение о принятий
-                    return $this->render('warning', [
-                        'params' => [
-                            'action' => $action->attributes,
-                            'task' => $task->attributes,
-                            'currentNode' => $task->currentNode->attributes,
-                            'entity' => $entity->attributes,
-                            //'role' => $user->attributes,
-                        ]
-                    ]);
-                }
-            }
-        } else {
-            if($user->hasActionAccess($action, $task->currentNode)) {
-                return $this->render('entity/create', [
-                    'formModel' => $action->form,
-                    'entity' => $entity,
-                    'task' => $this->findTaskModel($task_id),
-                    'task_id' => $task_id,
-                    'node_id' => $task->current_node_id,
-                    'action_id' => $id,
-                    'has_file_upload' => $action->getHasFileUploads($task->current_node_id),
-                ]);
-            }else{
-                // Переход на конечную ноду
-                return $this->redirect(['nodes-cart/view',
-                    'id' => $task->process->lastNode->id,
-                    'task_id' => $task_id,
-                    'prevision_node_id' => $task->current_node_id,
-                ]);
-            }
-        }
-    }
+//    /**
+//     * Displays a single NodesActions model.
+//     * @param integer $id
+//     * @return mixed
+//     */
+//    public function actionForm($id, $task_id, $prevision_node_id = null)
+//    {
+//        $this->layout = 'mainWithNoLeftMenu';
+//
+//        $action = $this->findModel($id);
+//        $task = $this->findTaskModel($task_id);
+//        $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->get($action, $task);
+//        $user = User::findOne(Yii::$app->user->id);
+//
+//        if ($this->loggingAction($task, $task->currentNode, $action) && $entity->load(Yii::$app->request->post()) && $entity->save()) {
+//
+//            if($this->setTasksEntitiesLink($task_id,$entity->id,$action, $task->currentNode, $prevision_node_id)) { // && $action->runHandlers()) {
+//
+////                $task = $this->findTaskModel($task_id);
+//                $nextNodeId = $task->currentNode->getNextNodeId($action);
+//
+//                if (!empty($nextNodeId)) {
+//                    $previsionNodeId = $task->current_node_id;
+//                    $task->current_node_id = $nextNodeId;
+//
+//                    if ($task->save()) {
+//
+//                        return $this->redirect(['nodes-cart/view',
+//                            'id' => $nextNodeId,
+//                            'task_id' => $task_id,
+//                            'prevision_node_id' => $previsionNodeId,
+//                        ]);
+//                    }
+//                } else {
+////                    DebugHelper::printSingleObjectAndDie(['nodes-cart/view', 'id' => $nextNodeId, 'task_id' => $task_id]);
+//                    //Завершить обработку заявки.
+//                    // Принять (перенести) задачу из таблицы корзины в основную таблицу
+//                    // и перенести все сущности из таблиц корзины в основные таблицы соответсвующих сущностей
+//                    // Вывести сообщение о принятий
+//                    return $this->render('warning', [
+//                        'params' => [
+//                            'action' => $action->attributes,
+//                            'task' => $task->attributes,
+//                            'currentNode' => $task->currentNode->attributes,
+//                            'entity' => $entity->attributes,
+//                            //'role' => $user->attributes,
+//                        ]
+//                    ]);
+//                }
+//            }
+//        } else {
+//            if($user->hasActionAccess($action, $task->currentNode)) {
+//                return $this->render('entity/create', [
+//                    'formModel' => $action->form,
+//                    'entity' => $entity,
+//                    'task' => $this->findTaskModel($task_id),
+//                    'task_id' => $task_id,
+//                    'node_id' => $task->current_node_id,
+//                    'action_id' => $id,
+//                    'has_file_upload' => $action->getHasFileUploads($task->current_node_id),
+//                ]);
+//            }else{
+//                // Переход на конечную ноду
+//                return $this->redirect(['nodes-cart/view',
+//                    'id' => $task->process->lastNode->id,
+//                    'task_id' => $task_id,
+//                    'prevision_node_id' => $task->current_node_id,
+//                ]);
+//            }
+//        }
+//    }
 
     protected function checkUserRole()
     {

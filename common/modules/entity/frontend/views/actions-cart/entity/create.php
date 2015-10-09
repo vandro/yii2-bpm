@@ -29,6 +29,7 @@ use yii\helpers\Html;
             'node_id' => $node_id,
             'action_id' => $action_id,
             'has_file_upload' =>  $has_file_upload,
+            'controller' => $controller,
         ]) ?>
     </div>
 </div>

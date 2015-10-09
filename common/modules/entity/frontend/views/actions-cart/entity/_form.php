@@ -8,6 +8,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\modules\upload\widgets\MegaFileUploadWidget;
+use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $model common\modules\entity\common\models\EntityTypes */
@@ -22,9 +24,41 @@ use common\modules\upload\widgets\MegaFileUploadWidget;
             'name' => 'node-action-form',
         ]
     ]); ?>
-        <?= $formModel->render($form, $entity) ?>
+        <?php if($formModel->mode != 'view'){?>
+            <?= $formModel->render($form, $entity) ?>
+        <?php }else{ ?>
+            <div style="display: none;">
+                <?= $formModel->render($form, $entity) ?>
+            </div>
+        <?php } ?>
     <?php ActiveForm::end(); ?>
 </div>
+
+<?php if($formModel->mode == 'view'){?>
+<div class="panel-body">
+    <?= DetailView::widget([
+    'model' => $entity,
+    'attributes' => $formModel->columns,
+    ])?>
+
+    <?php foreach($formModel->childForms as $childForm){?>
+        <?php $childEntity = $childForm->getChildEntity($entity);?>
+        <?=$childForm->getAddButton();?>
+        <?=GridView::widget([
+            'dataProvider' => $childEntity->search(),
+            'columns' => $childForm->columnsForGridView,
+        ]);?>
+        <?= $this->render('childForm', [
+            'childForm' => $childForm,
+            'entity' => $childEntity,
+            'task_id' => $task_id,
+            'node_id' => $node_id,
+            'action_id' => $action_id,
+        ]) ?>
+    <?php } ?>
+</div>
+<?php } ?>
+
 <?php if($has_file_upload){?>
     <div class="panel-body">
         <?= MegaFileUploadWidget::widget([
