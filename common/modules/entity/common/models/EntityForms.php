@@ -171,8 +171,7 @@ class EntityForms extends \yii\db\ActiveRecord
     {
         $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getByForm($this);
         $entity->{$this->foreignKeyField->code} = $parentEntity->id;
-
-//        return $entity->search();
+        
         return $entity;
     }
 
