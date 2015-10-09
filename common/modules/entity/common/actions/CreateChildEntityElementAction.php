@@ -24,7 +24,7 @@ class CreateChildEntityElementAction extends \yii\base\Action
     public function run()
     {
         $form = EntityForms::findOne($this->form_id);
-        $model = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getByForm($form);
+        $model = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getChildByForm($form);
 
         $model->load(Yii::$app->request->post());
         $model->save();
