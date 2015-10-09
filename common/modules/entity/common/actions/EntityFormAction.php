@@ -107,7 +107,7 @@ class EntityFormAction extends \yii\base\Action
                 'currentNode' => $task->currentNode->attributes,
                 'entity' => $entity->attributes,
             ]);
-            return $this->controller->render('warning', [
+            return $this->controller->render('warningView', [
                 'params' => [
                     'action' => $action->attributes,
                     'task' => $task->attributes,
