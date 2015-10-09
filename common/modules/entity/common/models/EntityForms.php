@@ -2,10 +2,13 @@
 
 namespace common\modules\entity\common\models;
 
+use common\helpers\DebugHelper;
+use common\modules\entity\common\config\Config;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
 
 /**
  * This is the model class for table "entity_forms".
@@ -145,16 +148,39 @@ class EntityForms extends \yii\db\ActiveRecord
 
             return $html;
         }else{
-            $columns = [];
-            foreach($this->fields as $field)
-            {
-                $columns[] = $field->code;
-            }
-            return DetailView::widget([
+            $html = DetailView::widget([
                 'model' => $entity,
-                'attributes' => $columns,
+                'attributes' => $this->columns,
             ]);
+
+            foreach($this->childForms as $childForm){
+                $html .= GridView::widget([
+                    'dataProvider' => $childForm->getChildEntityAdp($entity),
+                    'columns' => $childForm->columns,
+                ]);
+            }
+
+            return $html;
         }
+    }
+
+    public function getChildEntityAdp($parentEntity)
+    {
+        $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getByForm($this);
+        $entity->{$this->foreignKeyField->code} = $parentEntity->id;
+
+        return $entity->search();
+    }
+
+    public function getColumns()
+    {
+        $columns = [];
+        foreach($this->fields as $field)
+        {
+            $columns[] = $field->code;
+        }
+
+        return $columns;
     }
 
     /**
