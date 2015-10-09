@@ -10,6 +10,7 @@ namespace common\modules\entity\common\factories;
 //use backend\models\Entity;
 use backend\models\EntityItemModel;
 use common\helpers\DebugHelper;
+use common\modules\entity\common\components\ChildEntity;
 use common\modules\entity\common\models\EntityTypes;
 use common\modules\entity\common\components\Entity;
 use common\modules\entity\common\models\NodesActions;
@@ -22,6 +23,7 @@ use yii\web\NotFoundHttpException;
 class EntityFactory extends Component
 {
     protected static $model = null;
+    protected static $childModel = null;
     protected static $configs = [];
 
     protected static $rules = [];
@@ -57,6 +59,27 @@ class EntityFactory extends Component
         }
 
         return $model;
+    }
+
+
+    public static function getChildByForm($form)
+    {
+
+        self::$form = $form;
+        $entityType = self::getEntityType($form->entity_id);
+        $model = self::getChildModel();
+        $model->modelInit(self::getConfig($entityType));
+        $model->setEntityType($entityType);
+
+        return $model;
+    }
+
+    protected static function getChildModel()
+    {
+        if(empty(self::$childModel)){
+            self::$childModel = new ChildEntity();
+        }
+        return self::$childModel;
     }
 
     public static function getByForm($form)
