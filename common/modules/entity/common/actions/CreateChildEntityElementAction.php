@@ -23,22 +23,17 @@ class CreateChildEntityElementAction extends \yii\base\Action
 
     public function run()
     {
-//        $model = new SmiReestr();
         $form = EntityForms::findOne($this->form_id);
         $model = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getByForm($form);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->controller->redirect([$this->redirect_url,
-                'id' =>$this->action_id,
-                'task_id' => $this->task_id,
-                'prevision_node_id' => $this->prevision_node_id,
-            ]);
-        } else {
-            return $this->controller->redirect([$this->redirect_url,
-                'id' =>$this->action_id,
-                'task_id' => $this->task_id,
-                'prevision_node_id' => $this->prevision_node_id,
-            ]);
-        }
+        $model->load(Yii::$app->request->post());
+        $model->save();
+
+        return $this->controller->redirect([$this->redirect_url,
+            'id' =>$this->action_id,
+            'task_id' => $this->task_id,
+            'prevision_node_id' => $this->prevision_node_id,
+        ]);
+
     }
 }
