@@ -19,38 +19,13 @@ use common\modules\entity\common\models\EntityFields;
 ?>
 <div class="entity-types-lang-index">
 <br>
-    <p>
-        <?= Html::a('Add child form', ['entity-child-form/create', 'parent_id' => $model->id], ['class' => 'btn btn-success']) ?>
-    </p>
 
     <?= GridView::widget([
         'dataProvider' => $model->getChildFormsAdp(),
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            [
-                'attribute' => 'entity_type_id',
-                'value' => function($model){
-                    return !empty($model->parentForm)?$model->parentForm->title:'';
-                }
-            ],
             'title',
             'code',
-            [
-                'class' => 'yii\grid\ActionColumn',
-                'template'=>'{view} {update} {delete}',
-                'buttons'=>[
-                    'view'=>function ($url, $model) {
-                        return ActionColumnHelper::view($url,$model,'entity/entity-child-form');
-                    },
-                    'update'=>function ($url, $model) {
-                        return ActionColumnHelper::update($url,$model,'entity/entity-child-form');
-                    },
-                    'delete'=>function ($url, $model) {
-                        return ActionColumnHelper::delete($url,$model,'entity/entity-child-form');
-                    },
-                ],
-
-            ],
         ],
     ]); ?>
 

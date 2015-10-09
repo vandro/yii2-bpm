@@ -21,6 +21,10 @@ use yii\web\JsExpression;
 
     <?= $form->field($model, 'mode')->dropDownList(['create' => 'Create new entity item', 'update' => 'Update existed entity item'], ['prompt' => 'Choose form work mode']); ?>
 
+    <?= $form->field($model, 'parent_form_id')->dropDownList($model->getAllForms(), ['prompt' => 'Choose Parent Form']); ?>
+
+    <?= $form->field($model, 'foreign_key_field_id')->dropDownList($model->getAllEntityFields(), ['prompt' => 'Choose Foreign Key Field ID']); ?>
+
     <?php if(!empty($model->fields) || !empty($model->fields)){?>
 
         <?= $form->field($model, 'html')->widget(

@@ -4,6 +4,7 @@ namespace common\modules\entity\common\models;
 
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "entity_forms".
@@ -46,7 +47,7 @@ class EntityForms extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'code'], 'required'],
-            [['entity_id','added'], 'integer'],
+            [['entity_id','added','parent_form_id', 'foreign_key_field_id'], 'integer'],
             [['title', 'code', 'html', 'widget', 'mode'], 'string'],
             [['code'], 'unique'],
             [['title'], 'unique']
@@ -61,6 +62,8 @@ class EntityForms extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'entity_id' => 'Entity ID',
+            'parent_form_id' => 'Parent Form ID',
+            'foreign_key_field_id' => 'Foreign Key Field ID',
             'title' => 'Title',
             'code' => 'Code',
             'html' => 'Html',
@@ -171,7 +174,7 @@ class EntityForms extends \yii\db\ActiveRecord
      */
     public function getChildForms()
     {
-        return $this->hasMany(EntityChildForm::className(), ['parent_form_id' => 'id']);
+        return $this->hasMany(EntityForms::className(), ['parent_form_id' => 'id']);
     }
 
     public function getChildFormsAdp()
@@ -181,5 +184,28 @@ class EntityForms extends \yii\db\ActiveRecord
         ]);
 
         return $dataProvider;
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParentForm()
+    {
+        return $this->hasOne(EntityForms::className(), ['id' => 'parent_form_id']);
+    }
+
+    public function getAllForms()
+    {
+        return ArrayHelper::map(EntityForms::find()->where(['not in','id',[$this->id]])->all(), 'id', 'title');
+    }
+
+    public function getAllEntityFields()
+    {
+        return ArrayHelper::map($this->entity->fields, 'id', 'title');
+    }
+
+    public function getForeignKeyField()
+    {
+        return $this->hasOne(EntityFields::className(), ['id' => 'foreign_key_field_id']);
     }
 }

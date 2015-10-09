@@ -38,6 +38,14 @@ $this->params['breadcrumbs'][] = $this->title;
                     'attributes' => [
                         'id',
                         'entity_id',
+                        [
+                            'attribute' => 'parent_form_id',
+                            'value' => !empty($model->parentForm)?$model->parentForm->title:'',
+                        ],
+                        [
+                            'attribute' => 'foreign_key_field_id',
+                            'value' => !empty($model->foreignKeyField)?$model->foreignKeyField->title:'',
+                        ],
                         'title',
                         'code',
                         'html:ntext',
