@@ -9,6 +9,9 @@ use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use yii\helpers\Html;
+use yii\bootstrap\ActiveForm;
+use yii\bootstrap\Modal;
 
 /**
  * This is the model class for table "entity_forms".
@@ -28,6 +31,10 @@ use yii\grid\GridView;
  */
 class EntityForms extends \yii\db\ActiveRecord
 {
+    public $action_id;
+    public $task_id;
+    public $controller;
+
     /**
      * @inheritdoc
      */
@@ -139,37 +146,34 @@ class EntityForms extends \yii\db\ActiveRecord
 
     public function render($activeForm, $entity)
     {
-        if($this->mode != 'view') {
-            $html = $this->html;
+        $html = $this->html;
 
-            foreach ($this->fields as $field) {
-                $html = str_replace('{%' . $field->code . '%}', $field->getWidget($entity, $activeForm, $this), $html);
-            }
-
-            return $html;
-        }else{
-            $html = DetailView::widget([
-                'model' => $entity,
-                'attributes' => $this->columns,
-            ]);
-
-            foreach($this->childForms as $childForm){
-                $html .= GridView::widget([
-                    'dataProvider' => $childForm->getChildEntityAdp($entity),
-                    'columns' => $childForm->columnsForGridView,
-                ]);
-            }
-
-            return $html;
+        foreach ($this->fields as $field) {
+            $html = str_replace('{%' . $field->code . '%}', $field->getWidget($entity, $activeForm, $this), $html);
         }
+
+        return $html;
     }
 
-    public function getChildEntityAdp($parentEntity)
+
+    public function getAddButton()
+    {
+        return Html::button(Yii::t('app', 'Добавить'), [
+            'class' => 'btn',
+            'data' => [
+                'toggle' => 'modal',
+                'target' => '#'.$this->code,
+            ],
+        ]);
+    }
+
+    public function getChildEntity($parentEntity)
     {
         $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getByForm($this);
         $entity->{$this->foreignKeyField->code} = $parentEntity->id;
 
-        return $entity->search();
+//        return $entity->search();
+        return $entity;
     }
 
     public function getColumns()
