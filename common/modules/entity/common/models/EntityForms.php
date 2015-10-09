@@ -156,7 +156,7 @@ class EntityForms extends \yii\db\ActiveRecord
             foreach($this->childForms as $childForm){
                 $html .= GridView::widget([
                     'dataProvider' => $childForm->getChildEntityAdp($entity),
-                    'columns' => $childForm->columns,
+                    'columns' => $childForm->columnsForGridView,
                 ]);
             }
 
@@ -178,6 +178,20 @@ class EntityForms extends \yii\db\ActiveRecord
         foreach($this->fields as $field)
         {
             $columns[] = $field->code;
+        }
+
+        return $columns;
+    }
+
+    public function getColumnsForGridView()
+    {
+        $columns = [];
+        foreach($this->rules as $rule)
+        {
+            $options = json_decode($rule->value, true);
+            if(!isset($options['visible']) && $options['visible'] != 'off') {
+                $columns[] = $rule->field->code;
+            }
         }
 
         return $columns;
