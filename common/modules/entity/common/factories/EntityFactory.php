@@ -47,7 +47,7 @@ class EntityFactory extends Component
         $model->modelInit(self::getConfig($entityType));
         $model->setEntityType($entityType);
 
-        if($action->form->mode == 'update') {
+        if($action->form->mode == 'update' || $action->form->mode == 'view') {
             $entityItemLink = TasksEntitiesLink::find()->where(['task_id' => $task->id, 'entity_id' => $action->form->entity_id])->one();
             if (($itemModel = $model::findOne($entityItemLink->entity_item_id)) !== null) {
                 return $itemModel;
