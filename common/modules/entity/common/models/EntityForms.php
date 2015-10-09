@@ -5,6 +5,7 @@ namespace common\modules\entity\common\models;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
+use yii\widgets\DetailView;
 
 /**
  * This is the model class for table "entity_forms".
@@ -135,13 +136,25 @@ class EntityForms extends \yii\db\ActiveRecord
 
     public function render($activeForm, $entity)
     {
-        $html = $this->html;
+        if($this->mode != 'view') {
+            $html = $this->html;
 
-        foreach($this->fields as $field){
-            $html = str_replace('{%'.$field->code.'%}', $field->getWidget($entity,$activeForm,$this), $html);
+            foreach ($this->fields as $field) {
+                $html = str_replace('{%' . $field->code . '%}', $field->getWidget($entity, $activeForm, $this), $html);
+            }
+
+            return $html;
+        }else{
+            $columns = [];
+            foreach($this->fields as $field)
+            {
+                $columns[] = $field->code;
+            }
+            return DetailView::widget([
+                'model' => $entity,
+                'attributes' => $columns,
+            ]);
         }
-
-        return $html;
     }
 
     /**
