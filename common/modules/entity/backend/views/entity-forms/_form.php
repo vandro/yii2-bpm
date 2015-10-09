@@ -19,7 +19,7 @@ use yii\web\JsExpression;
 
     <?= $form->field($model, 'code')->textInput() ?>
 
-    <?= $form->field($model, 'mode')->dropDownList(['create' => 'Create new entity item', 'update' => 'Update existed entity item'], ['prompt' => 'Choose form work mode']); ?>
+    <?= $form->field($model, 'mode')->dropDownList(['create' => 'Create new entity item', 'update' => 'Update existed entity item', 'view' => 'View existed entity item'], ['prompt' => 'Choose form work mode']); ?>
 
     <?= $form->field($model, 'parent_form_id')->dropDownList($model->getAllForms(), ['prompt' => 'Choose Parent Form']); ?>
 
