@@ -32,20 +32,24 @@ class WidgetFactory extends Component
     protected function getHtml()
     {
         $entity = $this->entity;
-        if($this->field->type == 'VARCHAR' || $this->field->type == 'INT'){
-            if(empty($this->field->dictionary)) {
-                return $this->activeForm->field($this->entity, $this->field->code)->textInput();
-            }else{
-                if($this->form->mode == 'create') {
-                    $entity->{$this->field->code} = '';
+        if($this->field->id != $this->form->foreign_key_field_id) {
+            if ($this->field->type == 'VARCHAR' || $this->field->type == 'INT') {
+                if (empty($this->field->dictionary)) {
+                    return $this->activeForm->field($this->entity, $this->field->code)->textInput();
+                } else {
+                    if ($this->form->mode == 'create') {
+                        $entity->{$this->field->code} = '';
+                    }
+                    $dictionary = $this->field->dictionary;
+                    return $this->activeForm->field($entity, $this->field->code)->dropDownList($dictionary->getSelectData($this->field), [
+                        'prompt' => ' -- Выберите --'
+                    ]);
                 }
-                $dictionary = $this->field->dictionary;
-                return $this->activeForm->field($entity, $this->field->code)->dropDownList($dictionary->getSelectData($this->field),[
-                    'prompt' => ' -- Выберите --'
-                ]);
+            } elseif ($this->field->type == 'TEXT') {
+                return $this->activeForm->field($this->entity, $this->field->code)->textArea();
             }
-        }elseif($this->field->type == 'TEXT'){
-            return $this->activeForm->field($this->entity, $this->field->code)->textArea();
+        }else{
+            return $this->activeForm->field($this->entity, $this->field->code)->hiddenInput()->label('');
         }
     }
 
