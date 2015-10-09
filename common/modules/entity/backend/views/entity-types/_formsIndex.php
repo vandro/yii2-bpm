@@ -26,14 +26,15 @@ use common\helpers\ActionColumnHelper;
         'dataProvider' => $model->getFormsAdp(),
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-//            'entity_id',
             'title',
             'code',
-//            'html:ntext',
             'mode',
-
+            [
+                'attribute' => 'parent_form_id',
+                'value' => function($model){
+                    return !empty($model->parentForm)?$model->parentForm->title:'';
+                }
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {update} {delete}',
