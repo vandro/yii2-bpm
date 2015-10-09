@@ -49,7 +49,8 @@ class WidgetFactory extends Component
                 return $this->activeForm->field($this->entity, $this->field->code)->textArea();
             }
         }else{
-            return $this->activeForm->field($this->entity, $this->field->code)->hiddenInput()->label('');
+            $entityClassName = (new \ReflectionClass($this->entity))->getShortName();
+            return '<input type="hidden" id="'.strtolower($entityClassName).'-'.$this->field->code.'" class="form-control" name="'.$entityClassName.'['.$this->field->code.']" value="'.$this->entity{$this->field->code}.'">';
         }
     }
 
