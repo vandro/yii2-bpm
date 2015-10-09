@@ -33,45 +33,18 @@ class EntityFormAction extends \yii\base\Action
         $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->get($action, $task);
         $user = User::findOne(Yii::$app->user->id);
 
-//        return $this->processParentForm($task, $action, $entity, $user);
-
         if($action->form->mode != 'view'){
-            return $this->processParentForm($task, $action, $entity, $user);
+            return $this->processCreateUpdateModes($task, $action, $entity, $user);
         }else{
             return $this->processViewMode($task, $action, $entity, $user);
         }
     }
 
-    protected function processParentForm($task, $action, $entity, $user)
+    protected function processCreateUpdateModes($task, $action, $entity, $user)
     {
         if ($this->loggingAction($task, $task->currentNode, $action) && $entity->load(Yii::$app->request->post()) && $entity->save()) {
-
             if($this->setTasksEntitiesLink($this->task_id,$entity->id,$action, $task->currentNode, $this->prevision_node_id)) { // && $action->runHandlers()) {
-
-                $nextNodeId = $task->currentNode->getNextNodeId($action);
-
-                if (!empty($nextNodeId)) {
-                    $previsionNodeId = $task->current_node_id;
-                    $task->current_node_id = $nextNodeId;
-
-                    if ($task->save()) {
-
-                        return $this->controller->redirect(['nodes-cart/view',
-                            'id' => $nextNodeId,
-                            'task_id' => $this->task_id,
-                            'prevision_node_id' => $previsionNodeId,
-                        ]);
-                    }
-                } else {
-                    return $this->controller->render('warning', [
-                        'params' => [
-                            'action' => $action->attributes,
-                            'task' => $task->attributes,
-                            'currentNode' => $task->currentNode->attributes,
-                            'entity' => $entity->attributes,
-                        ]
-                    ]);
-                }
+                $this->goToNextNode($task, $action, $entity);
             }
         } else {
             return $this->render($task, $action, $entity, $user);
@@ -80,32 +53,8 @@ class EntityFormAction extends \yii\base\Action
 
     protected function processViewMode($task, $action, $entity, $user)
     {
-        if ($this->loggingAction($task, $task->currentNode, $action) && $entity->load(Yii::$app->request->post())) {
-
-            $nextNodeId = $task->currentNode->getNextNodeId($action);
-
-            if (!empty($nextNodeId)) {
-                $previsionNodeId = $task->current_node_id;
-                $task->current_node_id = $nextNodeId;
-
-                if ($task->save()) {
-
-                    return $this->controller->redirect(['nodes-cart/view',
-                        'id' => $nextNodeId,
-                        'task_id' => $this->task_id,
-                        'prevision_node_id' => $previsionNodeId,
-                    ]);
-                }
-            } else {
-                return $this->controller->render('warning', [
-                    'params' => [
-                        'action' => $action->attributes,
-                        'task' => $task->attributes,
-                        'currentNode' => $task->currentNode->attributes,
-                        'entity' => $entity->attributes,
-                    ]
-                ]);
-            }
+        if ($this->loggingAction($task, $task->currentNode, $action) && $entity->load(Yii::$app->request->post())) { // && $action->runHandlers()) {
+            $this->goToNextNode($task, $action, $entity);
         } else {
             return $this->render($task, $action, $entity, $user);
         }
@@ -134,9 +83,32 @@ class EntityFormAction extends \yii\base\Action
         }
     }
 
-    protected function processChildForm()
+    protected function goToNextNode($task, $action, $entity)
     {
+        $nextNodeId = $task->currentNode->getNextNodeId($action);
 
+        if (!empty($nextNodeId)) {
+            $previsionNodeId = $task->current_node_id;
+            $task->current_node_id = $nextNodeId;
+
+            if ($task->save()) {
+
+                return $this->controller->redirect(['nodes-cart/view',
+                    'id' => $nextNodeId,
+                    'task_id' => $this->task_id,
+                    'prevision_node_id' => $previsionNodeId,
+                ]);
+            }
+        } else {
+            return $this->controller->render('warning', [
+                'params' => [
+                    'action' => $action->attributes,
+                    'task' => $task->attributes,
+                    'currentNode' => $task->currentNode->attributes,
+                    'entity' => $entity->attributes,
+                ]
+            ]);
+        }
     }
 
     /**
