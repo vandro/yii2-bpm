@@ -39,8 +39,8 @@ class UserRoleLinks extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'role_id' => Yii::t('app', 'Role ID'),
+            'user_id' => Yii::t('app', 'Пользователь'),
+            'role_id' => Yii::t('app', 'Роль'),
         ];
     }
 

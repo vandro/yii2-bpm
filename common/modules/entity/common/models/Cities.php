@@ -39,9 +39,9 @@ class Cities extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'region_id' => Yii::t('app', 'Region'),
-            'title' => Yii::t('app', 'Title'),
-            'order' => Yii::t('app', 'Order'),
+            'region_id' => Yii::t('app', 'Регион'),
+            'title' => Yii::t('app', 'Наименования'),
+            'order' => Yii::t('app', 'Порядка'),
         ];
     }
 

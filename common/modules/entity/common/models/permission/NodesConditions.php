@@ -75,17 +75,17 @@ class NodesConditions extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'node_id' => Yii::t('app', 'Node ID'),
+            'node_id' => Yii::t('app', 'Шаг'),
             'true_next_exec_type' => Yii::t('app', 'True Next Execution Type'),
             'false_next_exec_type' => Yii::t('app', 'False Next Execution Type'),
-            'true_action_id' => Yii::t('app', 'True Action ID'),
-            'false_action_id' => Yii::t('app', 'False Action ID'),
-            'true_condition_id' => Yii::t('app', 'True Condition ID'),
-            'false_condition_id' => Yii::t('app', 'False Condition ID'),
-            'operator' => Yii::t('app', 'Operator'),
-            'operand_1_entity_id' => Yii::t('app', 'Operand 1 Entity ID'),
-            'operand_1_field_id' => Yii::t('app', 'Operand 1 Field ID'),
-            'operand_2' => Yii::t('app', 'Operand 2'),
+            'true_action_id' => Yii::t('app', 'Правилные действие'),
+            'false_action_id' => Yii::t('app', 'Неправилные действие'),
+            'true_condition_id' => Yii::t('app', 'Правилные состояние '),
+            'false_condition_id' => Yii::t('app', 'Неправилные состояние '),
+            'operator' => Yii::t('app', 'Оператор'),
+            'operand_1_entity_id' => Yii::t('app', 'Объект операнд 1'),
+            'operand_1_field_id' => Yii::t('app', ' Поля операнд 1'),
+            'operand_2' => Yii::t('app', 'Операнд 2'),
         ];
     }
 

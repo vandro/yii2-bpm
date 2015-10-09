@@ -56,9 +56,9 @@ class EpiguService extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'epugi_id' => Yii::t('app', 'Epugi ID'),
-            'title' => Yii::t('app', 'Title'),
-            'code' => Yii::t('app', 'Code'),
+            'epugi_id' => Yii::t('app', 'Епигу'),
+            'title' => Yii::t('app', 'Наименования'),
+            'code' => Yii::t('app', 'Код'),
         ];
     }
 

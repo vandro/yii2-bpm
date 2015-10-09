@@ -57,10 +57,10 @@ class TasksCart extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'process_id' => Yii::t('app', 'Process ID'),
-            'author_id' => Yii::t('app', 'Author ID'),
-            'current_node_id' => Yii::t('app', 'Current Node ID'),
-            'created_at' => Yii::t('app', 'Created At'),
+            'process_id' => Yii::t('app', 'Процесс'),
+            'author_id' => Yii::t('app', 'Автор'),
+            'current_node_id' => Yii::t('app', 'Текущий шаг'),
+            'created_at' => Yii::t('app', 'Дата добавлено'),
         ];
     }
 

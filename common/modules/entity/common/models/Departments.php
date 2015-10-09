@@ -53,9 +53,9 @@ class Departments extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'title' => Yii::t('app', 'Title'),
-            'organisation_id' => Yii::t('app', 'Organisation ID'),
-            'settings' => Yii::t('app', 'Settings'),
+            'title' => Yii::t('app', 'Наименования'),
+            'organisation_id' => Yii::t('app', 'Организация'),
+            'settings' => Yii::t('app', 'Настройки'),
         ];
     }
 

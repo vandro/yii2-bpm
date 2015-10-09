@@ -53,10 +53,10 @@ class ActionHandlerLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'action_id' => Yii::t('app', 'Action ID'),
-            'handler_id' => Yii::t('app', 'Handler ID'),
-            'settings' => Yii::t('app', 'Settings'),
-            'type' => Yii::t('app', 'Type'),
+            'action_id' => Yii::t('app', 'Действие'),
+            'handler_id' => Yii::t('app', 'Обработчик'),
+            'settings' => Yii::t('app', 'Настройки'),
+            'type' => Yii::t('app', 'Тип'),
         ];
     }
 

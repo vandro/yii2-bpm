@@ -53,10 +53,10 @@ class ViewsRules extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'view_id' => Yii::t('app', 'View ID'),
-            'field_id' => Yii::t('app', 'Field ID'),
-            'code' => Yii::t('app', 'Code'),
-            'value' => Yii::t('app', 'Value'),
+            'view_id' => Yii::t('app', 'Представление'),
+            'field_id' => Yii::t('app', 'Поля'),
+            'code' => Yii::t('app', 'Код'),
+            'value' => Yii::t('app', 'Значения'),
         ];
     }
 

@@ -58,14 +58,14 @@ class ComplexTasks extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'process_id' => Yii::t('app', 'Process ID'),
-            'organisation_id' => Yii::t('app', 'Organisation ID'),
-            'department_id' => Yii::t('app', 'Department ID'),
-            'author_id' => Yii::t('app', 'Author ID'),
-            'assigned_to_id' => Yii::t('app', 'Assigned to ID'),
-            'current_node_id' => Yii::t('app', 'Current Node ID'),
-            'active' => Yii::t('app', 'Active'),
-            'created_at' => Yii::t('app', 'Created At'),
+            'process_id' => Yii::t('app', 'Процесс'),
+            'organisation_id' => Yii::t('app', 'Организация'),
+            'department_id' => Yii::t('app', 'Отдел '),
+            'author_id' => Yii::t('app', 'Автор'),
+            'assigned_to_id' => Yii::t('app', 'Ответственный лицо'),
+            'current_node_id' => Yii::t('app', 'Текущий шаг'),
+            'active' => Yii::t('app', 'Актив'),
+            'created_at' => Yii::t('app', 'Дата добавлено'),
         ];
     }
 

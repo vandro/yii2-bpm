@@ -53,9 +53,9 @@ class NodeViewRoleLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'node_id' => Yii::t('app', 'Node ID'),
-            'view_id' => Yii::t('app', 'View ID'),
-            'role_id' => Yii::t('app', 'Role ID'),
+            'node_id' => Yii::t('app', 'Шаг'),
+            'view_id' => Yii::t('app', 'Представление'),
+            'role_id' => Yii::t('app', 'Роль'),
         ];
     }
 

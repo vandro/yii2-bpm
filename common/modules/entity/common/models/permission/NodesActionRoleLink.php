@@ -58,13 +58,13 @@ class NodesActionRoleLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'node_id' => Yii::t('app', 'Node ID'),
-            'action_id' => Yii::t('app', 'Action ID'),
-            'role_id' => Yii::t('app', 'Role ID'),
-            'next_node_id' => Yii::t('app', 'Next Node ID'),
-            'execution_type' => Yii::t('app', 'Execution Type'),
-            'only_one_entity' => Yii::t('app', 'Only One Entity'),
-            'cart_data_transfer' => Yii::t('app', 'Cart Data Transfer'),
+            'node_id' => Yii::t('app', 'Шаг'),
+            'action_id' => Yii::t('app', 'Действия'),
+            'role_id' => Yii::t('app', 'Роль'),
+            'next_node_id' => Yii::t('app', 'Следуший шаг'),
+            'execution_type' => Yii::t('app', 'Выполнение'),
+            'only_one_entity' => Yii::t('app', 'Только один объект'),
+            'cart_data_transfer' => Yii::t('app', 'Корзина для отпраления'),
         ];
     }
 

@@ -54,9 +54,9 @@ class UserOrganDepartLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'organisation_id' => Yii::t('app', 'Organisation ID'),
-            'department_id' => Yii::t('app', 'Department ID'),
+            'user_id' => Yii::t('app', 'Пользователь'),
+            'organisation_id' => Yii::t('app', 'Организация'),
+            'department_id' => Yii::t('app', 'Отдел'),
         ];
     }
 

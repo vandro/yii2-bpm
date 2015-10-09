@@ -53,10 +53,10 @@ class FormsRules extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'form_id' => Yii::t('app', 'Form ID'),
-            'field_id' => Yii::t('app', 'Field ID'),
-            'code' => Yii::t('app', 'Code'),
-            'value' => Yii::t('app', 'Value'),
+            'form_id' => Yii::t('app', 'Таблица'),
+            'field_id' => Yii::t('app', 'Поля'),
+            'code' => Yii::t('app', 'Код'),
+            'value' => Yii::t('app', 'Значение'),
         ];
     }
 
