@@ -59,6 +59,17 @@ class EntityFactory extends Component
         return $model;
     }
 
+    public static function getByForm($form)
+    {
+        self::$form = $form;
+        $entityType = self::getEntityType($form->entity_id);
+        $model = self::getModel();
+        $model->modelInit(self::getConfig($entityType));
+        $model->setEntityType($entityType);
+
+        return $model;
+    }
+
     public static function getFullEntityModelByTaskId($entity_id, $taskId)
     {
         $entityType = self::getEntityType($entity_id);
@@ -297,6 +308,7 @@ class EntityFactory extends Component
 
     public static function setSearchParams()
     {
+        self::$searchParams = [];
         foreach(self::$form->rules as $rule) {
             if($rule->field->type == 'VARCHAR' || $rule->field->type == 'TEXT'){
                 self::$searchParams[$rule->field->code] = 'like';
@@ -308,6 +320,7 @@ class EntityFactory extends Component
 
     public static function setFullSearchParams()
     {
+        self::$searchParams = [];
         foreach(self::$entityType->fields as $field) {
             if($field->type == 'VARCHAR' || $field->type == 'TEXT'){
                 self::$searchParams[$field->code] = 'like';
