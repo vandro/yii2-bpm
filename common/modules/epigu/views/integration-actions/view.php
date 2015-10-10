@@ -51,6 +51,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 ]),
                 'active' => ($tab == 2),
             ],
+            [
+                'label' =>'Condition tasks',
+                'content' => $this->render('_conditionTasksIndex', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 3),
+            ],
         ],
     ]);?>
 
