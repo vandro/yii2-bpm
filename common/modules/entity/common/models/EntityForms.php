@@ -191,10 +191,13 @@ class EntityForms extends \yii\db\ActiveRecord
         $columns = [];
         foreach($this->rules as $rule)
         {
-            $options = json_decode($rule->value, true);
-            if(!isset($options['visible']) && $options['visible'] != 'off') {
+            if($rule->field->id != $this->foreign_key_field_id) {
                 $columns[] = $rule->field->code;
             }
+//            $options = json_decode($rule->value, true);
+//            if(!isset($options['visible']) && $options['visible'] != 'off') {
+//                $columns[] = $rule->field->code;
+//            }
         }
 
         return $columns;
