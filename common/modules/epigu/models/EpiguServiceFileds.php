@@ -120,4 +120,30 @@ class EpiguServiceFileds extends \yii\db\ActiveRecord
     {
         return new EpiguServiceFiledsQuery(get_called_class());
     }
+
+    public function getEntityFieldType()
+    {
+        $types = [
+            'radiobuttonlist' => 'INT',
+            'checkbox' => 'INT',
+            'select' => 'INT',
+            'text' => 'VARCHAR',
+            'textarea' => 'TEXT',
+        ];
+
+        return $types[$this->type];
+    }
+
+    public function getEntityFieldLength()
+    {
+        $lengths = [
+            'radiobuttonlist' => 6,
+            'checkbox' => 6,
+            'select' => 6,
+            'text' => 255,
+            'textarea' => 800,
+        ];
+
+        return $lengths[$this->type];
+    }
 }

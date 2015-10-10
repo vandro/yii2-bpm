@@ -2,6 +2,7 @@
 
 namespace common\modules\epigu\models;
 
+use common\modules\entity\common\models\EntityTypes;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
@@ -84,6 +85,33 @@ class EpiguService extends \yii\db\ActiveRecord
     public function getFields()
     {
         return $this->hasMany(EpiguServiceFileds::className(), ['epigu_service_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNotInEpiguFields($entity_type_id)
+    {
+        $entityType = EntityTypes::findOne($entity_type_id);
+        $fieldNames = [];
+        foreach($entityType->fields as $field){
+            $fieldNames[] = $field->code;
+        }
+
+//        return $entityType->getFields()->where(['not in','code', $fieldNames]);
+        return $this->getFields()->where(['not in','name', $fieldNames]);
+    }
+
+    public function getNotInEntityFieldsAdp($entity_type_id)
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getNotInEpiguFields($entity_type_id),
+            'pagination' => [
+                'pageSize' => 1000,
+            ],
+        ]);
+
+        return $dataProvider;
     }
 
     /**

@@ -27,15 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ]) ?>
     </p>
-<!--    <form class="form-inline" action="add-entity-fields" method="get">-->
-<!--        --><?//= Html::hiddenInput('id',$model->id)?>
-<!--        <div class="form-group">-->
-<!--            --><?//= Html::dropDownList('entity_type_id', '', ArrayHelper::map(EntityTypes::find()->all(), 'id', 'title'),['prompt' => '-- Choose entity type --','class' => 'form-control'])?>
-<!--        </div>-->
-<!--        <div class="form-group">-->
-<!--            <button type="submit" class="btn btn-default">Add fields</button>-->
-<!--        </div>-->
-<!--    </form>-->
 
     <br>
     <?= Tabs::widget([
@@ -59,6 +50,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $model,
                 ]),
                 'active' => ($tab == 2),
+            ],
+            [
+                'label' =>'Add fields to entity type',
+                'content' => $this->render('_addFieldsIndex', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 3),
             ],
         ],
     ]);?>

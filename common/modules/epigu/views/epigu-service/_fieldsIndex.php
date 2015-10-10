@@ -28,16 +28,10 @@ use common\helpers\ActionColumnHelper;
         'dataProvider' => $model->getFieldsAdp(),
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            [
-                'header' => 'Выбрать',
-                'format' => 'raw',
-                'value' => function($model){
-                    return Html::checkbox('id', ['class' => 'service-fields']);
-                }
-            ],
             'name',
             'label_uz',
             'group',
+            'type',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {update} {delete} ',

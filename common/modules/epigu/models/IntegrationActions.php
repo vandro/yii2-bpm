@@ -97,4 +97,18 @@ class IntegrationActions extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Processes::className(),['id' => 'process_id']);
     }
+
+    public function getConditionActions()
+    {
+        return $this->hasMany(ConditionsActions::className(), ['integration_action_id' => 'id']);
+    }
+
+    public function getConditionActionsAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getConditionActions(),
+        ]);
+
+        return $dataProvider;
+    }
 }

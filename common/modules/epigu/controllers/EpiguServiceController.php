@@ -3,6 +3,7 @@
 namespace common\modules\epigu\controllers;
 
 use common\helpers\DebugHelper;
+use common\modules\entity\common\models\EntityFields;
 use common\modules\entity\common\models\EntityTypes;
 use common\modules\epigu\components\Integration;
 use common\modules\epigu\models\EpiguServiceFileds;
@@ -74,6 +75,27 @@ class EpiguServiceController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+
+    public function actionAddFieldsToEntity($id, $entity_type_id, $tab)
+    {
+        $arFieldsNames = [];
+        $arFieldsIds = Yii::$app->request->post('fields');
+        foreach($arFieldsIds as $fieldId){
+            $serviceField = EpiguServiceFileds::findOne($fieldId);
+            $result = EntityFields::find()->where(['code' => $serviceField->name, 'entity_id' => $entity_type_id])->all();
+            if(empty($result)) {
+                $entityField = new EntityFields();
+                $entityField->entity_id = $entity_type_id;
+                $entityField->title = $serviceField->label_ru;
+                $entityField->code = $serviceField->name;
+                $entityField->type = $serviceField->getEntityFieldType();
+                $entityField->length = $serviceField->getEntityFieldLength();
+                $entityField->save();
+                $arFieldsNames[] = $serviceField->name;
+            }
+        }
+        echo json_encode($arFieldsNames);
     }
 
     /**
