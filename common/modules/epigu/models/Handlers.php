@@ -51,9 +51,9 @@ class Handlers extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'title' => Yii::t('app', 'Title'),
-            'code' => Yii::t('app', 'Code'),
-            'class' => Yii::t('app', 'Class'),
+            'title' => Yii::t('app', 'Наименования'),
+            'code' => Yii::t('app', 'Код'),
+            'class' => Yii::t('app', 'Класс'),
         ];
     }
 

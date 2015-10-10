@@ -67,9 +67,9 @@ class EntityTypes extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'title' => 'Title',
-            'code' => 'Code',
-            'added' => 'Added',
+            'title' => 'Наименования',
+            'code' => 'Код',
+            'added' => 'Добавленной',
         ];
     }
 

@@ -28,3 +28,8 @@ composer.phar
 phpunit.phar
 # local phpunit config
 /phpunit.xml
+
+#sqllite 
+/common/sqlite/*
+!/common/sqlite/epigu_integration.db 
+!/common/sqlite/system2.db

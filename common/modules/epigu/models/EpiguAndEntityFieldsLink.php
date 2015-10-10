@@ -58,10 +58,10 @@ class EpiguAndEntityFieldsLink extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'in_action_entity_link_id' => Yii::t('app', 'In Action Entity Link ID'),
-            'epigu_service_id' => Yii::t('app', 'Epigu Service ID'),
-            'epigu_service_field_id' => Yii::t('app', 'Epigu Service Field ID'),
-            'entity_type_id' => Yii::t('app', 'Entity Type ID'),
-            'entity_type_fields_id' => Yii::t('app', 'Entity Type Fields ID'),
+            'epigu_service_id' => Yii::t('app', 'Епигу сервис '),
+            'epigu_service_field_id' => Yii::t('app', 'Поля Епигу сервис '),
+            'entity_type_id' => Yii::t('app', 'Тип объект'),
+            'entity_type_fields_id' => Yii::t('app', 'Поля тип объекта'),
         ];
     }
 

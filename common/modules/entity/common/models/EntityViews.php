@@ -62,9 +62,9 @@ class EntityViews extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'entity_id' => Yii::t('app', 'Entity ID'),
-            'title' => Yii::t('app', 'Title'),
-            'code' => Yii::t('app', 'Code'),
+            'entity_id' => Yii::t('app', 'Объект'),
+            'title' => Yii::t('app', 'Наименования'),
+            'code' => Yii::t('app', 'Код'),
             'html' => Yii::t('app', 'Html'),
         ];
     }

@@ -54,13 +54,13 @@ class NodeActionRoleLink extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'node_id' => Yii::t('app', 'Node ID'),
-            'action_id' => Yii::t('app', 'Action ID'),
-            'role_id' => Yii::t('app', 'Role ID'),
-            'next_node_id' => Yii::t('app', 'Next Node ID'),
-            'execution_type' => Yii::t('app', 'Execution type'),
-            'only_one_entity' => Yii::t('app', 'Only one entity (yes/no)'),
-            'has_file_upload' => Yii::t('app', 'Has file upload (yes/no)'),
+            'node_id' => Yii::t('app', 'Шаг'),
+            'action_id' => Yii::t('app', 'Действие'),
+            'role_id' => Yii::t('app', 'Роль'),
+            'next_node_id' => Yii::t('app', 'Следующий шаг'),
+            'execution_type' => Yii::t('app', 'Выполнение'),
+            'only_one_entity' => Yii::t('app', 'Только один объект (да/нет)'),
+            'has_file_upload' => Yii::t('app', 'Файл загружен (да/нет)'),
         ];
     }
 

@@ -55,9 +55,9 @@ class ProcessOrganDepartLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'process_id' => Yii::t('app', 'Process ID'),
-            'organisation_id' => Yii::t('app', 'Organisation ID'),
-            'first_department_id' => Yii::t('app', 'First Department ID'),
+            'process_id' => Yii::t('app', 'Процесс'),
+            'organisation_id' => Yii::t('app', 'Организация'),
+            'first_department_id' => Yii::t('app', '1-отдел'),
         ];
     }
 

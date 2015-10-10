@@ -63,14 +63,14 @@ class EntityFields extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'entity_id' => Yii::t('app', 'Entity ID'),
-            'title' => Yii::t('app', 'Title'),
-            'code' => Yii::t('app', 'Code'),
-            'type' => Yii::t('app', 'Type'),
-            'length' => Yii::t('app', 'Length'),
-            'dictionary_id' => Yii::t('app', 'Dictionary ID'),
-            'options' => Yii::t('app', 'Options'),
-            'added' => Yii::t('app', 'Added'),
+            'entity_id' => Yii::t('app', 'Объект'),
+            'title' => Yii::t('app', 'Наименования'),
+            'code' => Yii::t('app', 'Код'),
+            'type' => Yii::t('app', 'Тип'),
+            'length' => Yii::t('app', 'Длина'),
+            'dictionary_id' => Yii::t('app', 'Справочник'),
+            'options' => Yii::t('app', 'Опции'),
+            'added' => Yii::t('app', 'Добавленной'),
         ];
     }
 

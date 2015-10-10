@@ -52,11 +52,11 @@ class TasksEntitiesLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'task_id' => Yii::t('app', 'Task ID'),
-            'entity_id' => Yii::t('app', 'Entity ID'),
-            'entity_item_id' => Yii::t('app', 'Entity Item ID'),
-            'user_id' => Yii::t('app', 'User ID'),
-            'created_at' => Yii::t('app', 'Created At'),
+            'task_id' => Yii::t('app', 'Задача'),
+            'entity_id' => Yii::t('app', 'Объект'),
+            'entity_item_id' => Yii::t('app', 'Сущность объект'),
+            'user_id' => Yii::t('app', 'Пользователь'),
+            'created_at' => Yii::t('app', 'Дата добавлено'),
         ];
     }
 

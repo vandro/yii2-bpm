@@ -5,12 +5,12 @@ namespace common\modules\entity\common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\modules\entity\common\models\User;
+use common\modules\entity\common\models\Rights;
 
 /**
- * UserSearch represents the model behind the search form about `common\modules\entity\common\models\User`.
+ * RightsSearch represents the model behind the search form about `common\modules\entity\common\models\Rights`.
  */
-class UserSearch extends User
+class RightsSearch extends Rights
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class UserSearch extends User
     public function rules()
     {
         return [
-            [['id', 'status', 'role', 'created_at', 'updated_at'], 'integer'],
-            [['username', 'email', 'password_hash', 'auth_key', 'password_reset_token', 'account_activation_token'], 'safe'],
+            [['id'], 'integer'],
+            [['title', 'code'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class UserSearch extends User
      */
     public function search($params)
     {
-        $query = User::find();
+        $query = Rights::find();
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -57,18 +57,10 @@ class UserSearch extends User
 
         $query->andFilterWhere([
             'id' => $this->id,
-            'status' => $this->status,
-            'role' => $this->role,
-            'created_at' => $this->created_at,
-            'updated_at' => $this->updated_at,
         ]);
 
-        $query->andFilterWhere(['like', 'username', $this->username])
-            ->andFilterWhere(['like', 'email', $this->email])
-            ->andFilterWhere(['like', 'password_hash', $this->password_hash])
-            ->andFilterWhere(['like', 'auth_key', $this->auth_key])
-            ->andFilterWhere(['like', 'password_reset_token', $this->password_reset_token])
-            ->andFilterWhere(['like', 'account_activation_token', $this->account_activation_token]);
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'code', $this->code]);
 
         return $dataProvider;
     }

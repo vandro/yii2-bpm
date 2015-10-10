@@ -49,8 +49,8 @@ class RightRoleLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'right_id' => Yii::t('app', 'Right ID'),
-            'role_id' => Yii::t('app', 'Role ID'),
+            'right_id' => Yii::t('app', 'Примеры'),
+            'role_id' => Yii::t('app', 'Роль'),
         ];
     }
 

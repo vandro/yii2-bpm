@@ -47,9 +47,9 @@ class SmiDistributionRegion extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'smi_reestr_id' => Yii::t('app', 'Smi Reest ID'),
-            'region_id' => Yii::t('app', 'Region ID'),
-            'city_id' => Yii::t('app', 'City ID'),
+            'smi_reestr_id' => Yii::t('app', 'Реестр СМИ'),
+            'region_id' => Yii::t('app', 'Регион'),
+            'city_id' => Yii::t('app', 'Город'),
         ];
     }
 

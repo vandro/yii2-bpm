@@ -8,6 +8,8 @@
 namespace common\modules\entity\common\actions;
 
 use Yii;
+use yii\web\NotFoundHttpException;
+
 
 class DeleteAction extends \yii\base\Action
 {

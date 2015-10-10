@@ -72,14 +72,14 @@ class EntityForms extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'entity_id' => 'Entity ID',
             'parent_form_id' => 'Parent Form ID',
             'foreign_key_field_id' => 'Foreign Key Field ID',
-            'title' => 'Title',
-            'code' => 'Code',
+            'entity_id' => 'Объект',
+            'title' => 'Наименование',
+            'code' => 'Код',
             'html' => 'Html',
-            'mode' => 'Mode',
-            'added' => 'Added',
+            'mode' => 'Режим',
+            'added' => 'Добавленной',
         ];
     }
 

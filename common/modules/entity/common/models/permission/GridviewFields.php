@@ -49,12 +49,12 @@ class GridviewFields extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'gridview_id' => Yii::t('app', 'Gridview ID'),
-            'entity_type_id' => Yii::t('app', 'Entity Type ID'),
-            'field_id' => Yii::t('app', 'Field ID'),
-            'order' => Yii::t('app', 'Order'),
-            'condition' => Yii::t('app', 'Condition'),
-            'value' => Yii::t('app', 'Value'),
+            'gridview_id' => Yii::t('app', 'Таблица'),
+            'entity_type_id' => Yii::t('app', 'Тип объекта'),
+            'field_id' => Yii::t('app', 'Поля'),
+            'order' => Yii::t('app', 'Порядок'),
+            'condition' => Yii::t('app', 'Состояние'),
+            'value' => Yii::t('app', 'Значения'),
         ];
     }
 

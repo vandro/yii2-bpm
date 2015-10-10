@@ -43,8 +43,8 @@ class SmiFoundersLink extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'smi_reestr_id' => Yii::t('app', 'Smi Reestr ID'),
-            'smi_founders_id' => Yii::t('app', 'Smi Founders ID'),
+            'smi_reestr_id' => Yii::t('app', 'Реестр СМИ'),
+            'smi_founders_id' => Yii::t('app', 'Основатель СМИ'),
         ];
     }
 

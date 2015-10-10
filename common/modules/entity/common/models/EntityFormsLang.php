@@ -52,9 +52,9 @@ class EntityFormsLang extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'main' => 'Main',
-            'lang' => 'Lang',
-            'title' => 'Title',
+            'main' => 'Главный',
+            'lang' => 'Языки',
+            'title' => 'Наименования',
         ];
     }
 
