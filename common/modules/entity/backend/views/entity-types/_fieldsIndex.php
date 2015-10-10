@@ -31,6 +31,8 @@ use common\helpers\ActionColumnHelper;
 //            'entity_id',
             'title',
             'code',
+            'type',
+            'length',
 //            'html:ntext',
 
             [
