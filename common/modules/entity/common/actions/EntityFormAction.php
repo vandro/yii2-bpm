@@ -75,11 +75,24 @@ class EntityFormAction extends \yii\base\Action
             ]);
         }else{
             // Переход на конечную ноду
-            return $this->controller->redirect(['nodes-cart/view',
-                'id' => $task->process->lastNode->id,
-                'task_id' => $this->task_id,
-                'prevision_node_id' => $task->current_node_id,
-            ]);
+            if(!empty($task->process->lastNode)) {
+                return $this->controller->redirect(['nodes-cart/view',
+                    'id' => $task->process->lastNode->id,
+                    'task_id' => $this->task_id,
+                    'prevision_node_id' => $task->current_node_id,
+                ]);
+            }else{
+                $this->controller->layout = 'mainWithNoLeftMenu';
+                return $this->controller->render('noLastNodeView', [
+                    'params' => [
+                        'action' => $action->attributes,
+                        'task' => $task->attributes,
+                        'currentNode' => $task->currentNode->attributes,
+                        'entity' => $entity->attributes,
+                    ]
+                ]);
+
+            }
         }
     }
 
@@ -107,6 +120,7 @@ class EntityFormAction extends \yii\base\Action
                 'currentNode' => $task->currentNode->attributes,
                 'entity' => $entity->attributes,
             ]);
+            $this->controller->layout = 'mainWithNoLeftMenu';
             return $this->controller->render('warningView', [
                 'params' => [
                     'action' => $action->attributes,
