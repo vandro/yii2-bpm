@@ -9,11 +9,20 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\bootstrap\Modal;
+use yii\widgets\Pjax;
+$this->registerJs(
+    '$("document").ready(function(){
+        $("#new-child-element").on("pjax:end", function() {
+            $.pjax.reload({container:"#child-grid"});  //Reload GridView
+        });
+    });'
+);
 ?>
-
+<?php Pjax::begin(['id' => 'new-child-element']) ?>
 <?php $form = ActiveForm::begin([
     'options' => [
         'id' => 'child-node-form',
+        'data-pjax' => true,
     ]
 ]); ?>
 
@@ -33,6 +42,7 @@ use yii\bootstrap\Modal;
     <?php Modal::end();?>
 
 <?php ActiveForm::end(); ?>
+<?php Pjax::end() ?>
 
 <script>
     function submitChildForm(formId)

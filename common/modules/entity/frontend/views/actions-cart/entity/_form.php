@@ -10,6 +10,7 @@ use yii\widgets\ActiveForm;
 use common\modules\upload\widgets\MegaFileUploadWidget;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $model common\modules\entity\common\models\EntityTypes */
@@ -44,10 +45,12 @@ use yii\grid\GridView;
     <?php foreach($formModel->childForms as $childForm){?>
         <?php $childEntity = $childForm->getChildEntity($entity);?>
         <?=$childForm->getAddButton();?>
+        <?php Pjax::begin(['id' => 'child-grid']); ?>
         <?=GridView::widget([
             'dataProvider' => $childEntity->search(),
             'columns' => $childForm->columnsForGridView,
         ]);?>
+        <?php Pjax::end(); ?>
         <?= $this->render('childForm', [
             'childForm' => $childForm,
             'entity' => $childEntity,
