@@ -5,6 +5,7 @@ namespace common\modules\entity\common\models;
 use common\helpers\DebugHelper;
 use backend\models\User;
 use common\modules\entity\common\config\Config;
+use common\modules\log\models\TaskLog;
 use common\modules\upload\models\TasksFiles;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -168,5 +169,10 @@ class TasksCart extends \yii\db\ActiveRecord
         $html .= '</div>';
 
         return $html;
+    }
+
+    public function getLogs()
+    {
+        return $this->hasMany(TaskLog::className(),['task_id' => 'id']);
     }
 }
