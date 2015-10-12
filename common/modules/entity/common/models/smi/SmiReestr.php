@@ -112,6 +112,15 @@ class SmiReestr extends \yii\db\ActiveRecord
         return $this->hasMany(SmiLanguageLink::className(), ['smi_reestr_id' => 'id']);
     }
 
+    public function getSmiLanguageLinksAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getSmiLanguageLinks(),
+        ]);
+
+        return $dataProvider;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
