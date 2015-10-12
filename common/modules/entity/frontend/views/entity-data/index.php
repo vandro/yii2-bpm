@@ -37,7 +37,7 @@ $itemModel = $model->getItemSearchModelForFrontend();
     <div class="fields-index">
         <br>
         <p>
-            <?= Html::a('Create Item', ['entity/item-create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
+            <?= Html::a('Create Item', ['entity-data/create', 'id' => $model->id], ['class' => 'btn btn-success']) ?>
         </p>
 
         <?= GridView::widget([
