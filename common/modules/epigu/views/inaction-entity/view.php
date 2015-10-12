@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Tabs::widget([
         'items' => [
             [
-                'label' => 'Integration Action',
+                'label' => 'Entity',
                 'content' => DetailView::widget([
                     'model' => $model,
                     'attributes' => [
@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'active' => ($tab == 1),
             ],
             [
-                'label' =>'Entity Type',
+                'label' =>'Fields map to EPIGU service fields',
                 'content' => $this->render('_epiguEntityFieldsIndex', [
                     'model' => $model,
                 ]),
