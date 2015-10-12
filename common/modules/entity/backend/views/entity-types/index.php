@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use common\helpers\ActionColumnHelper;
 
 /* @var $this yii\web\View */
 /* @var $searchModel common\modules\entity\common\models\EntityTypesSearch */
@@ -17,7 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Create Entity Type', ['create'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Create Entity Type From EPIGU Service data', ['/epigu/epigu-service/create-entity'], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= GridView::widget([
@@ -30,7 +30,26 @@ $this->params['breadcrumbs'][] = $this->title;
             'title',
             'code',
 
-            ['class' => 'yii\grid\ActionColumn'],
+//            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=>'{list} {view} {update} {delete} ',
+                'buttons'=>[
+                    'view'=>function ($url, $model) {
+                        return ActionColumnHelper::view($url,$model,'entity/entity-types');
+                    },
+                    'update'=>function ($url, $model) {
+                        return ActionColumnHelper::update($url,$model,'entity/entity-types');
+                    },
+                    'delete'=>function ($url, $model) {
+                        return ActionColumnHelper::delete($url,$model,'entity/entity-types');
+                    },
+                    'list'=>function ($url, $model) {
+                        return ActionColumnHelper::standard($url, $model, 'entity/entity-data', 'index', 'Data List', 'glyphicon glyphicon-list');
+                    },
+                ],
+
+            ],
         ],
     ]); ?>
 
