@@ -3,6 +3,7 @@
 namespace common\modules\entity\common\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "forms_rules".
@@ -74,5 +75,18 @@ class FormsRules extends \yii\db\ActiveRecord
     public function getForm()
     {
         return $this->hasOne(EntityForms::className(), ['id' => 'form_id']);
+    }
+
+    public function getAllFields()
+    {
+        $fieldsIds = [];
+        foreach($this->form->rules as $rule){
+            $fieldsIds[] = $rule->field_id;
+        }
+        $fields = EntityFields::find()
+            ->where(['entity_id' => $this->form->entity_id])
+            ->andWhere(['not in','id', $fieldsIds])
+            ->all();
+        return ArrayHelper::map($fields, 'id','title');
     }
 }
