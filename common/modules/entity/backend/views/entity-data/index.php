@@ -43,7 +43,7 @@ $itemModel = $model->getItemSearchModel();
         <?= GridView::widget([
             'dataProvider' => $itemModel->search(),
             'filterModel' => $itemModel,
-            'columns' => $columns,
+            'columns' => array_merge(['id'],$columns),
         ]); ?>
 
     </div>
