@@ -77,7 +77,7 @@ class FormsRules extends \yii\db\ActiveRecord
         return $this->hasOne(EntityForms::className(), ['id' => 'form_id']);
     }
 
-    public function getAllFields($mode)
+    public function getAllFields()
     {
         $fieldsIds = [];
         foreach($this->form->rules as $rule){
