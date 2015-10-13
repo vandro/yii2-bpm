@@ -9,6 +9,7 @@
 namespace common\modules\entity\common\components;
 
 use common\helpers\DebugHelper;
+use common\modules\entity\common\config\Config;
 use Yii;
 use yii\data\ActiveDataProvider;
 /**
@@ -153,5 +154,12 @@ class Entity extends \yii\db\ActiveRecord
 
 
         return $dataProvider;
+    }
+
+    public function getChildFormData($childForm)
+    {
+        $childEntity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getChildByForm($childForm);
+        $childData = $childEntity::find()->where([$childForm->foreignKeyField->code => $this->id])->all();
+        return $childData;
     }
 }
