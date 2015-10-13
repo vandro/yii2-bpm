@@ -147,9 +147,14 @@ class EntityForms extends \yii\db\ActiveRecord
     public function render($activeForm, $entity)
     {
         $html = $this->html;
-
-        foreach ($this->fields as $field) {
-            $html = str_replace('{%' . $field->code . '%}', $field->getWidget($entity, $activeForm, $this), $html);
+        if(!empty($html)) {
+            foreach ($this->fields as $field) {
+                $html = str_replace('{%' . $field->code . '%}', $field->getWidget($entity, $activeForm, $this), $html);
+            }
+        }else{
+            foreach ($this->fields as $field) {
+                $html .= $field->getWidget($entity, $activeForm, $this);
+            }
         }
 
         return $html;
