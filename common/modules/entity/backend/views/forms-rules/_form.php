@@ -14,9 +14,17 @@ use yii\helpers\ArrayHelper;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'field_id')->dropDownList(ArrayHelper::map(EntityFields::find()->where(['entity_id' => $model->form->entity_id])->all(), 'id', 'title'), ['prompt' => ' -- Выберите полe --']) ?>
+    <?= $form->field($model, 'field_id')->dropDownList($model->allFields, ['prompt' => ' -- Выберите полe --']) ?>
 
-    <?= $form->field($model, 'code')->textInput() ?>
+    <?= $form->field($model, 'code')->dropDownList([
+        'required' => 'required',
+        'string' => 'string',
+        'integer' => 'integer',
+        'number' => 'number',
+        'double' => 'double',
+        'email' => 'email',
+        'date' => 'date',
+    ]) ?>
 
     <?= $form->field($model, 'value')->textarea(['rows' => 6]) ?>
 
