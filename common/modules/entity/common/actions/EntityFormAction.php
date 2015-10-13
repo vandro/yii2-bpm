@@ -53,7 +53,7 @@ class EntityFormAction extends \yii\base\Action
 
     protected function processViewMode($task, $action, $entity, $user)
     {
-        if ($this->loggingAction($task, $task->currentNode, $action) && $entity->load(Yii::$app->request->post())) { // && $action->runHandlers()) {
+        if ($this->loggingAction($task, $task->currentNode, $action) && $entity->load(Yii::$app->request->post())) { // && $this->checkChildEntityData($action, $entity) && $action->runHandlers()) {
             $this->goToNextNode($task, $action, $entity);
         } else {
             return $this->render($task, $action, $entity, $user);
@@ -198,5 +198,18 @@ class EntityFormAction extends \yii\base\Action
         }else {
             return false;
         }
+    }
+
+    protected function checkChildEntityData($action, $entity)
+    {
+        foreach($action->form->childForms as $childForm){
+            $childElements = $entity->getChildFormData($childForm);
+            if(!empty($childElements)){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
     }
 }
