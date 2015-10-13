@@ -129,6 +129,7 @@ class EpiguServiceFileds extends \yii\db\ActiveRecord
             'select' => 'INT',
             'text' => 'VARCHAR',
             'textarea' => 'TEXT',
+            'hidden' => 'VARCHAR'
         ];
 
         return $types[$this->type];
@@ -142,6 +143,7 @@ class EpiguServiceFileds extends \yii\db\ActiveRecord
             'select' => 6,
             'text' => 255,
             'textarea' => 800,
+            'hidden' => 255,
         ];
 
         return $lengths[$this->type];
