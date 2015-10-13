@@ -3,6 +3,7 @@
 namespace common\modules\entity\frontend\controllers;
 
 use common\helpers\DebugHelper;
+use common\modules\entity\common\actions\EntityFilteredFieldApiAction;
 use common\modules\entity\common\config\Config;
 use common\modules\entity\common\models\permission\User;
 use common\modules\entity\common\models\Tasks;
@@ -74,6 +75,14 @@ class ActionsCartController extends Controller
                 'task_id' => Yii::$app->request->get('task_id'),
                 'form_id' => Yii::$app->request->get('form_id'),
                 'redirect_url' => 'form',
+            ],
+            'items' => [
+                'class' => EntityFilteredFieldApiAction::className(),
+                'parent_id' => Yii::$app->request->get('parent_id'),
+                'entity_type_id' => Yii::$app->request->get('entity_type_id'),
+                'key_field' => Yii::$app->request->get('key_field'),
+                'value_field' => Yii::$app->request->get('value_field'),
+                'filter_field' => Yii::$app->request->get('filter_field'),
             ],
         ];
     }

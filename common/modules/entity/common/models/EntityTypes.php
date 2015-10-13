@@ -232,11 +232,38 @@ class EntityTypes extends \yii\db\ActiveRecord
         return Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getInstance($this);
     }
 
-    public function getSelectData($field)
+    public function getSelectData($field, $entity)
     {
         $options = json_decode($field->options, true);
-        $entity = $this->getItemSearchModelForFrontend();
-        return ArrayHelper::map($entity::find()->all(),$options['key'], $options['value']);
+        $entityModel = $this->getItemSearchModelForFrontend();
+        if(isset($options['dependFrom'])){
+            $dependFrom = $options['dependFrom'];
+            $values = $entityModel::find()->where([$dependFrom => $entity->{$dependFrom}])->all();
+
+            $entityClassName = (new \ReflectionClass($entity))->getShortName();
+            $fieldDomId = strtolower($entityClassName.'-'.$field->code);
+
+            Yii::$app->controller->view->registerJs("
+                $('#".strtolower($entityClassName.'-'.$dependFrom)."').change(function(){
+                    $.ajax({
+                        type: 'post',
+                        dataType: 'json',
+                        url: '".Yii::$app->urlManager->createUrl('bpm/actions-cart/items')."?parent_id='+$('#".strtolower($entityClassName.'-'.$dependFrom)."').val()+'&entity_type_id=".$this->id."&key_field=".$options['key']."&value_field=".$options['value']."&filter_field=".$dependFrom."',
+                        success: function (result) {
+                            $('#".$fieldDomId." option').remove();
+                            $('#".$fieldDomId."').append('<option value=\"0\">-- Выберите --</option>');
+                            for (key in result) {
+                                $('#".$fieldDomId."').append('<option value=\"' + result[key].value + '\">' + result[key].label + '</option>');
+                            }
+                        }
+                    });
+                });
+            ");
+        }else{
+            $values = $entityModel::find()->all();
+        }
+
+        return ArrayHelper::map($values,$options['key'], $options['value']);
     }
 
     public function getAllFields()
@@ -244,3 +271,5 @@ class EntityTypes extends \yii\db\ActiveRecord
         return ArrayHelper::map($this->fields, 'id', 'title');
     }
 }
+
+?>

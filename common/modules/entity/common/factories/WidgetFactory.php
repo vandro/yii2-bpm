@@ -41,7 +41,7 @@ class WidgetFactory extends Component
                         $entity->{$this->field->code} = '';
                     }
                     $dictionary = $this->field->dictionary;
-                    return $this->activeForm->field($entity, $this->field->code)->dropDownList($dictionary->getSelectData($this->field), [
+                    return $this->activeForm->field($entity, $this->field->code)->dropDownList($dictionary->getSelectData($this->field, $entity), [
                         'prompt' => ' -- Выберите --'
                     ]);
                 }
