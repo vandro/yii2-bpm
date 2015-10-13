@@ -17,8 +17,8 @@ use yii\helpers\ArrayHelper;
     <?= $form->field($model, 'field_id')->dropDownList($model->allFields, ['prompt' => ' -- Выберите полe --']) ?>
 
     <?= $form->field($model, 'code')->dropDownList([
-        'required' => 'required',
         'string' => 'string',
+        'required' => 'required',
         'integer' => 'integer',
         'number' => 'number',
         'double' => 'double',
