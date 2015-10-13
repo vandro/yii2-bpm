@@ -134,14 +134,16 @@ class EntityViews extends \yii\db\ActiveRecord
     {
         $fieldsCodes = [];
         foreach($this->fields as $field){
-            if(empty($field->dictionary_id)) {
-                $fieldsCodes[] = $field->code;
-            }else{
-                $fieldsCodes[] = [
-                    'attribute' => $field->code,
-                    'format' => 'html',
-                    'value' => $field->getDictionaryValue($field->dictionary_id,$entityModel->{$field->code}),
-                ];
+            if(!empty($entityModel->{$field->code})) {
+                if (empty($field->dictionary_id)) {
+                    $fieldsCodes[] = $field->code;
+                } else {
+                    $fieldsCodes[] = [
+                        'attribute' => $field->code,
+                        'format' => 'html',
+                        'value' => $field->getDictionaryValue($field->dictionary_id, $entityModel->{$field->code}),
+                    ];
+                }
             }
         }
         return $fieldsCodes;
