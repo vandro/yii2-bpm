@@ -3,6 +3,7 @@
 namespace common\modules\entity\common\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "views_rules".
@@ -74,5 +75,23 @@ class ViewsRules extends \yii\db\ActiveRecord
     public function getView()
     {
         return $this->hasOne(EntityViews::className(), ['id' => 'view_id']);
+    }
+
+    public function getAllFields()
+    {
+        $fieldsIds = [];
+        foreach($this->view->entity->views as $view){
+            foreach($view->rules as $viewRule){
+                if($this->field_id != $viewRule->field_id) {
+                    $fieldsIds[] = $viewRule->field_id;
+                }
+            }
+        }
+
+        $fields = EntityFields::find()
+            ->where(['entity_id' => $this->view->entity_id])
+            ->andWhere(['not in','id', $fieldsIds])
+            ->all();
+        return ArrayHelper::map($fields, 'id','title');
     }
 }
