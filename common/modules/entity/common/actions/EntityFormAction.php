@@ -42,7 +42,7 @@ class EntityFormAction extends \yii\base\Action
 
     protected function processCreateUpdateModes($task, $action, $entity, $user)
     {
-        if ($this->loggingAction($task, $task->currentNode, $action) && $entity->load(Yii::$app->request->post()) && $entity->save()) {
+        if ($entity->load(Yii::$app->request->post()) && $entity->save() && $this->loggingAction($task, $task->currentNode, $action)) {
             if($this->setTasksEntitiesLink($this->task_id,$entity->id,$action, $task->currentNode, $this->prevision_node_id)) { // && $action->runHandlers()) {
                 $this->goToNextNode($task, $action, $entity);
             }
