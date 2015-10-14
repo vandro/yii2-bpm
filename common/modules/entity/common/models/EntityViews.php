@@ -48,7 +48,7 @@ class EntityViews extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'code'], 'required'],
-            [['entity_id'], 'integer'],
+            [['entity_id', 'parent_form_id', 'foreign_key_field_id'], 'integer'],
             [['title', 'code', 'html'], 'string'],
             [['code'], 'unique'],
             [['title'], 'unique']
@@ -63,10 +63,42 @@ class EntityViews extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'entity_id' => Yii::t('app', 'Объект'),
+            'parent_view_id' => Yii::t('app', 'Родительское представление'),
+            'foreign_key_field_id' => Yii::t('app', 'Внешний ключ к родительскому представлению'),
             'title' => Yii::t('app', 'Наименования'),
             'code' => Yii::t('app', 'Код'),
             'html' => Yii::t('app', 'Html'),
         ];
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParentViews()
+    {
+        return $this->hasMany(EntityViews::className(), ['id' => 'parent_view_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getChildViews()
+    {
+        return $this->hasMany(EntityViews::className(), ['parent_view_id' => 'id']);
+    }
+
+    public function getChildFormsAdp()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => $this->getChildViews(),
+        ]);
+
+        return $dataProvider;
+    }
+
+    public function getForeignKeyField()
+    {
+        return $this->hasOne(EntityFields::className(), ['id' => 'foreign_key_field_id']);
     }
 
     /**
