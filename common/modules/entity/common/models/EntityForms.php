@@ -197,12 +197,19 @@ class EntityForms extends \yii\db\ActiveRecord
         foreach($this->rules as $rule)
         {
             if($rule->field->id != $this->foreign_key_field_id) {
-                $columns[] = $rule->field->code;
+                if (empty($rule->field->dictionary_id)) {
+                    $columns[] = $rule->field->code;
+                } else {
+                    $columns[] = [
+                        'attribute' => $rule->field->code,
+                        'format' => 'html',
+                        'value' => function($model) use ($rule) {
+                            return $rule->field->getDictionaryValue($rule->field->dictionary_id, $model->id);
+
+                        },
+                    ];
+                }
             }
-//            $options = json_decode($rule->value, true);
-//            if(!isset($options['visible']) && $options['visible'] != 'off') {
-//                $columns[] = $rule->field->code;
-//            }
         }
 
         return $columns;
