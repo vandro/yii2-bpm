@@ -50,7 +50,7 @@ class WidgetFactory extends Component
             }
         }else{
             $entityClassName = (new \ReflectionClass($this->entity))->getShortName();
-            return '<input type="hidden" id="'.strtolower($entityClassName).'-'.$this->field->code.'" class="form-control" name="'.$entityClassName.'['.$this->field->code.']" value="'.$this->entity{$this->field->code}.'">';
+            return '<input type="hidden" id="'.strtolower($entityClassName).'-'.$this->field->code.'" class="form-control" name="'.$entityClassName.'['.$this->field->code.']" value="'.$this->entity->{$this->field->code}.'">';
         }
     }
 
