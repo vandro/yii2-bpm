@@ -14,6 +14,9 @@ class Module extends \yii\base\Module
 
         Yii::configure($this, [
             'components' => [
+                'childEntityFactory' => [
+                    'class' => 'common\modules\entity\common\factories\ChildEntityFactory'
+                ],
                 'entityFactory' => [
                     'class' => 'common\modules\entity\common\factories\EntityFactory'
                 ],
