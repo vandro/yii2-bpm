@@ -26,7 +26,7 @@ use common\helpers\ActionColumnHelper;
         'dataProvider' => $model->getNodesAdp(),
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
+            'id',
             'title',
             'code',
             'order_status',
