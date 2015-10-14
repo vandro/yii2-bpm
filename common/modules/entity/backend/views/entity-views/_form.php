@@ -16,6 +16,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'code')->textInput() ?>
 
+    <?= $form->field($model, 'parent_view_id')->dropDownList($model->getAllViews(), ['prompt' => 'Choose Parent View']); ?>
+
+    <?= $form->field($model, 'foreign_key_field_id')->dropDownList($model->getAllEntityFields(), ['prompt' => 'Choose Foreign Key Field ID']); ?>
+
     <?= $form->field($model, 'html')->textarea(['rows' => 6]) ?>
 
     <?= $form->field($model, 'entity_id')->hiddenInput()->label('') ?>
