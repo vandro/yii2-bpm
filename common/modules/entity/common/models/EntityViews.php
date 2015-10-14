@@ -160,7 +160,7 @@ class EntityViews extends \yii\db\ActiveRecord
 
             $html = '<div class="panel panel-default box2">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">'.$entityModel->entityType->title.'</h3>
+                                    <h3 class="panel-title">'.$this->title.'</h3>
                                 </div>';
             $html .= DetailView::widget([
                         'model' => $entityModel,
