@@ -39,6 +39,14 @@ $this->params['breadcrumbs'][] = $this->title;
 //                        'entity_id',
                         'title',
                         'code',
+                        [
+                            'attribute' => 'parent_view_id',
+                            'value' => !empty($model->parentView)?$model->parentView->title:'',
+                        ],
+                        [
+                            'attribute' => 'foreign_key_field_id',
+                            'value' => !empty($model->foreignKeyField)?$model->foreignKeyField->title:'',
+                        ],
 //                        'html:ntext',,
                     ],
                 ]),
@@ -57,6 +65,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $model,
                 ]),
                 'active' => ($tab == 3),
+            ],
+            [
+                'label' =>'Child Views',
+                'content' => $this->render('_childViewsIndex', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 4),
             ],
         ],
     ]);?>
