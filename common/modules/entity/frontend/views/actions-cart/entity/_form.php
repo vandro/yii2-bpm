@@ -44,13 +44,6 @@ use yii\widgets\Pjax;
 
     <?php foreach($formModel->childForms as $childForm){?>
         <?php $childEntity = $childForm->getChildEntity($entity);?>
-        <?=$childForm->getAddButton();?>
-        <?php Pjax::begin(['id' => 'child-grid']); ?>
-        <?=GridView::widget([
-            'dataProvider' => $childEntity->search(),
-            'columns' => $childForm->columnsForGridView,
-        ]);?>
-        <?php Pjax::end(); ?>
         <?= $this->render('childForm', [
             'childForm' => $childForm,
             'entity' => $childEntity,
@@ -58,6 +51,13 @@ use yii\widgets\Pjax;
             'node_id' => $node_id,
             'action_id' => $action_id,
         ]) ?>
+        <?=$childForm->getAddButton();?>
+        <?php Pjax::begin(['id' => 'child-grid']); ?>
+        <?=GridView::widget([
+            'dataProvider' => $childEntity->search(),
+            'columns' => $childForm->columnsForGridView,
+        ]);?>
+        <?php Pjax::end(); ?>
     <?php } ?>
 </div>
 <?php } ?>
