@@ -8,6 +8,7 @@ use common\helpers\DebugHelper;
 use common\modules\entity\common\config\Config;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\helpers\ArrayHelper;
 use yii\widgets\DetailView;
 
 /**
@@ -74,7 +75,7 @@ class EntityViews extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getParentViews()
+    public function getParentView()
     {
         return $this->hasMany(EntityViews::className(), ['id' => 'parent_view_id']);
     }
@@ -87,7 +88,7 @@ class EntityViews extends \yii\db\ActiveRecord
         return $this->hasMany(EntityViews::className(), ['parent_view_id' => 'id']);
     }
 
-    public function getChildFormsAdp()
+    public function getChildViewsAdp()
     {
         $dataProvider = new ActiveDataProvider([
             'query' => $this->getChildViews(),
@@ -224,5 +225,15 @@ class EntityViews extends \yii\db\ActiveRecord
         }
 
         return false;
+    }
+
+    public function getAllEntityFields()
+    {
+        return ArrayHelper::map($this->entity->fields, 'id', 'title');
+    }
+
+    public function getAllViews()
+    {
+        return ArrayHelper::map(EntityViews::find()->where(['not in','id',[$this->id]])->all(), 'id', 'title');
     }
 }
