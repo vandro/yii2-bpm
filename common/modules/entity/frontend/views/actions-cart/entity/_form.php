@@ -53,6 +53,7 @@ use yii\widgets\Pjax;
         ]) ?>
         <?=$childForm->getAddButton();?>
         <?php Pjax::begin(['id' => 'child-grid']); ?>
+        <?php $childEntity = $childForm->getChildEntity($entity);?>
         <?=GridView::widget([
             'dataProvider' => $childEntity->search(),
             'columns' => $childForm->columnsForGridView,
