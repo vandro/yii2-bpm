@@ -174,7 +174,7 @@ class EntityForms extends \yii\db\ActiveRecord
 
     public function getChildEntity($parentEntity)
     {
-        $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getChildByForm($this);
+        $entity = Yii::$app->modules[Config::MODULE_NAME]->childEntityFactory->getChildByForm($this);
         $entity->{$this->foreignKeyField->code} = $parentEntity->id;
 
         return $entity;
@@ -204,7 +204,7 @@ class EntityForms extends \yii\db\ActiveRecord
                         'attribute' => $rule->field->code,
                         'format' => 'html',
                         'value' => function($model) use ($rule) {
-                            return $rule->field->getDictionaryValue($rule->field->dictionary_id, $model->id);
+                            return $rule->field->getDictionaryValue($rule->field->dictionary_id, $model->{$rule->field->code});
 
                         },
                     ];
