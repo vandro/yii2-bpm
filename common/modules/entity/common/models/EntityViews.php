@@ -48,7 +48,7 @@ class EntityViews extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'code'], 'required'],
-            [['entity_id', 'parent_form_id', 'foreign_key_field_id'], 'integer'],
+            [['entity_id', 'parent_view_id', 'foreign_key_field_id'], 'integer'],
             [['title', 'code', 'html'], 'string'],
             [['code'], 'unique'],
             [['title'], 'unique']
