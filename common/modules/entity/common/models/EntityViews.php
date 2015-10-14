@@ -75,7 +75,7 @@ class EntityViews extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getParentView()
+    public function getParentViews()
     {
         return $this->hasMany(EntityViews::className(), ['id' => 'parent_view_id']);
     }
@@ -83,9 +83,18 @@ class EntityViews extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getParentView()
+    {
+        return $this->hasOne(EntityViews::className(), ['id' => 'parent_view_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getChildViews()
     {
-        return $this->hasMany(EntityViews::className(), ['parent_view_id' => 'id']);
+//        return $this->hasMany(EntityViews::className(), ['parent_view_id' => 'id']);
+        return EntityViews::find()->where(['parent_view_id' => $this->id]);
     }
 
     public function getChildViewsAdp()
