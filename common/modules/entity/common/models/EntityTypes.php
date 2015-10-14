@@ -3,6 +3,7 @@
 namespace common\modules\entity\common\models;
 
 use common\helpers\DebugHelper;
+use common\modules\entity\common\actions\FilteredFieldApiAction;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
@@ -237,28 +238,7 @@ class EntityTypes extends \yii\db\ActiveRecord
         $options = json_decode($field->options, true);
         $entityModel = $this->getItemSearchModelForFrontend();
         if(isset($options['dependFrom'])){
-            $dependFrom = $options['dependFrom'];
-            $values = $entityModel::find()->where([$dependFrom => $entity->{$dependFrom}])->all();
-
-            $entityClassName = (new \ReflectionClass($entity))->getShortName();
-            $fieldDomId = strtolower($entityClassName.'-'.$field->code);
-
-            Yii::$app->controller->view->registerJs("
-                $('#".strtolower($entityClassName.'-'.$dependFrom)."').change(function(){
-                    $.ajax({
-                        type: 'post',
-                        dataType: 'json',
-                        url: '".Yii::$app->urlManager->createUrl('bpm/actions-cart/items')."?parent_id='+$('#".strtolower($entityClassName.'-'.$dependFrom)."').val()+'&entity_type_id=".$this->id."&key_field=".$options['key']."&value_field=".$options['value']."&filter_field=".$dependFrom."',
-                        success: function (result) {
-                            $('#".$fieldDomId." option').remove();
-                            $('#".$fieldDomId."').append('<option value=\"0\">-- Выберите --</option>');
-                            for (key in result) {
-                                $('#".$fieldDomId."').append('<option value=\"' + result[key].value + '\">' + result[key].label + '</option>');
-                            }
-                        }
-                    });
-                });
-            ");
+            $values = FilteredFieldApiAction::getDependFromData($field, $entity, $this);
         }else{
             $values = $entityModel::find()->all();
         }

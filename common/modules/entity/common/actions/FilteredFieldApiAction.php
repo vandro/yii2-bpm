@@ -27,4 +27,34 @@ class FilteredFieldApiAction extends \yii\base\Action
         }
         echo json_encode($arItems);
     }
+
+    public static function getDependFromData($field, $entity, $entityType)
+    {
+        $options = json_decode($field->options, true);
+        $entityModel = $entityType->getItemSearchModelForFrontend();
+        $dependFrom = $options['dependFrom'];
+        $values = $entityModel::find()->where([$dependFrom => $entity->{$dependFrom}])->all();
+
+        $entityClassName = (new \ReflectionClass($entity))->getShortName();
+        $fieldDomId = strtolower($entityClassName.'-'.$field->code);
+
+        Yii::$app->controller->view->registerJs("
+            $('#".strtolower($entityClassName.'-'.$dependFrom)."').change(function(){
+                $.ajax({
+                    type: 'post',
+                    dataType: 'json',
+                    url: '".Yii::$app->urlManager->createUrl('bpm/actions-cart/items')."?parent_id='+$('#".strtolower($entityClassName.'-'.$dependFrom)."').val()+'&entity_type_id=".$entityType->id."&key_field=".$options['key']."&value_field=".$options['value']."&filter_field=".$dependFrom."',
+                    success: function (result) {
+                        $('#".$fieldDomId." option').remove();
+                        $('#".$fieldDomId."').append('<option value=\"0\">-- Выберите --</option>');
+                        for (key in result) {
+                            $('#".$fieldDomId."').append('<option value=\"' + result[key].value + '\">' + result[key].label + '</option>');
+                        }
+                    }
+                });
+            });
+        ");
+
+        return $values;
+    }
 }
