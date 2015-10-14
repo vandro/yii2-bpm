@@ -209,7 +209,7 @@ class EntityFactory extends Component
 
     public static function getConfig($entityType)
     {
-        if(empty(self::$configs[$entityType->code])) {
+        //if(empty(self::$configs[$entityType->code])) {
             self::$entityType = $entityType;
             self::setRules();
             self::setSearchRules();
@@ -224,10 +224,11 @@ class EntityFactory extends Component
                 Entity::SEARCH_PARAMS => self::$searchParams,
             ];
 
-            self::$configs[$entityType->code] = $config;
-        }
+            //self::$configs[$entityType->code] = $config;
+        //}
 
-        return  self::$configs[$entityType->code];
+        //return  self::$configs[$entityType->code];
+        return $config;
     }
 
     public static function getFullConfig($entityType)
