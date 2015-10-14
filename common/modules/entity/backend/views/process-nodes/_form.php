@@ -16,7 +16,18 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'code')->textInput() ?>
 
-    <?= $form->field($model, 'order_status')->dropDownList(['first' => 'First Node', 'first_process' => 'First Process Node', 'process' => 'Process Node', 'last' => 'Last Node'], ['prompt' => 'Chose node order in process']) ?>
+    <?= $form->field($model, 'order_status')->dropDownList(
+        [
+            'first' => 'Первая нода',
+            'filling' => 'Нода заполнения',
+            'first_process' => 'Первая нода в процессе обработки',
+            'process' => 'Нода обработки',
+            'last' => 'Конечная нода'
+        ],
+        [
+            'prompt' => 'Выберите порядок ноды в процессе'
+        ]
+    ) ?>
 
     <?= $form->field($model, 'execution_type')->dropDownList(['semiautomatic' => 'Semiautomatic', 'automatic' => 'Automatic'], ['prompt' => 'Chose node type']) ?>
 
