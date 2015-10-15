@@ -51,11 +51,14 @@ class ActiveRecordEmailRuleFactory
 
     protected static function rRules()
     {
-        self::$rulesString .= "             [[";
-        foreach(self::getAllPropertiesArray() as $property){
-            self::$rulesString .= "'".$property."', ";
+        $arProperty = self::getAllPropertiesArray();
+        if(!empty($arProperty)) {
+            self::$rulesString .= "             [[";
+            foreach (self::getAllPropertiesArray() as $property) {
+                self::$rulesString .= "'" . $property . "', ";
+            }
+            self::$rulesString .= "], 'email'],\n";
         }
-        self::$rulesString .= "], 'email'],\n";
     }
 
     protected function getAllPropertiesArray()

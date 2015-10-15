@@ -52,19 +52,22 @@ class ActiveRecordIntegerRuleFactory
 
     protected static function rRules()
     {
-        foreach(self::getAllMaxMinArray() as $item){
-            self::$rulesString .= "             [[";
-            foreach($item[self::PROPERTIES] as $property){
-                self::$rulesString .= "'".$property."', ";
+        $arMinMax = self::getAllMaxMinArray();
+        if(!empty($arMinMax)) {
+            foreach (self::getAllMaxMinArray() as $item) {
+                self::$rulesString .= "             [[";
+                foreach ($item[self::PROPERTIES] as $property) {
+                    self::$rulesString .= "'" . $property . "', ";
+                }
+                self::$rulesString .= "], 'integer'";
+                if (isset($item[self::MAX])) {
+                    self::$rulesString .= ", 'max' => " . $item[self::MAX];
+                }
+                if (isset($item[self::MIN])) {
+                    self::$rulesString .= ", 'min' => " . $item[self::MIN];
+                }
+                self::$rulesString .= "],\n";
             }
-            self::$rulesString .= "], 'integer'";
-            if(isset($item[self::MAX])) {
-                self::$rulesString .= ", 'max' => ".$item[self::MAX];
-            }
-            if(isset($item[self::MIN])) {
-                self::$rulesString .= ", 'min' => ".$item[self::MIN];
-            }
-            self::$rulesString .= "],\n";
         }
     }
 
@@ -77,6 +80,7 @@ class ActiveRecordIntegerRuleFactory
                 foreach ($property[ActiveRecordClassFactory::PROPERTY_VALIDATION_RULES] as $rule) {
                     if ($rule[ActiveRecordClassFactory::PROPERTY_VALIDATION_RULE_TYPE] == self::TYPE) {
                         $key = 'key';
+                        $maxMin = [];
                         if (isset($rule[self::MAX])) {
                             $maxMin[self::MAX] = $rule[self::MAX];
                             $key .= $rule[self::MAX];
@@ -85,7 +89,7 @@ class ActiveRecordIntegerRuleFactory
                             $maxMin[self::MIN] = $rule[self::MIN];
                             $key .= $rule[self::MIN];
                         }
-                        if (!in_array($maxMin, $maxMinArray)) {
+                        if (!in_array($maxMin, $maxMinArray) && !empty($maxMin)) {
                             $maxMinArray[] = $maxMin;
                             $maxMinPropertiesArray[$key] = $maxMin;
                         }

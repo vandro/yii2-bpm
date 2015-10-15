@@ -13,6 +13,7 @@ class ActiveRecordClassFactory
 {
     const NAME_SPACE = 'NAME_SPACE';
     const CLASS_NAME = 'CLASS_NAME';
+    const DATABASE_NAME = 'DATABASE_NAME';
     const TABLE_NAME = 'TABLE_NAME';
     const PROPERTIES = 'PROPERTIES';
     const PROPERTY_NAME = 'PROPERTY_NAME';
@@ -55,9 +56,10 @@ class ActiveRecordClassFactory
         self::rUses();
         self::rClassBegin();
         self::rTableName();
+        self::rGetDb();
         self::rRules();
         self::rAttributeLabels();
-        self::rFind();
+        //self::rFind();
         self::rClassEnd();
     }
 
@@ -79,6 +81,7 @@ class ActiveRecordClassFactory
 
     protected static function rUses()
     {
+        self::$classString .= "use Yii;\n\n";
         self::$classString .= "use yii\\db\\ActiveRecord;\n\n";
     }
 
@@ -115,6 +118,27 @@ class ActiveRecordClassFactory
         self::$classString .= "    public static function tableName()\n";
         self::$classString .= "    {\n";
         self::$classString .= "         return '".self::$params[self::TABLE_NAME]."';\n";
+        self::$classString .= "    }\n\n";
+    }
+
+    /**
+     * Returns the database connection used by this AR class.
+     * I override this method to use a data sets database connection.
+     * @return Connection the database connection used by this AR class.
+     *
+    public static function getDb()
+    {
+        return Yii::$app->pdb;
+    }*/
+
+    protected static function rGetDb()
+    {
+        self::$classString .= "    /**\n";
+        self::$classString .= "     * @inheritdoc\n";
+        self::$classString .= "     */\n";
+        self::$classString .= "    public static function getDb()\n";
+        self::$classString .= "    {\n";
+        self::$classString .= "         return Yii::\$app->".self::$params[self::DATABASE_NAME].";\n";
         self::$classString .= "    }\n\n";
     }
 
