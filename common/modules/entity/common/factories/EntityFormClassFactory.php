@@ -7,15 +7,16 @@
  */
 namespace common\modules\entity\common\factories;
 
+use common\modules\entity\common\models\EntityForms;
 use Yii;
 use common\modules\entity\common\models\EntityTypes;
 use yii\web\NotFoundHttpException;
 
-class EntityClassFactory
+class EntityFormClassFactory
 {
     protected static $params;
     protected static $entityType;
-    protected static $entity;
+    protected static $form;
 
     protected static $types = [
         'VARCHAR' => 'string',
@@ -24,17 +25,18 @@ class EntityClassFactory
         'DATE' => 'date',
     ];
 
-    public static function generateFile($entity_id)
+    public static function generateFile($form_id)
     {
-        self::setEntityType($entity_id);
-        self::setNameSpace('common\modules\entity\common\entities');
+        self::setForm($form_id);
+        self::setEntityType($form_id);
+        self::setNameSpace('common\modules\entity\common\entities\forms');
         self::setClassName();
         self::setActiveQueryClassName();
         self::setDatabaseName('pdb');
         self::setTableName();
         self::setAuthorName('Avazbek Niyazov');
         self::setI18NMessageFileAlias('app');
-        self::setClassFileLocationPath(Yii::$app->basePath.'/../common/modules/entity/common/entities/');
+        self::setClassFileLocationPath(Yii::$app->basePath.'/../common/modules/entity/common/entities/forms/');
         self::setPropertyValidationRules([
             'required' => '\common\modules\entity\common\factories\ActiveRecordRequiredRuleFactory',
             'string' => '\common\modules\entity\common\factories\ActiveRecordStringRuleFactory',
@@ -50,13 +52,18 @@ class EntityClassFactory
         }
     }
 
-    protected static function setEntityType($id)
+    protected static function setForm($id)
     {
-        if (($model = EntityTypes::findOne($id)) !== null) {
-            self::$entityType = $model;
+        if (($model = EntityForms::findOne($id)) !== null) {
+            self::$form = $model;
         } else {
-            throw new NotFoundHttpException('The requested entity type does not exist.');
+            throw new NotFoundHttpException('The requested entity type form does not exist.');
         }
+    }
+
+    protected static function setEntityType()
+    {
+        self::$entityType = self::$form->entity;
     }
 
     protected function setNameSpace($nameSpace)
@@ -66,12 +73,12 @@ class EntityClassFactory
 
     protected function setClassName()
     {
-        self::$params[ActiveRecordClassFactory::CLASS_NAME] = self::getName(self::$entityType->code);
+        self::$params[ActiveRecordClassFactory::CLASS_NAME] = self::getName(self::$form->code).'Form';
     }
 
     protected function setActiveQueryClassName()
     {
-        self::$params[ActiveRecordClassFactory::ACTIVE_QUERY_CLASS_NAME] = self::getName(self::$entityType->code).'Query';
+        self::$params[ActiveRecordClassFactory::ACTIVE_QUERY_CLASS_NAME] = self::getName(self::$form->code).'FormQuery';
     }
 
     protected function setDatabaseName($databaseName)
@@ -111,14 +118,14 @@ class EntityClassFactory
     protected function setProperties()
     {
         self::$params[ActiveRecordClassFactory::PROPERTIES] = [];
-        foreach(self::$entityType->fields as $field){
+        foreach(self::$form->rules as $rule){
             self::$params[ActiveRecordClassFactory::PROPERTIES][] = [
-                ActiveRecordClassFactory::PROPERTY_NAME => $field->code,
-                ActiveRecordClassFactory::PROPERTY_TYPE => self::$types[$field->type],
-                ActiveRecordClassFactory::PROPERTY_LABEL => $field->title,
+                ActiveRecordClassFactory::PROPERTY_NAME => $rule->field->code,
+                ActiveRecordClassFactory::PROPERTY_TYPE => self::$types[$rule->field->type],
+                ActiveRecordClassFactory::PROPERTY_LABEL => $rule->field->title,
                 ActiveRecordClassFactory::PROPERTY_VALIDATION_RULES => [
                     [
-                        ActiveRecordClassFactory::PROPERTY_VALIDATION_RULE_TYPE => self::$types[$field->type],
+                        ActiveRecordClassFactory::PROPERTY_VALIDATION_RULE_TYPE => $rule->code,
                     ],
                 ]
             ];

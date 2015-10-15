@@ -87,11 +87,15 @@ class ActiveRecordClassFactory
 
     protected static function rClassBegin()
     {
+        $arProperties = [];
         self::$classString .= "/**\n";
         self::$classString .= " * This is the model class for table \"".self::$params[self::TABLE_NAME]."\".\n";
         self::$classString .= " *\n";
         foreach(self::$params[self::PROPERTIES] as $property) {
-            self::$classString .= " * @property ".$property[self::PROPERTY_TYPE]." $".$property[self::PROPERTY_NAME]."\n";
+            if(!in_array($property[self::PROPERTY_NAME], $arProperties)) {
+                self::$classString .= " * @property " . $property[self::PROPERTY_TYPE] . " $" . $property[self::PROPERTY_NAME] . "\n";
+                $arProperties[] = $property[self::PROPERTY_NAME];
+            }
         }
         self::$classString .= " */\n";
         self::$classString .= "class ".self::$params[self::CLASS_NAME]." extends ActiveRecord\n{\n";

@@ -59,7 +59,7 @@ class ActiveRecordIntegerRuleFactory
                 foreach ($item[self::PROPERTIES] as $property) {
                     self::$rulesString .= "'" . $property . "', ";
                 }
-                self::$rulesString .= "], 'integer'";
+                self::$rulesString .= "], '".self::TYPE."'";
                 if (isset($item[self::MAX])) {
                     self::$rulesString .= ", 'max' => " . $item[self::MAX];
                 }
