@@ -120,9 +120,22 @@ class EntityClassFactory
                     [
                         ActiveRecordClassFactory::PROPERTY_VALIDATION_RULE_TYPE => self::$types[$field->type],
                     ],
-                ]
+                ],
+                ActiveRecordClassFactory::PROPERTY_RELATION => self::getPropertyRelation($field),
             ];
         }
+    }
+
+    //Метод не закончен
+    protected function getPropertyRelation($field)
+    {
+        return [
+            ActiveRecordClassFactory::PROPERTY_RELATION_METHOD_NAME => self::getMethodsName($field->code),
+            ActiveRecordClassFactory::PROPERTY_RELATION_TYPE => ActiveRecordClassFactory::RELATION_TYPE_HAS_MANY,
+            ActiveRecordClassFactory::PROPERTY_RELATION_FOREIGN_KEY => $field->code,
+            ActiveRecordClassFactory::PROPERTY_RELATION_TARGET_KEY => 'id',
+            ActiveRecordClassFactory::PROPERTY_RELATION_TARGET_CLASS => 'EntityType',
+        ];
     }
 
     private static function getName($nameString)
@@ -132,6 +145,19 @@ class EntityClassFactory
         foreach($arName as $nameItem){
             $name .= ucfirst($nameItem);
         }
+
+        return $name;
+    }
+
+    private static function getMethodsName($nameString)
+    {
+        $replaceItems = ['id', 'Id', 'ID', '_id', '_Id', '_ID', '_id_', '_Id_', '_ID_',];
+
+        foreach($replaceItems as $item) {
+            $nameString = str_replace($item, '', $nameString);
+        }
+
+        $name = self::getName($nameString);
 
         return $name;
     }
