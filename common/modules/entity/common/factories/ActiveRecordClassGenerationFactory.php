@@ -10,7 +10,7 @@ namespace common\modules\entity\common\factories;
 use common\helpers\DebugHelper;
 use Yii;
 
-class ActiveRecordClassFactory
+class ActiveRecordClassGenerationFactory
 {
     const NAME_SPACE = 'NAME_SPACE';
     const CLASS_NAME = 'CLASS_NAME';

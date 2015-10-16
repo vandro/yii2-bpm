@@ -11,7 +11,7 @@ use Yii;
 use common\modules\entity\common\models\EntityTypes;
 use yii\web\NotFoundHttpException;
 
-class EntityClassFactory
+class EntityClassGenerationFactory
 {
     protected static $params;
     protected static $entityType;
@@ -43,8 +43,8 @@ class EntityClassFactory
         ]);
         self::setProperties();
 
-        if(ActiveRecordClassFactory::generateClassFile(self::$params)){
-            if(ActiveRecordSearchClassFactory::generateClassFile(self::$params)){
+        if(ActiveRecordClassGenerationFactory::generateClassFile(self::$params)){
+            if(ActiveRecordSearchClassGenerationFactory::generateClassFile(self::$params)){
                 return true;
             }
         }
@@ -63,67 +63,67 @@ class EntityClassFactory
 
     protected function setNameSpace($nameSpace)
     {
-        self::$params[ActiveRecordClassFactory::NAME_SPACE] = $nameSpace;
+        self::$params[ActiveRecordClassGenerationFactory::NAME_SPACE] = $nameSpace;
     }
 
     protected function setClassName($className = null)
     {
-        self::$params[ActiveRecordClassFactory::CLASS_NAME] = !empty($className)?$className:self::getName(self::$entityType->code);
+        self::$params[ActiveRecordClassGenerationFactory::CLASS_NAME] = !empty($className)?$className:self::getName(self::$entityType->code);
     }
 
     protected function setActiveQueryClassName()
     {
-        self::$params[ActiveRecordClassFactory::ACTIVE_QUERY_CLASS_NAME] = self::getName(self::$entityType->code).'Query';
+        self::$params[ActiveRecordClassGenerationFactory::ACTIVE_QUERY_CLASS_NAME] = self::getName(self::$entityType->code).'Query';
     }
 
     protected function setDatabaseName($databaseName)
     {
-        self::$params[ActiveRecordClassFactory::DATABASE_NAME] = $databaseName;
+        self::$params[ActiveRecordClassGenerationFactory::DATABASE_NAME] = $databaseName;
     }
 
     protected function setTableName()
     {
-        self::$params[ActiveRecordClassFactory::TABLE_NAME] = self::$entityType->code;
+        self::$params[ActiveRecordClassGenerationFactory::TABLE_NAME] = self::$entityType->code;
     }
 
     protected function setAuthorName($authorName)
     {
-        self::$params[ActiveRecordClassFactory::AUTHOR_NAME] = $authorName;
+        self::$params[ActiveRecordClassGenerationFactory::AUTHOR_NAME] = $authorName;
     }
 
     protected function setI18NMessageFileAlias($alias)
     {
-        self::$params[ActiveRecordClassFactory::I18N_MESSAGE_FILE_ALIAS] = $alias;
+        self::$params[ActiveRecordClassGenerationFactory::I18N_MESSAGE_FILE_ALIAS] = $alias;
     }
 
     protected function setClassFileLocationPath($path)
     {
-        self::$params[ActiveRecordClassFactory::CLASS_FILE_LOCATION_PATH] = $path;
+        self::$params[ActiveRecordClassGenerationFactory::CLASS_FILE_LOCATION_PATH] = $path;
     }
 
     protected function setPropertyValidationRules($validatorRules)
     {
         foreach($validatorRules as $rule => $className){
-            self::$params[ActiveRecordClassFactory::PROPERTIES_VALIDATION_RULES][$rule] = [
-                ActiveRecordClassFactory::CLASS_NAME => $className
+            self::$params[ActiveRecordClassGenerationFactory::PROPERTIES_VALIDATION_RULES][$rule] = [
+                ActiveRecordClassGenerationFactory::CLASS_NAME => $className
             ];
         }
     }
 
     protected function setProperties()
     {
-        self::$params[ActiveRecordClassFactory::PROPERTIES] = [];
+        self::$params[ActiveRecordClassGenerationFactory::PROPERTIES] = [];
         foreach(self::$entityType->fields as $field){
-            self::$params[ActiveRecordClassFactory::PROPERTIES][] = [
-                ActiveRecordClassFactory::PROPERTY_NAME => $field->code,
-                ActiveRecordClassFactory::PROPERTY_TYPE => self::$types[$field->type],
-                ActiveRecordClassFactory::PROPERTY_LABEL => $field->title,
-                ActiveRecordClassFactory::PROPERTY_VALIDATION_RULES => [
+            self::$params[ActiveRecordClassGenerationFactory::PROPERTIES][] = [
+                ActiveRecordClassGenerationFactory::PROPERTY_NAME => $field->code,
+                ActiveRecordClassGenerationFactory::PROPERTY_TYPE => self::$types[$field->type],
+                ActiveRecordClassGenerationFactory::PROPERTY_LABEL => $field->title,
+                ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULES => [
                     [
-                        ActiveRecordClassFactory::PROPERTY_VALIDATION_RULE_TYPE => self::$types[$field->type],
+                        ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULE_TYPE => self::$types[$field->type],
                     ],
                 ],
-                ActiveRecordClassFactory::PROPERTY_RELATION => self::getPropertyRelation($field),
+                ActiveRecordClassGenerationFactory::PROPERTY_RELATION => self::getPropertyRelation($field),
             ];
         }
     }
@@ -132,11 +132,11 @@ class EntityClassFactory
     {
         if(!empty($field->dictionary)) {
             return [
-                ActiveRecordClassFactory::PROPERTY_RELATION_METHOD_NAME => self::getMethodsName($field->code),
-                ActiveRecordClassFactory::PROPERTY_RELATION_TYPE => ActiveRecordClassFactory::RELATION_TYPE_HAS_MANY,
-                ActiveRecordClassFactory::PROPERTY_RELATION_FOREIGN_KEY => $field->code,
-                ActiveRecordClassFactory::PROPERTY_RELATION_TARGET_KEY => 'id',
-                ActiveRecordClassFactory::PROPERTY_RELATION_TARGET_CLASS => self::getName($field->dictionary->code),
+                ActiveRecordClassGenerationFactory::PROPERTY_RELATION_METHOD_NAME => self::getMethodsName($field->code),
+                ActiveRecordClassGenerationFactory::PROPERTY_RELATION_TYPE => ActiveRecordClassGenerationFactory::RELATION_TYPE_HAS_MANY,
+                ActiveRecordClassGenerationFactory::PROPERTY_RELATION_FOREIGN_KEY => $field->code,
+                ActiveRecordClassGenerationFactory::PROPERTY_RELATION_TARGET_KEY => 'id',
+                ActiveRecordClassGenerationFactory::PROPERTY_RELATION_TARGET_CLASS => self::getName($field->dictionary->code),
             ];
         }
 

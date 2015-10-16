@@ -33,9 +33,9 @@ class ActiveRecordRequiredRuleFactory
 
     protected static function render()
     {
-        if(self::$params[ActiveRecordClassFactory::RENDER_MODE] == ActiveRecordClassFactory::ACTIVE_RECORD_MODE) {
+        if(self::$params[ActiveRecordClassGenerationFactory::RENDER_MODE] == ActiveRecordClassGenerationFactory::ACTIVE_RECORD_MODE) {
             self::rRules();
-        }elseif(self::$params[ActiveRecordSearchClassFactory::RENDER_MODE] == ActiveRecordSearchClassFactory::ACTIVE_RECORD_SEARCH_MODE){
+        }elseif(self::$params[ActiveRecordSearchClassGenerationFactory::RENDER_MODE] == ActiveRecordSearchClassGenerationFactory::ACTIVE_RECORD_SEARCH_MODE){
             self::rSearchRules();
         }
     }
@@ -70,11 +70,11 @@ class ActiveRecordRequiredRuleFactory
     protected function getAllPropertiesArray()
     {
         $propertiesArray = [];
-        foreach(self::$params[ActiveRecordClassFactory::PROPERTIES] as $property) {
-            if(isset($property[ActiveRecordClassFactory::PROPERTY_VALIDATION_RULES])) {
-                foreach ($property[ActiveRecordClassFactory::PROPERTY_VALIDATION_RULES] as $rule) {
-                    if ($rule[ActiveRecordClassFactory::PROPERTY_VALIDATION_RULE_TYPE] == self::TYPE) {
-                        $propertiesArray[] = $property[ActiveRecordClassFactory::PROPERTY_NAME];
+        foreach(self::$params[ActiveRecordClassGenerationFactory::PROPERTIES] as $property) {
+            if(isset($property[ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULES])) {
+                foreach ($property[ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULES] as $rule) {
+                    if ($rule[ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULE_TYPE] == self::TYPE) {
+                        $propertiesArray[] = $property[ActiveRecordClassGenerationFactory::PROPERTY_NAME];
                     }
                 }
             }
@@ -97,11 +97,11 @@ class ActiveRecordRequiredRuleFactory
     protected static function rSearchRules()
     {
         self::$rulesString .= "             [[";
-        foreach(self::$params[ActiveRecordClassFactory::PROPERTIES] as $property) {
-            if(isset($property[ActiveRecordClassFactory::PROPERTY_VALIDATION_RULES])) {
-                foreach ($property[ActiveRecordClassFactory::PROPERTY_VALIDATION_RULES] as $rule) {
-                    if ($rule[ActiveRecordClassFactory::PROPERTY_VALIDATION_RULE_TYPE] == self::TYPE) {
-                        self::$rulesString .= "'" . $property[ActiveRecordClassFactory::PROPERTY_NAME] . "', ";
+        foreach(self::$params[ActiveRecordClassGenerationFactory::PROPERTIES] as $property) {
+            if(isset($property[ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULES])) {
+                foreach ($property[ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULES] as $rule) {
+                    if ($rule[ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULE_TYPE] == self::TYPE) {
+                        self::$rulesString .= "'" . $property[ActiveRecordClassGenerationFactory::PROPERTY_NAME] . "', ";
                     }
                 }
             }
