@@ -34,6 +34,8 @@ class ActiveRecordClassFactory
     const ACTIVE_QUERY_CLASS_NAME = 'ACTIVE_QUERY_CLASS_NAME';
     const CLASS_FILE_LOCATION_PATH = 'CLASS_FILE_LOCATION_PATH';
     const PROPERTIES_VALIDATION_RULES = 'PROPERTIES_VALIDATION_RULES';
+    const RENDER_MODE = 'RENDER_MODE';
+    const ACTIVE_RECORD_MODE = 'ACTIVE_RECORD_MODE';
 
     protected static $params;
     protected static $classString;
