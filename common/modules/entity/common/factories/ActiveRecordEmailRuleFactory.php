@@ -25,6 +25,7 @@ class ActiveRecordEmailRuleFactory
     public static function getRuleString($params)
     {
         self::$params = $params;
+        self::$rulesString = '';
         self::render();
 
         return self::$rulesString;
@@ -32,7 +33,11 @@ class ActiveRecordEmailRuleFactory
 
     protected static function render()
     {
-        self::rRules();
+        if(self::$params[ActiveRecordClassFactory::RENDER_MODE] == ActiveRecordClassFactory::ACTIVE_RECORD_MODE) {
+            self::rRules();
+        }elseif(self::$params[ActiveRecordSearchClassFactory::RENDER_MODE] == ActiveRecordSearchClassFactory::ACTIVE_RECORD_SEARCH_MODE){
+            self::rSearchRules();
+        }
     }
 
 
@@ -75,5 +80,31 @@ class ActiveRecordEmailRuleFactory
         }
 
         return $propertiesArray;
+    }
+
+    /**
+     * @inheritdoc
+     *
+    public function rules()
+    {
+        return [
+            [['id', 'entity_id', 'length', 'dictionary_id'], 'integer'],
+            [['title', 'code', 'type', 'options'], 'safe'],
+        ];
+    }*/
+
+    protected static function rSearchRules()
+    {
+        self::$rulesString .= "             [[";
+        foreach(self::$params[ActiveRecordClassFactory::PROPERTIES] as $property) {
+            if(isset($property[ActiveRecordClassFactory::PROPERTY_VALIDATION_RULES])) {
+                foreach ($property[ActiveRecordClassFactory::PROPERTY_VALIDATION_RULES] as $rule) {
+                    if ($rule[ActiveRecordClassFactory::PROPERTY_VALIDATION_RULE_TYPE] == self::TYPE) {
+                        self::$rulesString .= "'" . $property[ActiveRecordClassFactory::PROPERTY_NAME] . "', ";
+                    }
+                }
+            }
+        }
+        self::$rulesString .= "], '".self::TYPE."'],\n";
     }
 }

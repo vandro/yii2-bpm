@@ -44,10 +44,12 @@ class EntityClassFactory
         self::setProperties();
 
         if(ActiveRecordClassFactory::generateClassFile(self::$params)){
-            return true;
-        }else{
-            return false;
+            if(ActiveRecordSearchClassFactory::generateClassFile(self::$params)){
+                return true;
+            }
         }
+
+        return false;
     }
 
     protected static function setEntityType($id)
@@ -64,9 +66,9 @@ class EntityClassFactory
         self::$params[ActiveRecordClassFactory::NAME_SPACE] = $nameSpace;
     }
 
-    protected function setClassName()
+    protected function setClassName($className = null)
     {
-        self::$params[ActiveRecordClassFactory::CLASS_NAME] = self::getName(self::$entityType->code);
+        self::$params[ActiveRecordClassFactory::CLASS_NAME] = !empty($className)?$className:self::getName(self::$entityType->code);
     }
 
     protected function setActiveQueryClassName()

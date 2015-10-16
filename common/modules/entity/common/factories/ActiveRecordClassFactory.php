@@ -7,6 +7,7 @@
  */
 namespace common\modules\entity\common\factories;
 
+use common\helpers\DebugHelper;
 use Yii;
 
 class ActiveRecordClassFactory
@@ -45,6 +46,7 @@ class ActiveRecordClassFactory
 
     public static function getClassString($params)
     {
+        $params[self::RENDER_MODE] = self::ACTIVE_RECORD_MODE;
         self::$params = $params;
         self::render();
 
@@ -53,6 +55,7 @@ class ActiveRecordClassFactory
 
     public static function generateClassFile($params)
     {
+        $params[self::RENDER_MODE] = self::ACTIVE_RECORD_MODE;
         self::$params = $params;
         self::render();
 
