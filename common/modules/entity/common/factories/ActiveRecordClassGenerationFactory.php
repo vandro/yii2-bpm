@@ -37,6 +37,12 @@ class ActiveRecordClassGenerationFactory
     const PROPERTIES_VALIDATION_RULES = 'PROPERTIES_VALIDATION_RULES';
     const RENDER_MODE = 'RENDER_MODE';
     const ACTIVE_RECORD_MODE = 'ACTIVE_RECORD_MODE';
+    const RELATIONS = 'RELATIONS';
+    const RELATION_METHOD_NAME = 'RELATION_METHOD_NAME';
+    const RELATION_TYPE = 'RELATION_TYPE';
+    const RELATION_FOREIGN_KEY = 'RELATION_FOREIGN_KEY';
+    const RELATION_TARGET_KEY = 'RELATION_TARGET_KEY';
+    const RELATION_TARGET_CLASS = 'RELATION_TARGET_CLASS';
 
     protected static $params;
     protected static $classString;
@@ -246,15 +252,29 @@ class ActiveRecordClassGenerationFactory
 
     protected static function rRelationMethods()
     {
-        foreach(self::$params[self::PROPERTIES] as $property) {
-            if(isset($property[self::PROPERTY_RELATION]) && !empty($property[self::PROPERTY_RELATION])) {
-                $relation = $property[self::PROPERTY_RELATION];
+        if(isset(self::$params[self::PROPERTIES])) {
+            foreach (self::$params[self::PROPERTIES] as $property) {
+                if (isset($property[self::PROPERTY_RELATION]) && !empty($property[self::PROPERTY_RELATION])) {
+                    $relation = $property[self::PROPERTY_RELATION];
+                    self::$classString .= "    /**\n";
+                    self::$classString .= "     * @return \\yii\\db\\ActiveQuery.\n";
+                    self::$classString .= "     */\n";
+                    self::$classString .= "    public function get" . $relation[self::PROPERTY_RELATION_METHOD_NAME] . "()\n";
+                    self::$classString .= "    {\n";
+                    self::$classString .= "         return $" . "this->" . $relation[self::PROPERTY_RELATION_TYPE] . "(" . $relation[self::PROPERTY_RELATION_TARGET_CLASS] . "::className(),['" . $relation[self::PROPERTY_RELATION_TARGET_KEY] . "' => '" . $relation[self::PROPERTY_RELATION_FOREIGN_KEY] . "']);\n";
+                    self::$classString .= "    }\n\n";
+                }
+            }
+        }
+
+        if(isset(self::$params[self::RELATIONS]) && !empty(self::$params[self::RELATIONS])) {
+            foreach (self::$params[self::RELATIONS] as $relation) {
                 self::$classString .= "    /**\n";
                 self::$classString .= "     * @return \\yii\\db\\ActiveQuery.\n";
                 self::$classString .= "     */\n";
-                self::$classString .= "    public function get" . $relation[self::PROPERTY_RELATION_METHOD_NAME] . "()\n";
+                self::$classString .= "    public function get" . $relation[self::RELATION_METHOD_NAME] . "()\n";
                 self::$classString .= "    {\n";
-                self::$classString .= "         return $" . "this->" . $relation[self::PROPERTY_RELATION_TYPE] . "(" . $relation[self::PROPERTY_RELATION_TARGET_CLASS] . "::className(),['" . $relation[self::PROPERTY_RELATION_TARGET_KEY] . "' => '" . $relation[self::PROPERTY_RELATION_FOREIGN_KEY] . "']);\n";
+                self::$classString .= "         return $" . "this->" . $relation[self::RELATION_TYPE] . "(" . $relation[self::RELATION_TARGET_CLASS] . "::className(),['" . $relation[self::RELATION_TARGET_KEY] . "' => '" . $relation[self::RELATION_FOREIGN_KEY] . "']);\n";
                 self::$classString .= "    }\n\n";
             }
         }

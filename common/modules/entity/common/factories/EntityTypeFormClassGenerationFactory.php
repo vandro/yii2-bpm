@@ -12,7 +12,7 @@ use Yii;
 use common\modules\entity\common\models\EntityTypes;
 use yii\web\NotFoundHttpException;
 
-class EntityFormClassGenerationFactory
+class EntityTypeFormClassGenerationFactory
 {
     protected static $params;
     protected static $entityType;
@@ -28,7 +28,7 @@ class EntityFormClassGenerationFactory
     public static function generateFile($form_id)
     {
         self::setForm($form_id);
-        self::setEntityType($form_id);
+        self::setEntityType();
         self::setNameSpace('common\modules\entity\common\entities\forms');
         self::setClassName();
         self::setActiveQueryClassName();
@@ -43,6 +43,7 @@ class EntityFormClassGenerationFactory
             'integer' => '\common\modules\entity\common\factories\ActiveRecordIntegerRuleGenerationFactory',
             'email' => '\common\modules\entity\common\factories\ActiveRecordEmailRuleGenerationFactory',
         ]);
+        self::setRelations();
         self::setProperties();
 
         if(ActiveRecordClassGenerationFactory::generateClassFile(self::$params)){
@@ -130,24 +131,50 @@ class EntityFormClassGenerationFactory
                         ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULE_TYPE => $rule->code,
                     ],
                 ],
-                ActiveRecordClassGenerationFactory::PROPERTY_RELATION => self::getPropertyRelation($rule),
             ];
+            if(!empty($rule->field->dictionary)) {
+                $relation = [
+                    ActiveRecordClassGenerationFactory::RELATION_METHOD_NAME => self::getMethodsName($rule->field->code),
+                    ActiveRecordClassGenerationFactory::RELATION_TYPE => ActiveRecordClassGenerationFactory::RELATION_TYPE_HAS_MANY,
+                    ActiveRecordClassGenerationFactory::RELATION_FOREIGN_KEY => $rule->field->code,
+                    ActiveRecordClassGenerationFactory::RELATION_TARGET_KEY => 'id',
+                    ActiveRecordClassGenerationFactory::RELATION_TARGET_CLASS => self::getName($rule->field->dictionary->code),
+                ];
+                if (!in_array($relation, self::$params[ActiveRecordClassGenerationFactory::RELATIONS])) {
+                    self::$params[ActiveRecordClassGenerationFactory::RELATIONS][] = $relation;
+                }
+            }
+
         }
     }
 
-    protected function getPropertyRelation($rule)
+    protected function setRelations()
     {
-        if(!empty($rule->field->dictionary)) {
-            return [
-                ActiveRecordClassGenerationFactory::PROPERTY_RELATION_METHOD_NAME => self::getMethodsName($rule->field->code),
-                ActiveRecordClassGenerationFactory::PROPERTY_RELATION_TYPE => ActiveRecordClassGenerationFactory::RELATION_TYPE_HAS_MANY,
-                ActiveRecordClassGenerationFactory::PROPERTY_RELATION_FOREIGN_KEY => $rule->field->code,
-                ActiveRecordClassGenerationFactory::PROPERTY_RELATION_TARGET_KEY => 'id',
-                ActiveRecordClassGenerationFactory::PROPERTY_RELATION_TARGET_CLASS => self::getName($rule->field->dictionary->code),
+        self::$params[ActiveRecordClassGenerationFactory::RELATIONS] = [];
+        if(!empty(self::$form->parentForm)) {
+            self::$params[ActiveRecordClassGenerationFactory::RELATIONS][] = [
+                ActiveRecordClassGenerationFactory::RELATION_METHOD_NAME => self::getMethodsName(self::$form->parentForm->code),
+                ActiveRecordClassGenerationFactory::RELATION_TYPE => ActiveRecordClassGenerationFactory::RELATION_TYPE_HAS_ONE,
+                ActiveRecordClassGenerationFactory::RELATION_FOREIGN_KEY => self::$form->foreignKeyField->code,
+                ActiveRecordClassGenerationFactory::RELATION_TARGET_KEY => 'id',
+                ActiveRecordClassGenerationFactory::RELATION_TARGET_CLASS => self::getName(self::$form->parentForm->code),
             ];
         }
 
-        return null;
+        if(!empty(self::$form->childForms)) {
+            foreach(self::$form->childForms as $form) {
+                $relation = [
+                    ActiveRecordClassGenerationFactory::RELATION_METHOD_NAME => self::getMethodsName($form->code),
+                    ActiveRecordClassGenerationFactory::RELATION_TYPE => ActiveRecordClassGenerationFactory::RELATION_TYPE_HAS_MANY,
+                    ActiveRecordClassGenerationFactory::RELATION_FOREIGN_KEY => 'id',
+                    ActiveRecordClassGenerationFactory::RELATION_TARGET_KEY => $form->foreignKeyField->code,
+                    ActiveRecordClassGenerationFactory::RELATION_TARGET_CLASS => self::getName($form->code) . 'Form',
+                ];
+                if(!in_array($relation, self::$params[ActiveRecordClassGenerationFactory::RELATIONS])) {
+                    self::$params[ActiveRecordClassGenerationFactory::RELATIONS][] = $relation;
+                }
+            }
+        }
     }
 
     private static function getName($nameString)

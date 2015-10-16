@@ -11,12 +11,12 @@ use common\modules\entity\common\models\EntityForms;
 use Yii;
 use common\modules\entity\common\models\EntityTypes;
 use yii\web\NotFoundHttpException;
-use common\modules\entity\common\factories\EntityClassGenerationFactory;
+use common\modules\entity\common\factories\EntityTypeFormClassGenerationFactory;
 
-class EntityFormClassFactory
+class EntityTypeFormClassFactory
 {
-    protected static $entityType = null;
-    protected static $namespace = 'common\modules\entity\common\entities\forms';
+    protected static $entityTypeForm = null;
+    protected static $namespace = 'common\modules\entity\common\entities';
 
     public static function get($form_id)
     {
@@ -36,13 +36,13 @@ class EntityFormClassFactory
         if (($model = EntityForms::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested entity type does not exist.');
+            throw new NotFoundHttpException('The requested entity type form does not exist.');
         }
     }
 
     protected static function getClassName($entityTypeCode)
     {
-        return static::$namespace.'\\'.self::getName($entityTypeCode).'Form';
+        return static::$namespace.'\\'.self::getName($entityTypeCode)."From";
     }
 
     private static function getName($nameString)
