@@ -3,8 +3,9 @@
 namespace common\modules\entity\frontend\controllers;
 
 //use common\modules\entity\common\factories\BehaviorClassFactory;
-use common\modules\entity\common\factories\ActiveRecordClassFactory;
+use common\modules\entity\common\factories\ActiveRecordClassGenerationFactory;
 use common\modules\entity\common\factories\ActiveRecordStringRuleFactory;
+use common\modules\entity\common\factories\EntityClassGenerationFactory;
 use common\modules\entity\common\factories\EntityClassFactory;
 use common\modules\entity\common\factories\EntityFormClassFactory;
 use common\modules\entity\common\models\EntityForms;
@@ -162,16 +163,23 @@ class TestTasksController extends Controller
     public function actionCreateEntity($id)
     {
 
-        if (EntityClassFactory::generateFile($id)) {
+        if (EntityClassGenerationFactory::generateFile($id)) {
             echo 'Generated';
         } else {
             echo 'Not';
         }
     }
 
+    public function actionGetEntityData($id)
+    {
+        $entityClass = EntityClassFactory::get($id);
+        DebugHelper::printActiveRecordsArray($entityClass::find()->all());
+    }
+
     public function actionTestCreateEntity()
     {
         $params = [
+            ActiveRecordClassFactory::RENDER_MODE => ActiveRecordClassFactory::ACTIVE_RECORD_MODE,
             ActiveRecordClassFactory::NAME_SPACE => 'common\modules\entity\common\entities',
             ActiveRecordClassFactory::CLASS_NAME => 'RequestRelation',
             ActiveRecordClassFactory::ACTIVE_QUERY_CLASS_NAME => 'RequestQuery',
@@ -266,7 +274,7 @@ class TestTasksController extends Controller
             ],
         ];
 
-        if(ActiveRecordClassFactory::generateClassFile($params)){
+        if(ActiveRecordClassGenerationFactory::generateClassFile($params)){
             echo 'Generated';
         }else{
             echo 'Not';
