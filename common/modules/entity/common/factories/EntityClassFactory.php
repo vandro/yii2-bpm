@@ -126,16 +126,19 @@ class EntityClassFactory
         }
     }
 
-    //Метод не закончен
     protected function getPropertyRelation($field)
     {
-        return [
-            ActiveRecordClassFactory::PROPERTY_RELATION_METHOD_NAME => self::getMethodsName($field->code),
-            ActiveRecordClassFactory::PROPERTY_RELATION_TYPE => ActiveRecordClassFactory::RELATION_TYPE_HAS_MANY,
-            ActiveRecordClassFactory::PROPERTY_RELATION_FOREIGN_KEY => $field->code,
-            ActiveRecordClassFactory::PROPERTY_RELATION_TARGET_KEY => 'id',
-            ActiveRecordClassFactory::PROPERTY_RELATION_TARGET_CLASS => 'EntityType',
-        ];
+        if(!empty($field->dictionary)) {
+            return [
+                ActiveRecordClassFactory::PROPERTY_RELATION_METHOD_NAME => self::getMethodsName($field->code),
+                ActiveRecordClassFactory::PROPERTY_RELATION_TYPE => ActiveRecordClassFactory::RELATION_TYPE_HAS_MANY,
+                ActiveRecordClassFactory::PROPERTY_RELATION_FOREIGN_KEY => $field->code,
+                ActiveRecordClassFactory::PROPERTY_RELATION_TARGET_KEY => 'id',
+                ActiveRecordClassFactory::PROPERTY_RELATION_TARGET_CLASS => self::getName($field->dictionary->code),
+            ];
+        }
+
+        return null;
     }
 
     private static function getName($nameString)
