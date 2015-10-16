@@ -90,7 +90,7 @@ class ActiveRecordClassFactory
 
     protected static function rUses()
     {
-        self::$classString .= "use Yii;\n\n";
+        self::$classString .= "use Yii;\n";
         self::$classString .= "use yii\\db\\ActiveRecord;\n\n";
     }
 
