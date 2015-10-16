@@ -179,7 +179,11 @@ class ActiveRecordQueryClassGenerationFactory
                 self::$classString .= "     */\n";
                 self::$classString .= "    public function " . $property[self::PROPERTY_NAME] . "($" . $property[self::PROPERTY_NAME] . ")\n";
                 self::$classString .= "    {\n";
-                self::$classString .= "         \$this->andWhere(['" . $property[self::PROPERTY_NAME] . "' => $" . $property[self::PROPERTY_NAME] . "]);\n";
+                if($property[self::PROPERTY_TYPE] == 'string'){
+                    self::$classString .= "         \$this->andWhere(['like','" . $property[self::PROPERTY_NAME] . "', $" . $property[self::PROPERTY_NAME] . "]);\n";
+                }else {
+                    self::$classString .= "         \$this->andWhere(['" . $property[self::PROPERTY_NAME] . "' => $" . $property[self::PROPERTY_NAME] . "]);\n";
+                }
                 self::$classString .= "         return \$this;\n";
                 self::$classString .= "    }\n\n";
             }
@@ -201,7 +205,7 @@ class ActiveRecordQueryClassGenerationFactory
                 self::$classString .= "    /**\n";
                 self::$classString .= "     * @return \\yii\\db\\ActiveQuery.\n";
                 self::$classString .= "     */\n";
-                self::$classString .= "    public function " . $relation[self::RELATION_METHOD_NAME] . "($" . $relation[self::RELATION_METHOD_NAME] . ")\n";
+                self::$classString .= "    public function " . $relation[self::RELATION_METHOD_NAME] . "Relation($" . $relation[self::RELATION_METHOD_NAME] . ")\n";
                 self::$classString .= "    {\n";
                 self::$classString .= "         \$this->joinWith('" . $relation[self::RELATION_METHOD_NAME] . "')\n";
                 self::$classString .= "             ->andWhere(['`" . $relation[self::RELATION_TABLE_NAME] . "`.`id`' => $" . $relation[self::RELATION_METHOD_NAME] . "->id]);\n";
