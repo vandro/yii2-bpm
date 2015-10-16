@@ -242,7 +242,7 @@ class ActiveRecordClassFactory
     protected static function rRelationMethods()
     {
         foreach(self::$params[self::PROPERTIES] as $property) {
-            if(isset($property[self::PROPERTY_RELATION])) {
+            if(isset($property[self::PROPERTY_RELATION]) && !empty($property[self::PROPERTY_RELATION])) {
                 $relation = $property[self::PROPERTY_RELATION];
                 self::$classString .= "    /**\n";
                 self::$classString .= "     * @return \\yii\\db\\ActiveQuery.\n";
