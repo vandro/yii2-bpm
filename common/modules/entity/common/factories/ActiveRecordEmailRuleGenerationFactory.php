@@ -10,11 +10,11 @@ namespace common\modules\entity\common\factories;
 use common\helpers\DebugHelper;
 use Yii;
 
-class ActiveRecordRequiredRuleFactory
+class ActiveRecordEmailRuleGenerationFactory
 {
     const PROPERTIES = 'PROPERTIES';
     const PROPERTY_NAME = 'PROPERTY_NAME';
-    const TYPE = 'required';
+    const TYPE = 'email';
 
     protected static $params;
     protected static $rulesString;
@@ -48,7 +48,6 @@ class ActiveRecordRequiredRuleFactory
     public function rules()
     {
         return [
-            [['order', 'region_id'], 'required'],
             [['order', 'region_id'], 'integer'],
             [['title'], 'string', 'max' => 255]
             [['email'], 'email']
@@ -106,6 +105,6 @@ class ActiveRecordRequiredRuleFactory
                 }
             }
         }
-        self::$rulesString .= "], 'safe'],\n";
+        self::$rulesString .= "], '".self::TYPE."'],\n";
     }
 }

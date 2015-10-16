@@ -36,10 +36,10 @@ class EntityClassGenerationFactory
         self::setI18NMessageFileAlias('app');
         self::setClassFileLocationPath(Yii::$app->basePath.'/../common/modules/entity/common/entities/');
         self::setPropertyValidationRules([
-            'required' => '\common\modules\entity\common\factories\ActiveRecordRequiredRuleFactory',
-            'string' => '\common\modules\entity\common\factories\ActiveRecordStringRuleFactory',
-            'integer' => '\common\modules\entity\common\factories\ActiveRecordIntegerRuleFactory',
-            'email' => '\common\modules\entity\common\factories\ActiveRecordEmailRuleFactory',
+            'required' => '\common\modules\entity\common\factories\ActiveRecordRequiredRuleGenerationFactory',
+            'string' => '\common\modules\entity\common\factories\ActiveRecordStringRuleGenerationFactory',
+            'integer' => '\common\modules\entity\common\factories\ActiveRecordIntegerRuleGenerationFactory',
+            'email' => '\common\modules\entity\common\factories\ActiveRecordEmailRuleGenerationFactory',
         ]);
         self::setProperties();
 

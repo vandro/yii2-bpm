@@ -10,11 +10,13 @@ namespace common\modules\entity\common\factories;
 use common\helpers\DebugHelper;
 use Yii;
 
-class ActiveRecordEmailRuleFactory
+class ActiveRecordStringRuleGenerationFactory
 {
+    const MAX = 'MAX';
+    const MIN ='MIN';
     const PROPERTIES = 'PROPERTIES';
     const PROPERTY_NAME = 'PROPERTY_NAME';
-    const TYPE = 'email';
+    const TYPE = 'string';
 
     protected static $params;
     protected static $rulesString;
@@ -50,36 +52,59 @@ class ActiveRecordEmailRuleFactory
         return [
             [['order', 'region_id'], 'integer'],
             [['title'], 'string', 'max' => 255]
-            [['email'], 'email']
         ];
     }*/
 
     protected static function rRules()
     {
-        $arProperty = self::getAllPropertiesArray();
-        if(!empty($arProperty)) {
-            self::$rulesString .= "             [[";
-            foreach (self::getAllPropertiesArray() as $property) {
-                self::$rulesString .= "'" . $property . "', ";
+        $arMinMax = self::getAllMaxMinArray();
+        if(!empty($arMinMax)) {
+            foreach (self::getAllMaxMinArray() as $item) {
+                self::$rulesString .= "             [[";
+                foreach ($item[self::PROPERTIES] as $property) {
+                    self::$rulesString .= "'" . $property . "', ";
+                }
+                self::$rulesString .= "], '".self::TYPE."'";
+                if (isset($item[self::MAX])) {
+                    self::$rulesString .= ", 'max' => " . $item[self::MAX];
+                }
+                if (isset($item[self::MIN])) {
+                    self::$rulesString .= ", 'min' => " . $item[self::MIN];
+                }
+                self::$rulesString .= "],\n";
             }
-            self::$rulesString .= "], '".self::TYPE."'],\n";
         }
     }
 
-    protected function getAllPropertiesArray()
+    protected function getAllMaxMinArray()
     {
-        $propertiesArray = [];
+        $maxMinArray = [];
+        $maxMinPropertiesArray = [];
         foreach(self::$params[ActiveRecordClassGenerationFactory::PROPERTIES] as $property) {
             if(isset($property[ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULES])) {
                 foreach ($property[ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULES] as $rule) {
                     if ($rule[ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULE_TYPE] == self::TYPE) {
-                        $propertiesArray[] = $property[ActiveRecordClassGenerationFactory::PROPERTY_NAME];
+                        $key = 'key';
+                        $maxMin = [];
+                        if (isset($rule[self::MAX])) {
+                            $maxMin[self::MAX] = $rule[self::MAX];
+                            $key .= $rule[self::MAX];
+                        }
+                        if (isset($rule[self::MIN])) {
+                            $maxMin[self::MIN] = $rule[self::MIN];
+                            $key .= $rule[self::MIN];
+                        }
+                        if (!in_array($maxMin, $maxMinArray) && !empty($maxMin)) {
+                            $maxMinArray[] = $maxMin;
+                            $maxMinPropertiesArray[$key] = $maxMin;
+                        }
+                        $maxMinPropertiesArray[$key][self::PROPERTIES][] = $property[ActiveRecordClassGenerationFactory::PROPERTY_NAME];
                     }
                 }
             }
         }
 
-        return $propertiesArray;
+        return $maxMinPropertiesArray;
     }
 
     /**

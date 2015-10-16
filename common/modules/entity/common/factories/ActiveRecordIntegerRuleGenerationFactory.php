@@ -10,7 +10,7 @@ namespace common\modules\entity\common\factories;
 use common\helpers\DebugHelper;
 use Yii;
 
-class ActiveRecordIntegerRuleFactory
+class ActiveRecordIntegerRuleGenerationFactory
 {
     const MAX = 'MAX';
     const MIN ='MIN';
