@@ -48,7 +48,9 @@ class EntityTypeFormClassGenerationFactory
 
         if(ActiveRecordClassGenerationFactory::generateClassFile(self::$params)){
             if(ActiveRecordSearchClassGenerationFactory::generateClassFile(self::$params)){
-                return true;
+                if(ActiveRecordQueryClassGenerationFactory::generateClassFile(self::$params)) {
+                    return true;
+                }
             }
         }
 
@@ -139,6 +141,7 @@ class EntityTypeFormClassGenerationFactory
                     ActiveRecordClassGenerationFactory::RELATION_FOREIGN_KEY => $rule->field->code,
                     ActiveRecordClassGenerationFactory::RELATION_TARGET_KEY => 'id',
                     ActiveRecordClassGenerationFactory::RELATION_TARGET_CLASS => self::getName($rule->field->dictionary->code),
+                    ActiveRecordClassGenerationFactory::RELATION_TABLE_NAME => $rule->field->dictionary->code,
                 ];
                 if (!in_array($relation, self::$params[ActiveRecordClassGenerationFactory::RELATIONS])) {
                     self::$params[ActiveRecordClassGenerationFactory::RELATIONS][] = $relation;
@@ -158,6 +161,7 @@ class EntityTypeFormClassGenerationFactory
                 ActiveRecordClassGenerationFactory::RELATION_FOREIGN_KEY => self::$form->foreignKeyField->code,
                 ActiveRecordClassGenerationFactory::RELATION_TARGET_KEY => 'id',
                 ActiveRecordClassGenerationFactory::RELATION_TARGET_CLASS => self::getName(self::$form->parentForm->code),
+                ActiveRecordClassGenerationFactory::RELATION_TABLE_NAME => self::$form->parentForm->entity->code,
             ];
         }
 
@@ -169,6 +173,7 @@ class EntityTypeFormClassGenerationFactory
                     ActiveRecordClassGenerationFactory::RELATION_FOREIGN_KEY => 'id',
                     ActiveRecordClassGenerationFactory::RELATION_TARGET_KEY => $form->foreignKeyField->code,
                     ActiveRecordClassGenerationFactory::RELATION_TARGET_CLASS => self::getName($form->code) . 'Form',
+                    ActiveRecordClassGenerationFactory::RELATION_TABLE_NAME => $form->entity->code,
                 ];
                 if(!in_array($relation, self::$params[ActiveRecordClassGenerationFactory::RELATIONS])) {
                     self::$params[ActiveRecordClassGenerationFactory::RELATIONS][] = $relation;

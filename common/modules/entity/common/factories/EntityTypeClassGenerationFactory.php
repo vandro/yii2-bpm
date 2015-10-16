@@ -7,17 +7,15 @@
  */
 namespace common\modules\entity\common\factories;
 
-use common\modules\entity\common\models\EntityForms;
-use common\modules\entity\common\models\EntityViews;
 use Yii;
 use common\modules\entity\common\models\EntityTypes;
 use yii\web\NotFoundHttpException;
 
-class EntityTypeViewClassGenerationFactory
+class EntityTypeClassGenerationFactory
 {
     protected static $params;
     protected static $entityType;
-    protected static $view;
+    protected static $entity;
 
     protected static $types = [
         'VARCHAR' => 'string',
@@ -26,25 +24,23 @@ class EntityTypeViewClassGenerationFactory
         'DATE' => 'date',
     ];
 
-    public static function generateFile($view_id)
+    public static function generateFile($entity_id)
     {
-        self::setView($view_id);
-        self::setEntityType();
-        self::setNameSpace('common\modules\entity\common\entities\views');
+        self::setEntityType($entity_id);
+        self::setNameSpace('common\modules\entity\common\entities');
         self::setClassName();
         self::setActiveQueryClassName();
         self::setDatabaseName('pdb');
         self::setTableName();
         self::setAuthorName('Avazbek Niyazov');
         self::setI18NMessageFileAlias('app');
-        self::setClassFileLocationPath(Yii::$app->basePath.'/../common/modules/entity/common/entities/views/');
+        self::setClassFileLocationPath(Yii::$app->basePath.'/../common/modules/entity/common/entities/');
         self::setPropertyValidationRules([
             'required' => '\common\modules\entity\common\factories\ActiveRecordRequiredRuleGenerationFactory',
             'string' => '\common\modules\entity\common\factories\ActiveRecordStringRuleGenerationFactory',
             'integer' => '\common\modules\entity\common\factories\ActiveRecordIntegerRuleGenerationFactory',
             'email' => '\common\modules\entity\common\factories\ActiveRecordEmailRuleGenerationFactory',
         ]);
-        self::setRelations();
         self::setProperties();
 
         if(ActiveRecordClassGenerationFactory::generateClassFile(self::$params)){
@@ -56,18 +52,13 @@ class EntityTypeViewClassGenerationFactory
         return false;
     }
 
-    protected static function setView($id)
+    protected static function setEntityType($id)
     {
-        if (($model = EntityViews::findOne($id)) !== null) {
-            self::$view = $model;
+        if (($model = EntityTypes::findOne($id)) !== null) {
+            self::$entityType = $model;
         } else {
-            throw new NotFoundHttpException('The requested entity type view does not exist.');
+            throw new NotFoundHttpException('The requested entity type does not exist.');
         }
-    }
-
-    protected static function setEntityType()
-    {
-        self::$entityType = self::$view->entity;
     }
 
     protected function setNameSpace($nameSpace)
@@ -75,14 +66,14 @@ class EntityTypeViewClassGenerationFactory
         self::$params[ActiveRecordClassGenerationFactory::NAME_SPACE] = $nameSpace;
     }
 
-    protected function setClassName()
+    protected function setClassName($className = null)
     {
-        self::$params[ActiveRecordClassGenerationFactory::CLASS_NAME] = self::getName(self::$view->code).'View';
+        self::$params[ActiveRecordClassGenerationFactory::CLASS_NAME] = !empty($className)?$className:self::getName(self::$entityType->code);
     }
 
     protected function setActiveQueryClassName()
     {
-        self::$params[ActiveRecordClassGenerationFactory::ACTIVE_QUERY_CLASS_NAME] = self::getName(self::$view->code).'ViewQuery';
+        self::$params[ActiveRecordClassGenerationFactory::ACTIVE_QUERY_CLASS_NAME] = self::getName(self::$entityType->code).'Query';
     }
 
     protected function setDatabaseName($databaseName)
@@ -122,58 +113,29 @@ class EntityTypeViewClassGenerationFactory
     protected function setProperties()
     {
         self::$params[ActiveRecordClassGenerationFactory::PROPERTIES] = [];
-        foreach(self::$view->rules as $rule){
+        self::$params[ActiveRecordClassGenerationFactory::RELATIONS] = [];
+        foreach(self::$entityType->fields as $field){
             self::$params[ActiveRecordClassGenerationFactory::PROPERTIES][] = [
-                ActiveRecordClassGenerationFactory::PROPERTY_NAME => $rule->field->code,
-                ActiveRecordClassGenerationFactory::PROPERTY_TYPE => self::$types[$rule->field->type],
-                ActiveRecordClassGenerationFactory::PROPERTY_LABEL => $rule->field->title,
+                ActiveRecordClassGenerationFactory::PROPERTY_NAME => $field->code,
+                ActiveRecordClassGenerationFactory::PROPERTY_TYPE => self::$types[$field->type],
+                ActiveRecordClassGenerationFactory::PROPERTY_LABEL => $field->title,
                 ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULES => [
                     [
-                        ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULE_TYPE => $rule->code,
+                        ActiveRecordClassGenerationFactory::PROPERTY_VALIDATION_RULE_TYPE => self::$types[$field->type],
                     ],
-                ],
+                ]
             ];
-            if(!empty($rule->field->dictionary)) {
+
+            if(!empty($field->dictionary)) {
                 $relation = [
-                    ActiveRecordClassGenerationFactory::RELATION_METHOD_NAME => self::getMethodsName($rule->field->code),
+                    ActiveRecordClassGenerationFactory::RELATION_METHOD_NAME => self::getMethodsName($field->code),
                     ActiveRecordClassGenerationFactory::RELATION_TYPE => ActiveRecordClassGenerationFactory::RELATION_TYPE_HAS_MANY,
-                    ActiveRecordClassGenerationFactory::RELATION_FOREIGN_KEY => $rule->field->code,
+                    ActiveRecordClassGenerationFactory::RELATION_FOREIGN_KEY => $field->code,
                     ActiveRecordClassGenerationFactory::RELATION_TARGET_KEY => 'id',
-                    ActiveRecordClassGenerationFactory::RELATION_TARGET_CLASS => self::getName($rule->field->dictionary->code),
-                    ActiveRecordClassGenerationFactory::RELATION_TABLE_NAME => $rule->field->dictionary->code,
+                    ActiveRecordClassGenerationFactory::RELATION_TARGET_CLASS => self::getName($field->dictionary->code),
+                    ActiveRecordClassGenerationFactory::RELATION_TABLE_NAME => $field->dictionary->code,
                 ];
                 if (!in_array($relation, self::$params[ActiveRecordClassGenerationFactory::RELATIONS])) {
-                    self::$params[ActiveRecordClassGenerationFactory::RELATIONS][] = $relation;
-                }
-            }
-        }
-    }
-
-    protected function setRelations()
-    {
-        self::$params[ActiveRecordClassGenerationFactory::RELATIONS] = [];
-        if(!empty(self::$view->parentView)) {
-            self::$params[ActiveRecordClassGenerationFactory::RELATIONS][] = [
-                ActiveRecordClassGenerationFactory::RELATION_METHOD_NAME => self::getMethodsName(self::$view->parentView->code),
-                ActiveRecordClassGenerationFactory::RELATION_TYPE => ActiveRecordClassGenerationFactory::RELATION_TYPE_HAS_ONE,
-                ActiveRecordClassGenerationFactory::RELATION_FOREIGN_KEY => self::$view->foreignKeyField->code,
-                ActiveRecordClassGenerationFactory::RELATION_TARGET_KEY => 'id',
-                ActiveRecordClassGenerationFactory::RELATION_TARGET_CLASS => self::getName(self::$view->parentView->code),
-                ActiveRecordClassGenerationFactory::RELATION_TABLE_NAME => self::$view->parentView->code,
-            ];
-        }
-
-        if(!empty(self::$view->childViews)) {
-            foreach(self::$view->childViews as $view) {
-                $relation = [
-                    ActiveRecordClassGenerationFactory::RELATION_METHOD_NAME => self::getMethodsName($view->code),
-                    ActiveRecordClassGenerationFactory::RELATION_TYPE => ActiveRecordClassGenerationFactory::RELATION_TYPE_HAS_MANY,
-                    ActiveRecordClassGenerationFactory::RELATION_FOREIGN_KEY => 'id',
-                    ActiveRecordClassGenerationFactory::RELATION_TARGET_KEY => $view->foreignKeyField->code,
-                    ActiveRecordClassGenerationFactory::RELATION_TARGET_CLASS => self::getName($view->code).'View',
-                    ActiveRecordClassGenerationFactory::RELATION_TABLE_NAME => $view->entity->code,
-                ];
-                if(!in_array($relation, self::$params[ActiveRecordClassGenerationFactory::RELATIONS])) {
                     self::$params[ActiveRecordClassGenerationFactory::RELATIONS][] = $relation;
                 }
             }

@@ -37,6 +37,7 @@ class ActiveRecordSearchClassGenerationFactory
     const PROPERTIES_VALIDATION_RULES = 'PROPERTIES_VALIDATION_RULES';
     const RENDER_MODE = 'RENDER_MODE';
     const ACTIVE_RECORD_SEARCH_MODE = 'ACTIVE_RECORD_SEARCH_MODE';
+    const RELATION_TABLE_NAME = 'RELATION_TABLE_NAME';
 
     protected static $params;
     protected static $searchClassString;
@@ -78,7 +79,7 @@ class ActiveRecordSearchClassGenerationFactory
     {
         self::$searchClassString .= "<?php\n";
         self::$searchClassString .= "/**\n";
-        self::$searchClassString .= "* Created by ActiveRecordSearchClassFactory.\n";
+        self::$searchClassString .= "* Created by ActiveRecordSearchClassGenerationFactory.\n";
         self::$searchClassString .= "* Author: ".self::$params[self::AUTHOR_NAME]."\n";
         self::$searchClassString .= "* Date: ".date("d.m.Y")."\n";
         self::$searchClassString .= "* Time: ".date("h:i:sa")."\n";
@@ -166,7 +167,7 @@ class ActiveRecordSearchClassGenerationFactory
      * @param array $params
      *
      * @return ActiveDataProvider
-     */
+     *
     public function search($params)
     {
         $query = EntityFields::find();
@@ -197,7 +198,7 @@ class ActiveRecordSearchClassGenerationFactory
             ->andFilterWhere(['like', 'options', $this->options]);
 
         return $dataProvider;
-    }
+    }*/
 
     protected static function rSearch()
     {

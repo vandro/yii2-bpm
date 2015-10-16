@@ -43,6 +43,7 @@ class ActiveRecordClassGenerationFactory
     const RELATION_FOREIGN_KEY = 'RELATION_FOREIGN_KEY';
     const RELATION_TARGET_KEY = 'RELATION_TARGET_KEY';
     const RELATION_TARGET_CLASS = 'RELATION_TARGET_CLASS';
+    const RELATION_TABLE_NAME = 'RELATION_TABLE_NAME';
 
     protected static $params;
     protected static $classString;
@@ -87,7 +88,7 @@ class ActiveRecordClassGenerationFactory
     {
         self::$classString .= "<?php\n";
         self::$classString .= "/**\n";
-        self::$classString .= "* Created by ActiveRecordClassFactory.\n";
+        self::$classString .= "* Created by ActiveRecordClassGenerationFactory.\n";
         self::$classString .= "* Author: ".self::$params[self::AUTHOR_NAME]."\n";
         self::$classString .= "* Date: ".date("d.m.Y")."\n";
         self::$classString .= "* Time: ".date("h:i:sa")."\n";
@@ -261,7 +262,7 @@ class ActiveRecordClassGenerationFactory
                     self::$classString .= "     */\n";
                     self::$classString .= "    public function get" . $relation[self::PROPERTY_RELATION_METHOD_NAME] . "()\n";
                     self::$classString .= "    {\n";
-                    self::$classString .= "         return $" . "this->" . $relation[self::PROPERTY_RELATION_TYPE] . "(" . $relation[self::PROPERTY_RELATION_TARGET_CLASS] . "::className(),['" . $relation[self::PROPERTY_RELATION_TARGET_KEY] . "' => '" . $relation[self::PROPERTY_RELATION_FOREIGN_KEY] . "']);\n";
+                    self::$classString .= "         return \$this->" . $relation[self::PROPERTY_RELATION_TYPE] . "(" . $relation[self::PROPERTY_RELATION_TARGET_CLASS] . "::className(),['" . $relation[self::PROPERTY_RELATION_TARGET_KEY] . "' => '" . $relation[self::PROPERTY_RELATION_FOREIGN_KEY] . "']);\n";
                     self::$classString .= "    }\n\n";
                 }
             }
@@ -274,7 +275,7 @@ class ActiveRecordClassGenerationFactory
                 self::$classString .= "     */\n";
                 self::$classString .= "    public function get" . $relation[self::RELATION_METHOD_NAME] . "()\n";
                 self::$classString .= "    {\n";
-                self::$classString .= "         return $" . "this->" . $relation[self::RELATION_TYPE] . "(" . $relation[self::RELATION_TARGET_CLASS] . "::className(),['" . $relation[self::RELATION_TARGET_KEY] . "' => '" . $relation[self::RELATION_FOREIGN_KEY] . "']);\n";
+                self::$classString .= "         return \$this->" . $relation[self::RELATION_TYPE] . "(" . $relation[self::RELATION_TARGET_CLASS] . "::className(),['" . $relation[self::RELATION_TARGET_KEY] . "' => '" . $relation[self::RELATION_FOREIGN_KEY] . "']);\n";
                 self::$classString .= "    }\n\n";
             }
         }
