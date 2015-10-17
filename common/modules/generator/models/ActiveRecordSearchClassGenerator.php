@@ -20,9 +20,9 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
             'Yii',
             'yii\\base\\Model',
             'yii\\data\\ActiveDataProvider',
-            $params[self::NAME_SPACE]."\\".$params[self::CLASS_NAME]."AR",
+            $params[self::NAME_SPACE]."\\".$params[self::CLASS_NAME],
         ];
-        $arParams[self::EXTEND_CLASS_NAME] = $params[self::CLASS_NAME]."AR";
+        $arParams[self::EXTEND_CLASS_NAME] = $params[self::CLASS_NAME];
         $arParams[self::CLASS_NAME] = $params[self::CLASS_NAME]."Search";
         parent::__construct($arParams);
     }

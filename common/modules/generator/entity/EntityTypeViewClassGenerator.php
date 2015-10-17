@@ -37,6 +37,7 @@ class EntityTypeViewClassGenerator extends EntityTypeClassGenerator
             'integer' => '\common\modules\generator\rules\ActiveRecordIntegerRuleGenerator',
             'email' => '\common\modules\generator\rules\ActiveRecordEmailRuleGenerator',
         ]);
+        self::setRelations();
         self::setProperties();
 
         $activeRecordGenerator = new ActiveRecordClassGenerator(self::$params);

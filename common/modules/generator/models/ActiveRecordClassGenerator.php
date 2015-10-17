@@ -21,7 +21,7 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
             'yii\\db\\ActiveRecord',
         ];
         $arParams[self::EXTEND_CLASS_NAME] = 'ActiveRecord';
-        $arParams[self::CLASS_NAME] = $params[self::CLASS_NAME]."AR";
+        $arParams[self::CLASS_NAME] = $params[self::CLASS_NAME];
         parent::__construct($arParams);
     }
 
