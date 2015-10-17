@@ -15,13 +15,14 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
 
     public function __construct($params)
     {
-        $params[self::USED_CLASSES] = [
+        $arParams = $params;
+        $arParams[self::USED_CLASSES] = [
             'Yii',
             'yii\\db\\ActiveRecord',
         ];
-        $params[self::EXTEND_CLASS_NAME] = 'ActiveRecord';
-        $params[self::CLASS_NAME] = $params[self::CLASS_NAME]."AR";
-        parent::__construct($params);
+        $arParams[self::EXTEND_CLASS_NAME] = 'ActiveRecord';
+        $arParams[self::CLASS_NAME] = $params[self::CLASS_NAME]."AR";
+        parent::__construct($arParams);
     }
 
 

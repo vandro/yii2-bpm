@@ -5,10 +5,9 @@
  * Date: 23.09.2015
  * Time: 12:03
  */
-namespace common\modules\entity\common\factories;
+namespace common\modules\generator\models;
 
 use Yii;
-use common\modules\generator\models\AbstractClassGenerator;
 
 class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
 {
@@ -16,41 +15,31 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
 
     public function __construct($params)
     {
-        $params[self::USED_CLASSES] = [
+        $arParams = $params;
+        $arParams[self::USED_CLASSES] = [
             'Yii',
             'yii\\base\\Model',
             'yii\\data\\ActiveDataProvider',
-            'yii\\data\\ActiveDataProvider',
-            $params[self::NAME_SPACE]."\\".$params[self::CLASS_NAME],
+            $params[self::NAME_SPACE]."\\".$params[self::CLASS_NAME]."AR",
         ];
-        $params[self::EXTEND_CLASS_NAME] = $params[self::CLASS_NAME];
-        $params[self::CLASS_NAME] = $params[self::CLASS_NAME]."Search";
-        parent::__construct($params);
+        $arParams[self::EXTEND_CLASS_NAME] = $params[self::CLASS_NAME]."AR";
+        $arParams[self::CLASS_NAME] = $params[self::CLASS_NAME]."Search";
+        parent::__construct($arParams);
     }
 
 
     protected function addBeforeClassBegin()
     {
-        $arProperties = [];
         $this->classString .= "/**\n";
-        if(isset($this->params[self::TABLE_NAME])) {
-            $this->classString .= " * This is the model class for table \"" . $this->params[self::TABLE_NAME] . "\".\n";
-        }
-        $this->classString .= " *\n";
-        if(isset($this->params[self::PROPERTIES])) {
-            foreach ($this->params[self::PROPERTIES] as $property) {
-                if (!in_array($property[self::PROPERTY_NAME], $arProperties)) {
-                    $this->classString .= " * @property " . $property[self::PROPERTY_TYPE] . " $" . $property[self::PROPERTY_NAME] . "\n";
-                    $arProperties[] = $property[self::PROPERTY_NAME];
-                }
-            }
-            $this->classString .= " */\n";
-        }
+        $this->classString .= " * ".$this->params[self::CLASS_NAME]."Search represents the model behind the search form about `".$this->params[self::NAME_SPACE]."\\".$this->params[self::CLASS_NAME]."`..\n";
+        $this->classString .= " */\n";
     }
 
     protected function addInClass()
     {
-        // TODO: Implement addInClass() method.
+        $this->addRules();
+        $this->addScenarios();
+        $this->addSearch();
     }
 
 
@@ -67,20 +56,21 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
 
     protected function addRules()
     {
-        self::$searchClassString .= "    /**\n";
-        self::$searchClassString .= "     * @inheritdoc\n";
-        self::$searchClassString .= "     */\n";
-        self::$searchClassString .= "    public function rules()\n";
-        self::$searchClassString .= "    {\n";
-        self::$searchClassString .= "         return [\n";
-        if(isset(self::$params[self::PROPERTIES_VALIDATION_RULES])) {
-            foreach (self::$params[self::PROPERTIES_VALIDATION_RULES] as $rule) {
+        $this->classString .= "    /**\n";
+        $this->classString .= "     * @inheritdoc\n";
+        $this->classString .= "     */\n";
+        $this->classString .= "    public function rules()\n";
+        $this->classString .= "    {\n";
+        $this->classString .= "         return [\n";
+        if(isset($this->params[self::PROPERTIES_VALIDATION_RULES])) {
+            foreach ($this->params[self::PROPERTIES_VALIDATION_RULES] as $rule) {
                 $ruleClass = $rule[self::CLASS_NAME];
-                self::$searchClassString .= $ruleClass::getRuleString(self::$params);
+                $ruleObject = new $ruleClass($this->params);
+                $this->classString .= $ruleObject->getRuleString($this->params);
             }
         }
-        self::$searchClassString .= "         ];\n";
-        self::$searchClassString .= "    }\n\n";
+        $this->classString .= "         ];\n";
+        $this->classString .= "    }\n\n";
     }
 
     /**
@@ -94,13 +84,13 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
 
     protected function addScenarios()
     {
-        self::$searchClassString .= "    /**\n";
-        self::$searchClassString .= "     * @inheritdoc\n";
-        self::$searchClassString .= "     */\n";
-        self::$searchClassString .= "    public function scenarios()\n";
-        self::$searchClassString .= "    {\n";
-        self::$searchClassString .= "         return Model::scenarios();\n";
-        self::$searchClassString .= "    }\n\n";
+        $this->classString .= "    /**\n";
+        $this->classString .= "     * @inheritdoc\n";
+        $this->classString .= "     */\n";
+        $this->classString .= "    public function scenarios()\n";
+        $this->classString .= "    {\n";
+        $this->classString .= "         return Model::scenarios();\n";
+        $this->classString .= "    }\n\n";
     }
 
     /**
@@ -144,44 +134,46 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
 
     protected function addSearch()
     {
-        self::$searchClassString .= "    /**\n";
-        self::$searchClassString .= "     * Creates data provider instance with search query applied\n";
-        self::$searchClassString .= "     *\n";
-        self::$searchClassString .= "     * @param array \$params\n";
-        self::$searchClassString .= "     *\n";
-        self::$searchClassString .= "     * @return ActiveDataProvider\n";
-        self::$searchClassString .= "     */\n";
-        self::$searchClassString .= "    public function search(\$params)\n";
-        self::$searchClassString .= "    {\n";
-        self::$searchClassString .= "         \$query = ".self::$params[self::CLASS_NAME]."::find();\n";
-        self::$searchClassString .= "         \n";
-        self::$searchClassString .= "         \$dataProvider = new ActiveDataProvider([\n";
-        self::$searchClassString .= "             'query' => \$query,\n";
-        self::$searchClassString .= "         ]);\n";
-        self::$searchClassString .= "         \n";
-        self::$searchClassString .= "         \$this->load(\$params);\n";
-        self::$searchClassString .= "         \n";
-        self::$searchClassString .= "         if (!\$this->validate()) {\n";
-        self::$searchClassString .= "             return \$dataProvider;\n";
-        self::$searchClassString .= "         }\n";
-        self::$searchClassString .= "         \n";
-        self::$searchClassString .= "         \$query->andFilterWhere([\n";
-        foreach(self::$params[self::PROPERTIES] as $property) {
+        $this->classString .= "    /**\n";
+        $this->classString .= "     * Creates data provider instance with search query applied\n";
+        $this->classString .= "     *\n";
+        $this->classString .= "     * @param array \$params\n";
+        $this->classString .= "     *\n";
+        $this->classString .= "     * @return ActiveDataProvider\n";
+        $this->classString .= "     */\n";
+        $this->classString .= "    public function search(\$params)\n";
+        $this->classString .= "    {\n";
+        $this->classString .= "         \$query = ".$this->params[self::CLASS_NAME]."::find();\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         \$dataProvider = new ActiveDataProvider([\n";
+        $this->classString .= "             'query' => \$query,\n";
+        $this->classString .= "         ]);\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         \$arParams['".$this->params[self::CLASS_NAME]."'] = (array) \$params;\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         \$this->load(\$arParams,'".$this->params[self::CLASS_NAME]."');\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         if (!\$this->validate()) {\n";
+        $this->classString .= "             return \$dataProvider;\n";
+        $this->classString .= "         }\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         \$query->andFilterWhere([\n";
+        foreach($this->params[self::PROPERTIES] as $property) {
             if(isset($property[self::PROPERTY_TYPE]) && $property[self::PROPERTY_TYPE] == 'integer') {
-                self::$searchClassString .= "             '" . $property[self::PROPERTY_NAME] . "' => \$this->" . $property[self::PROPERTY_NAME] . ",\n";
+                $this->classString .= "             '" . $property[self::PROPERTY_NAME] . "' => \$this->" . $property[self::PROPERTY_NAME] . ",\n";
             }
         }
-        self::$searchClassString .= "         ]);\n";
-        self::$searchClassString .= "         \n";
-        self::$searchClassString .= "         \$query\n";
-        foreach(self::$params[self::PROPERTIES] as $property) {
+        $this->classString .= "         ]);\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         \$query\n";
+        foreach($this->params[self::PROPERTIES] as $property) {
             if (isset($property[self::PROPERTY_TYPE]) && $property[self::PROPERTY_TYPE] == 'string') {
-                self::$searchClassString .= "           ->andFilterWhere(['like', '" . $property[self::PROPERTY_NAME] . "', \$this->" . $property[self::PROPERTY_NAME] . "])\n";
+                $this->classString .= "           ->andFilterWhere(['like', '" . $property[self::PROPERTY_NAME] . "', \$this->" . $property[self::PROPERTY_NAME] . "])\n";
             }
         }
-        self::$searchClassString .= "         ;\n";
-        self::$searchClassString .= "         \n";
-        self::$searchClassString .= "         return \$dataProvider;\n";
-        self::$searchClassString .= "    }\n\n";
+        $this->classString .= "         ;\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         return \$dataProvider;\n";
+        $this->classString .= "    }\n\n";
     }
 }

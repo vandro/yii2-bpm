@@ -101,6 +101,7 @@ abstract class AbstractClassGenerator
                 $this->classString .= "use " . $use . ";\n";
             }
         }
+        $this->classString .= "\n";
     }
 
     abstract protected function addBeforeClassBegin(); // В этом методе необходимо вызвать методы которые будут добавлять определения перед генерируемым классом

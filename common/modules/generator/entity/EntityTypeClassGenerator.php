@@ -5,9 +5,13 @@
  * Date: 15.10.2015
  * Time: 15:32
  */
-namespace common\modules\generator\models;
+namespace common\modules\generator\entity;
 
+use common\modules\generator\models\ActiveRecordQueryClassGenerator;
 use Yii;
+use common\modules\generator\models\AbstractClassGenerator;
+use common\modules\generator\models\ActiveRecordClassGenerator;
+use common\modules\generator\models\ActiveRecordSearchClassGenerator;
 use common\modules\entity\common\models\EntityTypes;
 use yii\web\NotFoundHttpException;
 
@@ -44,8 +48,15 @@ class EntityTypeClassGenerator
         self::setProperties();
 
         $activeRecordGenerator = new ActiveRecordClassGenerator(self::$params);
+        $activeRecordSearchGenerator = new ActiveRecordSearchClassGenerator(self::$params);
+        $activeRecordQueryGenerator = new ActiveRecordQueryClassGenerator(self::$params);
+
         if($activeRecordGenerator->generateClassFile()){
-            return true;
+            if($activeRecordSearchGenerator->generateClassFile()) {
+                if($activeRecordQueryGenerator->generateClassFile()) {
+                    return true;
+                }
+            }
         }
 
         return false;
