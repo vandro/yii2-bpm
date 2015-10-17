@@ -40,6 +40,7 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
         $this->addRules();
         $this->addScenarios();
         $this->addSearch();
+        $this->addSearchLink();
     }
 
 
@@ -149,6 +150,51 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
         $this->classString .= "             'query' => \$query,\n";
         $this->classString .= "         ]);\n";
         $this->classString .= "         \n";
+        $this->classString .= "         \$this->load(\$params);\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         if (!\$this->validate()) {\n";
+        $this->classString .= "             return \$dataProvider;\n";
+        $this->classString .= "         }\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         \$query->andFilterWhere([\n";
+        foreach($this->params[self::PROPERTIES] as $property) {
+            if(isset($property[self::PROPERTY_TYPE]) && $property[self::PROPERTY_TYPE] == 'integer') {
+                $this->classString .= "             '" . $property[self::PROPERTY_NAME] . "' => \$this->" . $property[self::PROPERTY_NAME] . ",\n";
+            }
+        }
+        $this->classString .= "         ]);\n";
+        $this->classString .= "         \n";
+        if($this->hasStringPropertyType()) {
+            $this->classString .= "         \$query\n";
+            foreach ($this->params[self::PROPERTIES] as $property) {
+                if (isset($property[self::PROPERTY_TYPE]) && $property[self::PROPERTY_TYPE] == 'string') {
+                    $this->classString .= "           ->andFilterWhere(['like', '" . $property[self::PROPERTY_NAME] . "', \$this->" . $property[self::PROPERTY_NAME] . "])\n";
+                }
+            }
+            $this->classString .= "         ;\n";
+        }
+        $this->classString .= "         \n";
+        $this->classString .= "         return \$dataProvider;\n";
+        $this->classString .= "    }\n\n";
+    }
+
+    protected function addSearchLink()
+    {
+        $this->classString .= "    /**\n";
+        $this->classString .= "     * Creates data provider instance with search query applied\n";
+        $this->classString .= "     *\n";
+        $this->classString .= "     * @param array \$params\n";
+        $this->classString .= "     *\n";
+        $this->classString .= "     * @return ActiveDataProvider\n";
+        $this->classString .= "     */\n";
+        $this->classString .= "    public function searchLink(\$params)\n";
+        $this->classString .= "    {\n";
+        $this->classString .= "         \$query = ".$this->params[self::CLASS_NAME]."::find();\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         \$dataProvider = new ActiveDataProvider([\n";
+        $this->classString .= "             'query' => \$query,\n";
+        $this->classString .= "         ]);\n";
+        $this->classString .= "         \n";
         $this->classString .= "         \$arParams['".$this->params[self::CLASS_NAME]."'] = (array) \$params;\n";
         $this->classString .= "         \n";
         $this->classString .= "         \$this->load(\$arParams,'".$this->params[self::CLASS_NAME]."');\n";
@@ -165,15 +211,26 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
         }
         $this->classString .= "         ]);\n";
         $this->classString .= "         \n";
-        $this->classString .= "         \$query\n";
-        foreach($this->params[self::PROPERTIES] as $property) {
-            if (isset($property[self::PROPERTY_TYPE]) && $property[self::PROPERTY_TYPE] == 'string') {
-                $this->classString .= "           ->andFilterWhere(['like', '" . $property[self::PROPERTY_NAME] . "', \$this->" . $property[self::PROPERTY_NAME] . "])\n";
+        if($this->hasStringPropertyType()) {
+            $this->classString .= "         \$query\n";
+            foreach ($this->params[self::PROPERTIES] as $property) {
+                if (isset($property[self::PROPERTY_TYPE]) && $property[self::PROPERTY_TYPE] == 'string') {
+                    $this->classString .= "           ->andFilterWhere(['like', '" . $property[self::PROPERTY_NAME] . "', \$this->" . $property[self::PROPERTY_NAME] . "])\n";
+                }
             }
+            $this->classString .= "         ;\n";
         }
-        $this->classString .= "         ;\n";
         $this->classString .= "         \n";
         $this->classString .= "         return \$dataProvider;\n";
         $this->classString .= "    }\n\n";
+    }
+
+    protected function hasStringPropertyType()
+    {
+        foreach($this->params[self::PROPERTIES] as $property) {
+            if (isset($property[self::PROPERTY_TYPE]) && $property[self::PROPERTY_TYPE] == 'string') {
+                return true;
+            }
+        }
     }
 }

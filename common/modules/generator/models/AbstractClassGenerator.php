@@ -150,7 +150,11 @@ abstract class AbstractClassGenerator
 
     protected function makeClassFile()
     {
-        $result = file_put_contents($this->params[self::CLASS_FILE_LOCATION_PATH].$this->params[self::CLASS_NAME].".php",$this->classString);
+        $locationPath = $this->params[self::CLASS_FILE_LOCATION_PATH];
+        if(!is_dir($locationPath)){
+            mkdir($locationPath);
+        }
+        $result = file_put_contents($locationPath.DIRECTORY_SEPARATOR.$this->params[self::CLASS_NAME].".php",$this->classString);
         if(!empty($result)){
             return true;
         }

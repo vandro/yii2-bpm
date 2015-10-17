@@ -209,7 +209,7 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
             $this->classString .= "    public function search()\n";
             $this->classString .= "    {\n";
             $this->classString .= "         \$searchModel = new ".$this->params[self::CLASS_NAME]."Search;\n";
-            $this->classString .= "         return \$searchModel->search(\$this->attributes);\n";
+            $this->classString .= "         return \$searchModel->searchLink(\$this->attributes);\n";
             $this->classString .= "    }\n\n";
         }
     }

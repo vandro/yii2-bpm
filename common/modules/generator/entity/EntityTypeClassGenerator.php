@@ -7,12 +7,12 @@
  */
 namespace common\modules\generator\entity;
 
-use common\modules\generator\models\ActiveRecordQueryClassGenerator;
 use Yii;
 use common\modules\generator\models\AbstractClassGenerator;
 use common\modules\generator\models\ActiveRecordClassGenerator;
 use common\modules\generator\models\ActiveRecordSearchClassGenerator;
 use common\modules\entity\common\models\EntityTypes;
+use common\modules\generator\models\ActiveRecordQueryClassGenerator;
 use yii\web\NotFoundHttpException;
 
 class EntityTypeClassGenerator
@@ -81,9 +81,9 @@ class EntityTypeClassGenerator
         self::$params[AbstractClassGenerator::CLASS_NAME] = !empty($className)?$className:self::getName(self::$entityType->code);
     }
 
-    protected function setActiveQueryClassName()
+    protected function setActiveQueryClassName($additional = 'Query')
     {
-        self::$params[AbstractClassGenerator::ACTIVE_QUERY_CLASS_NAME] = self::getName(self::$entityType->code).'Query';
+        self::$params[AbstractClassGenerator::ACTIVE_QUERY_CLASS_NAME] = self::getName(self::$entityType->code).$additional;
     }
 
     protected function setDatabaseName($databaseName)
@@ -152,7 +152,7 @@ class EntityTypeClassGenerator
         }
     }
 
-    private static function getName($nameString)
+    protected static function getName($nameString)
     {
         $name = '';
         $arName = explode("_",$nameString);
@@ -163,7 +163,7 @@ class EntityTypeClassGenerator
         return $name;
     }
 
-    private static function getMethodsName($nameString)
+    protected static function getMethodsName($nameString)
     {
         $replaceItems = ['id', 'Id', 'ID', '_id', '_Id', '_ID', '_id_', '_Id_', '_ID_',];
 
