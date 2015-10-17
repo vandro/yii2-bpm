@@ -3,13 +3,16 @@
 namespace common\modules\entity\common\models;
 
 //use backend\models\User;
+use common\modules\entity\common\factories\EntityTypeViewClassGenerationFactory;
 use common\modules\entity\common\models\permission\User;
 use common\helpers\DebugHelper;
 use common\modules\entity\common\config\Config;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\widgets\DetailView;
+use common\modules\entity\common\factories\EntityTypeViewClassFactory;
 
 /**
  * This is the model class for table "entity_views".
@@ -93,8 +96,7 @@ class EntityViews extends \yii\db\ActiveRecord
      */
     public function getChildViews()
     {
-//        return $this->hasMany(EntityViews::className(), ['parent_view_id' => 'id']);
-        return EntityViews::find()->where(['parent_view_id' => $this->id]);
+        return $this->hasMany(EntityViews::className(), ['parent_view_id' => 'id']);
     }
 
     public function getChildViewsAdp()
@@ -199,20 +201,70 @@ class EntityViews extends \yii\db\ActiveRecord
                 $html = str_replace('<%' . $field->code . '%>', $field->getView($entityModel), $html);
             }
         }else{
+            if(empty($this->childViews)) {
 
-            $html = '<div class="panel panel-default box2">
+                $html = '<div class="panel panel-default box2">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">'.$this->title.'</h3>
+                                    <h3 class="panel-title">' . $this->title . '</h3>
                                 </div>';
-            $html .= DetailView::widget([
-                        'model' => $entityModel,
-                        'attributes' => $this->getFieldsCodesArray($entityModel),
-                    ]);
+                $html .= DetailView::widget([
+                    'model' => $entityModel,
+                    'attributes' => $this->getFieldsCodesArray($entityModel),
+                ]);
+                $html .= '</div>';
 
-            $html .= '</div>';
+            }else{
+                $html = '';
+
+                foreach($this->childViews as $childView){
+                    $html .= '<div class="panel panel-default box2">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">' . $childView->title . '</h3>
+                                </div>';
+                    $childEntity = $childView->getChildEntity($entityModel);
+                    $html .= GridView::widget([
+                        'dataProvider' => $childEntity->search(),
+                        'columns' => $childView->columnsForGridView,
+                    ]);
+                    $html .= '</div>';
+                }
+            }
         }
 
         return $html;
+    }
+
+    public function getChildEntity($parentEntity)
+    {
+        $entity = EntityTypeViewClassFactory::get($this->id);
+        //$entity = Yii::$app->modules[Config::MODULE_NAME]->childEntityFactory->getChildByView($this);
+        $entity->{$this->foreignKeyField->code} = $parentEntity->id;
+
+        return $entity;
+    }
+
+    public function getColumnsForGridView()
+    {
+        $columns = [];
+        foreach($this->rules as $rule)
+        {
+            if($rule->field->id != $this->foreign_key_field_id) {
+                if (empty($rule->field->dictionary_id)) {
+                    $columns[] = $rule->field->code;
+                } else {
+                    $columns[] = [
+                        'attribute' => $rule->field->code,
+                        'format' => 'html',
+                        'value' => function($model) use ($rule) {
+                            return $rule->field->getDictionaryValue($rule->field->dictionary_id, $model->{$rule->field->code});
+
+                        },
+                    ];
+                }
+            }
+        }
+
+        return $columns;
     }
 
     public function getRoles()

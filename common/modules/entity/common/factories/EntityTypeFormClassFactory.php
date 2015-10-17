@@ -8,6 +8,7 @@
 namespace common\modules\entity\common\factories;
 
 use common\modules\entity\common\models\EntityForms;
+use common\modules\generator\entity\EntityTypeFormClassGenerator;
 use Yii;
 use common\modules\entity\common\models\EntityTypes;
 use yii\web\NotFoundHttpException;
@@ -16,7 +17,7 @@ use common\modules\entity\common\factories\EntityTypeFormClassGenerationFactory;
 class EntityTypeFormClassFactory
 {
     protected static $entityTypeForm = null;
-    protected static $namespace = 'common\modules\entity\common\entities';
+    protected static $namespace = 'frontend\runtime\generated';
 
     public static function get($form_id)
     {
@@ -25,7 +26,7 @@ class EntityTypeFormClassFactory
         if(class_exists($entityTypeFormClass)){
             return new $entityTypeFormClass;
         }else{
-            if(EntityTypeFormClassGenerationFactory::generateFile($form_id)) {
+            if(EntityTypeFormClassGenerator::generateFile($form_id,self::$namespace,'pdb', Yii::$app->basePath.'/runtime/generated')) {
                 return new $entityTypeFormClass;
             }
         }
@@ -42,7 +43,7 @@ class EntityTypeFormClassFactory
 
     protected static function getClassName($entityTypeCode)
     {
-        return static::$namespace.'\\'.self::getName($entityTypeCode)."From";
+        return static::$namespace.'\\'.self::getName($entityTypeCode)."Form";
     }
 
     private static function getName($nameString)
