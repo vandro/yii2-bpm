@@ -48,6 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         'title',
                         'code',
+                        'settings',
                         'html:ntext',
                     ],
                 ]),

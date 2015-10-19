@@ -43,7 +43,7 @@ class FormsRules extends \yii\db\ActiveRecord
         return [
             [['form_id', 'field_id', 'code'], 'required'],
             [['form_id', 'field_id'], 'integer'],
-            [['code', 'value'], 'string']
+            [['code', 'value', 'settings'], 'string']
         ];
     }
 
@@ -58,6 +58,7 @@ class FormsRules extends \yii\db\ActiveRecord
             'field_id' => Yii::t('app', 'Поля'),
             'code' => Yii::t('app', 'Код'),
             'value' => Yii::t('app', 'Значение'),
+            'settings' => Yii::t('app', 'Настройки'),
         ];
     }
 
@@ -87,14 +88,9 @@ class FormsRules extends \yii\db\ActiveRecord
                 }
             }
         }
-//        foreach($this->form->rules as $rule){
-//            if($this->field_id != $rule->field_id) {
-//                $fieldsIds[] = $rule->field_id;
-//            }
-//        }
         $fields = EntityFields::find()
             ->where(['entity_id' => $this->form->entity_id])
-            ->andWhere(['not in','id', $fieldsIds])
+            //->andWhere(['not in','id', $fieldsIds])
             ->all();
         return ArrayHelper::map($fields, 'id','title');
     }

@@ -282,4 +282,16 @@ class EntityForms extends \yii\db\ActiveRecord
     {
         return $this->hasOne(EntityFields::className(), ['id' => 'foreign_key_field_id']);
     }
+
+    public function getSettings($settingsName)
+    {
+        $settings = json_decode($this->settings, true);
+        if(is_array($settings) && !empty($settings)){
+            if(isset($settings[$settingsName])){
+                return $settings[$settingsName];
+            }
+        }
+
+        return false;
+    }
 }
