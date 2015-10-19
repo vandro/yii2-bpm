@@ -25,6 +25,7 @@ use yii\bootstrap\Modal;
  * @property string $widget
  * @property integer $added
  * @property string $mode
+ * @property string $settings
  *
  * @property EntityTypes $entity
  * @property EntityFormsLang[] $entityFormsLangs
@@ -60,7 +61,7 @@ class EntityForms extends \yii\db\ActiveRecord
         return [
             [['title', 'code'], 'required'],
             [['entity_id','added','parent_form_id', 'foreign_key_field_id'], 'integer'],
-            [['title', 'code', 'html', 'widget', 'mode'], 'string'],
+            [['title', 'code', 'html', 'widget', 'mode', 'settings'], 'string'],
             [['code'], 'unique'],
             [['title'], 'unique']
         ];
