@@ -13,6 +13,7 @@ use yii\grid\GridView;
 use yii\helpers\ArrayHelper;
 use yii\widgets\DetailView;
 use common\modules\entity\common\factories\EntityTypeViewClassFactory;
+use yii\web\NotFoundHttpException;
 
 /**
  * This is the model class for table "entity_views".
@@ -241,6 +242,16 @@ class EntityViews extends \yii\db\ActiveRecord
         $entity->{$this->foreignKeyField->code} = $parentEntity->id;
 
         return $entity;
+    }
+
+    public function getEntityItemByLink($entityItemLink)
+    {
+        $entityType = EntityTypeViewClassFactory::get($this->id);
+        if (($itemModel = $entityType::findOne($entityItemLink->entity_item_id)) !== null) {
+            return $itemModel;
+        } else {
+            throw new NotFoundHttpException('The requested entity item does not exist.');
+        }
     }
 
     public function getColumnsForGridView()

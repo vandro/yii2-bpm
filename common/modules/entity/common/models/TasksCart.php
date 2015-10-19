@@ -5,6 +5,10 @@ namespace common\modules\entity\common\models;
 use common\helpers\DebugHelper;
 use backend\models\User;
 use common\modules\entity\common\config\Config;
+use common\modules\entity\common\factories\EntityTypeFormClassFactory;
+use common\modules\entity\common\factories\EntityTypeViewClassFactory;
+use common\modules\generator\entity\EntityTypeViewClassGenerator;
+use yii\web\NotFoundHttpException;
 use common\modules\log\models\TaskLog;
 use common\modules\upload\models\TasksFiles;
 use Yii;
@@ -89,42 +93,17 @@ class TasksCart extends \yii\db\ActiveRecord
     public function renderViews($node)
     {
         $userNode = $node->is_last()?$node:$this->currentNode;
-
         foreach ($this->entitiesLink as $entityLink) {
             foreach ($userNode->views as $view) {;
                 if ($entityLink->entity_id == $view->entity_id) {
                     if ($view->checkRole()) {
-                        $entityModel = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getInstanceModelByView($entityLink->entity_item_id, $entityLink->entity_id, $view);
+                        //$entityModel = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getInstanceModelByView($entityLink->entity_item_id, $entityLink->entity_id, $view);
+                        $entityModel = $view->getEntityItemByLink($entityLink);
                         echo $view->getHtml($entityModel);
                     }
                 }
             }
         }
-
-//        if(!$node->is_last()) {
-//            foreach ($this->entitiesLink as $entityLink) {
-//                foreach ($this->currentNode->views as $view) {;
-//                    if ($entityLink->entity_id == $view->entity_id) {
-//                        if ($view->checkRole()) {
-//                            $entityModel = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getInstanceModelByView($entityLink->entity_item_id, $entityLink->entity_id, $view);
-//                            echo $view->getHtml($entityModel);
-//                        }
-//                    }
-//                }
-//            }
-//        }else{
-//            foreach ($this->entitiesLink as $entityLink) {
-//                foreach ($node->views as $view) {
-//                    if ($entityLink->entity_id == $view->entity_id) {
-//                        if ($view->checkRole()) {
-//                            $entityModel = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getInstanceModelByView($entityLink->entity_item_id, $entityLink->entity_id, $view);
-//                            echo $view->getHtml($entityModel);
-//                        }
-//                    }
-//                }
-//            }
-//
-//        }
     }
 
     public function getFiles()
@@ -174,5 +153,19 @@ class TasksCart extends \yii\db\ActiveRecord
     public function getLogs()
     {
         return $this->hasMany(TaskLog::className(),['task_id' => 'id']);
+    }
+
+    public function getEntityByForm($form_id)
+    {
+        $form = EntityForms::findOne($form_id);
+        $entityType = EntityTypeFormClassFactory::get($form_id);
+        if($form->mode == 'update' || $form->mode == 'view') {
+            $entityItemLink = TasksEntitiesLink::find()->where(['task_id' => $this->id, 'entity_id' => $form->entity_id])->one();
+            if (($itemModel = $entityType::findOne($entityItemLink->entity_item_id)) !== null) {
+                return $itemModel;
+            } else {
+                throw new NotFoundHttpException('The requested entity item does not exist.');
+            }
+        }
     }
 }
