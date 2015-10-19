@@ -224,8 +224,10 @@ class EntityViews extends \yii\db\ActiveRecord
                                 </div>';
                     $childEntity = $childView->getChildEntity($entityModel);
                     $html .= GridView::widget([
+                        'summary' => '',
                         'dataProvider' => $childEntity->search(),
                         'columns' => $childView->columnsForGridView,
+                        'tableOptions' => ['class' => 'table table-striped']
                     ]);
                     $html .= '</div>';
                 }
