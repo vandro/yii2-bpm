@@ -151,7 +151,7 @@ abstract class AbstractClassGenerator
     protected function getName($nameString)
     {
         $name = '';
-        $arName = explode("_",$nameString);
+        $arName = explode("_",trim($nameString));
         foreach($arName as $nameItem){
             $name .= ucfirst($nameItem);
         }
