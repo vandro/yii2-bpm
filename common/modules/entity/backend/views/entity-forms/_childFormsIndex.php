@@ -26,6 +26,10 @@ use common\modules\entity\common\models\EntityFields;
             ['class' => 'yii\grid\SerialColumn'],
             'title',
             'code',
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=>'{view}',
+            ],
         ],
     ]); ?>
 
