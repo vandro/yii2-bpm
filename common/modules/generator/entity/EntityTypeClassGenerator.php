@@ -45,7 +45,9 @@ class EntityTypeClassGenerator
             'integer' => '\common\modules\generator\rules\ActiveRecordIntegerRuleGenerator',
             'email' => '\common\modules\generator\rules\ActiveRecordEmailRuleGenerator',
         ]);
+        self::setClassProperties();
         self::setProperties();
+        self::setEntityRelation();
 
         $activeRecordGenerator = new ActiveRecordClassGenerator(self::$params);
         $activeRecordSearchGenerator = new ActiveRecordSearchClassGenerator(self::$params);
@@ -69,6 +71,15 @@ class EntityTypeClassGenerator
         } else {
             throw new NotFoundHttpException('The requested entity type does not exist.');
         }
+    }
+
+    protected function setClassProperties()
+    {
+        self::$params[AbstractClassGenerator::ClASS_PROPERTIES][] = [
+            AbstractClassGenerator::VISIBILITY => AbstractClassGenerator::PUBLIC_VISIBILITY,
+            AbstractClassGenerator::NAME => 'entity_type_id',
+            AbstractClassGenerator::VALUE => self::$entityType->id,
+        ];
     }
 
     protected function setNameSpace($nameSpace)
@@ -149,6 +160,21 @@ class EntityTypeClassGenerator
                     self::$params[AbstractClassGenerator::RELATIONS][] = $relation;
                 }
             }
+        }
+    }
+
+    public static function setEntityRelation()
+    {
+        $relation = [
+            AbstractClassGenerator::RELATION_METHOD_NAME => 'EntityType',
+            AbstractClassGenerator::RELATION_TYPE => AbstractClassGenerator::RELATION_TYPE_HAS_ONE,
+            AbstractClassGenerator::RELATION_FOREIGN_KEY => 'entity_type_id',
+            AbstractClassGenerator::RELATION_TARGET_KEY => 'id',
+            AbstractClassGenerator::RELATION_TARGET_CLASS => '\common\modules\entity\common\models\EntityTypes',
+            AbstractClassGenerator::RELATION_TABLE_NAME => 'entity_types',
+        ];
+        if (!in_array($relation, self::$params[AbstractClassGenerator::RELATIONS])) {
+            self::$params[AbstractClassGenerator::RELATIONS][] = $relation;
         }
     }
 

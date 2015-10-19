@@ -39,6 +39,8 @@ class EntityTypeFormClassGenerator extends EntityTypeClassGenerator
         ]);
         self::setRelations();
         self::setProperties();
+        self::setClassProperties();
+        self::setEntityRelation();
 
         $activeRecordGenerator = new ActiveRecordClassGenerator(self::$params);
         $activeRecordSearchGenerator = new ActiveRecordSearchClassGenerator(self::$params);
