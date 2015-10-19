@@ -85,16 +85,18 @@ class EntityTypeViewClassGenerator extends EntityTypeClassGenerator
     {
         self::$params[AbstractClassGenerator::PROPERTIES] = [];
         foreach(self::$view->rules as $rule){
-            self::$params[AbstractClassGenerator::PROPERTIES][] = [
-                AbstractClassGenerator::PROPERTY_NAME => $rule->field->code,
-                AbstractClassGenerator::PROPERTY_TYPE => self::$types[$rule->field->type],
-                AbstractClassGenerator::PROPERTY_LABEL => $rule->field->title,
-                AbstractClassGenerator::PROPERTY_VALIDATION_RULES => [
-                    [
-                        AbstractClassGenerator::PROPERTY_VALIDATION_RULE_TYPE => $rule->code,
+            if(isset($rule->field)) {
+                self::$params[AbstractClassGenerator::PROPERTIES][] = [
+                    AbstractClassGenerator::PROPERTY_NAME => $rule->field->code,
+                    AbstractClassGenerator::PROPERTY_TYPE => self::$types[$rule->field->type],
+                    AbstractClassGenerator::PROPERTY_LABEL => $rule->field->title,
+                    AbstractClassGenerator::PROPERTY_VALIDATION_RULES => [
+                        [
+                            AbstractClassGenerator::PROPERTY_VALIDATION_RULE_TYPE => $rule->code,
+                        ],
                     ],
-                ],
-            ];
+                ];
+            }
             if(!empty($rule->field->dictionary)) {
                 $relation = [
                     AbstractClassGenerator::RELATION_METHOD_NAME => self::getMethodsName($rule->field->code),
