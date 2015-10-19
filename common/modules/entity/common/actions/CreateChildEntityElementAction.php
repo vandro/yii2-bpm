@@ -11,6 +11,7 @@ use common\modules\entity\common\config\Config;
 use common\modules\entity\common\models\EntityForms;
 use Yii;
 use common\modules\entity\common\models\smi\SmiReestr;
+use common\modules\entity\common\factories\EntityTypeFormClassFactory;
 
 class CreateChildEntityElementAction extends \yii\base\Action
 {
@@ -24,7 +25,8 @@ class CreateChildEntityElementAction extends \yii\base\Action
     public function run()
     {
         $form = EntityForms::findOne($this->form_id);
-        $model = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getChildByForm($form);
+//        $model = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->getChildByForm($form);
+        $model = EntityTypeFormClassFactory::get($form->id);
 
         $model->load(Yii::$app->request->post());
         $model->save();

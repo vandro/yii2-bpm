@@ -30,7 +30,8 @@ class EntityFormAction extends \yii\base\Action
 
         $action = $this->findModel($this->action_id);
         $task = $this->findTaskModel($this->task_id);
-        $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->get($action, $task);
+//        $entity = Yii::$app->modules[Config::MODULE_NAME]->entityFactory->get($action, $task);
+        $entity = $task->getEntityByForm($action->form_id);
         $user = User::findOne(Yii::$app->user->id);
 
         if($action->form->mode != 'view'){
