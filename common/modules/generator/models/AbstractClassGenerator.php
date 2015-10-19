@@ -10,11 +10,13 @@ namespace common\modules\generator\models;
 abstract class AbstractClassGenerator
 {
     const NAME_SPACE = 'NAME_SPACE';
+    const NAME = 'NAME';
     const CLASS_NAME = 'CLASS_NAME';
     const EXTEND_CLASS_NAME = 'EXTEND_CLASS_NAME';
     const USED_CLASSES =  'USED_CLASSES';
     const DATABASE_NAME = 'DATABASE_NAME';
     const TABLE_NAME = 'TABLE_NAME';
+    const ClASS_PROPERTIES = 'ClASS_PROPERTIES';
     const PROPERTIES = 'PROPERTIES';
     const PROPERTY_NAME = 'PROPERTY_NAME';
     const PROPERTY_TYPE = 'PROPERTY_TYPE';
@@ -36,6 +38,11 @@ abstract class AbstractClassGenerator
     const RELATION_TARGET_KEY = 'RELATION_TARGET_KEY';
     const RELATION_TARGET_CLASS = 'RELATION_TARGET_CLASS';
     const RELATION_TABLE_NAME = 'RELATION_TABLE_NAME';
+    const VISIBILITY = 'VISIBILITY';
+    const VALUE = 'VALUE';
+    const PUBLIC_VISIBILITY = 'public';
+    const PROTECTED_VISIBILITY = 'protected';
+    const PRIVATE_VISIBILITY = 'private';
     const RENDER_MODE = 'RENDER_MODE';
     const RENDER_MODE_VALUE = 'RENDER_MODE_VALUE'; // Эту константу необходимо переопределить в дочернем классе
 
@@ -68,6 +75,7 @@ abstract class AbstractClassGenerator
         $this->addUses();
         $this->addBeforeClassBegin();
         $this->addClassBegin();
+        $this->addClassProperties();
         $this->addInClass();
         $this->addClassEnd();
     }
@@ -118,6 +126,22 @@ abstract class AbstractClassGenerator
     }
 
     abstract protected function addInClass(); // В этом методе необходимо вызвать методы которые будут добавлять содержимое генерируемого класса
+
+    protected function addClassProperties()
+    {
+        if(isset($this->params[self::ClASS_PROPERTIES])){
+            foreach($this->params[self::ClASS_PROPERTIES] as $classProperty) {
+                $this->classString .= "    ".$classProperty[self::VISIBILITY]." $".$classProperty[self::NAME];
+                if(isset($classProperty[self::VALUE])){
+                    $this->classString .= " = ".$classProperty[self::VALUE].";\n";
+                }else{
+                    $this->classString .= ";\n";
+                }
+            }
+        }
+        $this->classString .= "    \n";
+
+    }
 
     protected function addClassEnd()
     {
