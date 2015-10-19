@@ -75,6 +75,7 @@ class EntityTypeClassGenerator
 
     protected function setClassProperties()
     {
+        self::$params[AbstractClassGenerator::ClASS_PROPERTIES] = [];
         self::$params[AbstractClassGenerator::ClASS_PROPERTIES][] = [
             AbstractClassGenerator::VISIBILITY => AbstractClassGenerator::PUBLIC_VISIBILITY,
             AbstractClassGenerator::NAME => 'entity_type_id',
