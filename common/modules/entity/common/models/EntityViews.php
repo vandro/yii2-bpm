@@ -227,7 +227,10 @@ class EntityViews extends \yii\db\ActiveRecord
                         'summary' => '',
                         'dataProvider' => $childEntity->search(),
                         'columns' => $childView->columnsForGridView,
-                        'tableOptions' => ['class' => 'table table-striped']
+                        'tableOptions' => [
+                            'class' => 'table table-striped',
+                            'style' => 'margin-bottom: 0px;'
+                        ]
                     ]);
                     $html .= '</div>';
                 }
