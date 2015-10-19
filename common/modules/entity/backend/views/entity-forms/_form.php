@@ -25,6 +25,8 @@ use yii\web\JsExpression;
 
     <?= $form->field($model, 'foreign_key_field_id')->dropDownList($model->getAllEntityFields(), ['prompt' => 'Choose Foreign Key Field ID']); ?>
 
+    <?= $form->field($model, 'settings')->textarea(['rows' => 6]) ?>
+
     <?php if(!empty($model->fields) || !empty($model->fields)){?>
 
         <?= $form->field($model, 'html')->widget(
