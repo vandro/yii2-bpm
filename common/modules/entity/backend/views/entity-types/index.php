@@ -18,6 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <p>
         <?= Html::a('Create Entity Type', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Delete Generated', ['delete-generated'], ['class' => 'btn btn-default']) ?>
     </p>
 
     <?= GridView::widget([
