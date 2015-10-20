@@ -3,6 +3,7 @@
 namespace common\modules\entity\frontend\controllers;
 
 use common\helpers\DebugHelper;
+use common\modules\entity\common\actions\CreateChildTableElementAction;
 use common\modules\entity\common\actions\EntityFilteredFieldApiAction;
 use common\modules\entity\common\config\Config;
 use common\modules\entity\common\models\permission\User;
@@ -18,7 +19,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\modules\entity\common\actions\CreateChildEntityElementAction;
+use common\modules\entity\common\actions\CreateChildEntityElementLinkAction;
 use common\modules\entity\common\actions\EntityFormAction;
+use common\modules\entity\common\actions\EntityFormAction2;
 
 
 /**
@@ -70,6 +73,24 @@ class ActionsCartController extends Controller
             ],
             'createChild' => [
                 'class' => CreateChildEntityElementAction::className(),
+                'params' => Yii::$app->request->post(),
+                'action_id' => Yii::$app->request->get('action_id'),
+                'task_id' => Yii::$app->request->get('task_id'),
+                'form_id' => Yii::$app->request->get('form_id'),
+                'redirect_url' => 'form',
+            ],
+            'createChildLink' => [
+                'class' => CreateChildEntityElementLinkAction::className(),
+                'params' => Yii::$app->request->post(),
+                'action_id' => Yii::$app->request->get('action_id'),
+                'task_id' => Yii::$app->request->get('task_id'),
+                'form_id' => Yii::$app->request->get('form_id'),
+                'parent_id' => Yii::$app->request->get('parent_id'),
+                'link_id' => Yii::$app->request->get('link_id'),
+                'redirect_url' => 'form',
+            ],
+            'createChildTableElement' => [
+                'class' => CreateChildTableElementAction::className(),
                 'params' => Yii::$app->request->post(),
                 'action_id' => Yii::$app->request->get('action_id'),
                 'task_id' => Yii::$app->request->get('task_id'),
