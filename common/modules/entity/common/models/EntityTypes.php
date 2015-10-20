@@ -4,11 +4,13 @@ namespace common\modules\entity\common\models;
 
 use common\helpers\DebugHelper;
 use common\modules\entity\common\actions\FilteredFieldApiAction;
+use common\modules\entity\common\factories\EntityTypeClassFactory;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\db\Query;
 use common\modules\entity\common\config\Config;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
 
 /**
  * This is the model class for table "entity_types".
@@ -31,6 +33,8 @@ use yii\helpers\ArrayHelper;
  */
 class EntityTypes extends \yii\db\ActiveRecord
 {
+    protected $_activeRecord;
+
     /**
      * @inheritdoc
      */
@@ -249,6 +253,45 @@ class EntityTypes extends \yii\db\ActiveRecord
     public function getAllFields()
     {
         return ArrayHelper::map($this->fields, 'id', 'title');
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getModel()
+    {
+        if(empty($this->_activeRecord)){
+            $this->_activeRecord = EntityTypeClassFactory::get($this->id);
+        }
+        return $this->_activeRecord;
+    }
+
+    public function getFieldsForGridView()
+    {
+        $columns = [];
+        $columns[] = [
+            'class' => 'yii\grid\ActionColumn',
+            'template'=>'{select}',
+            'buttons'=>[
+                'select'=>function ($url, $model) {
+                    return Html::a( '<span class="glyphicon glyphicon-arrow-left"></span>', '#',
+                        [
+                            'title' => Yii::t('yii', 'Выбрать'),
+                            'data-pjax' => 0,
+                            'onclick' => 'selectElement('.$model->id.')',
+                        ]);
+                },
+            ],
+        ];
+        foreach($this->fields as $fields) {
+            $columns[] = $fields->code;
+        }
+        return $columns;
+    }
+
+    public function getForm()
+    {
+        return $this->forms[0];
     }
 }
 

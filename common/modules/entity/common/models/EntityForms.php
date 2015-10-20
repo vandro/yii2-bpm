@@ -4,6 +4,7 @@ namespace common\modules\entity\common\models;
 
 use common\helpers\DebugHelper;
 use common\modules\entity\common\config\Config;
+use common\modules\entity\common\factories\EntityTypeClassFactory;
 use common\modules\entity\common\factories\EntityTypeFormClassFactory;
 use Yii;
 use yii\data\ActiveDataProvider;
@@ -183,6 +184,11 @@ class EntityForms extends \yii\db\ActiveRecord
         return $entity;
     }
 
+    public function getEntityType()
+    {
+        return EntityTypeFormClassFactory::get($this->id);
+    }
+
     public function getColumns()
     {
         $columns = [];
@@ -283,7 +289,7 @@ class EntityForms extends \yii\db\ActiveRecord
         return $this->hasOne(EntityFields::className(), ['id' => 'foreign_key_field_id']);
     }
 
-    public function getSettings($settingsName)
+    public function getSetting($settingsName)
     {
         $settings = json_decode($this->settings, true);
         if(is_array($settings) && !empty($settings)){
@@ -292,6 +298,19 @@ class EntityForms extends \yii\db\ActiveRecord
             }
         }
 
+        return false;
+    }
+
+    public function getLinkFieldDictionary()
+    {
+        $linkFieldName = $this->getSetting('link-field');
+        if($linkFieldName){
+            foreach($this->entity->fields as $field) {
+                if($field->code == $linkFieldName) {
+                    return $field->dictionary;
+                }
+            }
+        }
         return false;
     }
 }
