@@ -5,12 +5,8 @@
  * Date: 20.10.2015
  * Time: 10:09
  */
-use yii\helpers\Html;
-use yii\widgets\ActiveForm;
-use common\modules\upload\widgets\MegaFileUploadWidget;
+
 use yii\widgets\DetailView;
-use yii\grid\GridView;
-use yii\widgets\Pjax;
 ?>
 
 <?php if($formModel->mode == 'view'){?>
@@ -22,29 +18,39 @@ use yii\widgets\Pjax;
 
         <?php foreach($formModel->childForms as $childForm){?>
             <?php $childEntity = $childForm->getChildEntity($entity);?>
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-6">
-            <!--            --><?//=$childForm->getAddButton();?>
-                        <?php Pjax::begin(['id' => 'child-grid']); ?>
-                            <?php $childEntity = $childForm->getChildEntity($entity);?>
-                            <?=GridView::widget([
-                                'summary' => '',
-                                'dataProvider' => $childEntity->search(null,15),
-                                'columns' => $childForm->columnsForGridView,
-                            ]);?>
-                        <?php Pjax::end(); ?>
-                    </div>
-                    <div class="col-md-6">
-                        <?php if($childForm->getSetting('child-form-view-type') != 'select-table'){?>
-                            <?= $this->render('childForm', [
+
+                <?php if($childForm->getSetting('child-form-view-type') != 'select-table'){?>
+
+                    <?=$childForm->getAddButton();?>
+
+                    <div style="margin-bottom: 10px"></div>
+
+                    <?= $this->render('_childGridView', [
+                        'childForm' => $childForm,
+                        'entity' => $childEntity,
+                    ]) ?>
+
+                    <?= $this->render('childForm', [
+                        'childForm' => $childForm,
+                        'entity' => $childEntity,
+                        'task_id' => $task_id,
+                        'node_id' => $node_id,
+                        'action_id' => $action_id,
+                    ]) ?>
+
+                <?php }else{ ?>
+
+                    <div class="row">
+                        <div class="col-md-6">
+
+                            <?= $this->render('_childGridView', [
                                 'childForm' => $childForm,
                                 'entity' => $childEntity,
-                                'task_id' => $task_id,
-                                'node_id' => $node_id,
-                                'action_id' => $action_id,
                             ]) ?>
-                        <?php }else{ ?>
+
+                        </div>
+                        <div class="col-md-6">
+
                             <?= $this->render('childTableSelect', [
                                 'childForm' => $childForm,
                                 'parentEntity' => $entity,
@@ -53,10 +59,12 @@ use yii\widgets\Pjax;
                                 'node_id' => $node_id,
                                 'action_id' => $action_id,
                             ])?>
-                        <?php } ?>
+
+                        </div>
                     </div>
-                    <?php } ?>
-                </div>
-            </div>
+
+                <?php } ?>
+
+        <?php } ?>
     </div>
 <?php } ?>
