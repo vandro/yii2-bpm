@@ -166,6 +166,8 @@ class TasksCart extends \yii\db\ActiveRecord
             } else {
                 throw new NotFoundHttpException('The requested entity item does not exist.');
             }
+        }else{
+            return $entityType;
         }
     }
 }
