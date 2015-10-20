@@ -53,6 +53,7 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
         $this->addAttributeLabels();
         $this->addRelationMethods();
         $this->addGetSearch();
+        $this->addGetSearchModel();
         //$this->addFind();
 
     }
@@ -193,7 +194,7 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
      * @inheritdoc
      * @return CitiesQuery the active query used by this AR class.
      *
-    public static function find()
+    public static function search()
     {
         $searchModel = new CitiesSearch();
         return $searchModel->search($this->attributes);
@@ -204,12 +205,37 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
         if(isset($this->params[self::ACTIVE_QUERY_CLASS_NAME])) {
             $this->classString .= "    /**\n";
             $this->classString .= "     * @inheritdoc\n";
-            $this->classString .= "     * @return ".$this->params[self::CLASS_NAME]."Search class object.\n";
+            $this->classString .= "     * @return ActiveDataProvider class object.\n";
             $this->classString .= "     */\n";
             $this->classString .= "    public function search()\n";
             $this->classString .= "    {\n";
             $this->classString .= "         \$searchModel = new ".$this->params[self::CLASS_NAME]."Search;\n";
             $this->classString .= "         return \$searchModel->searchLink(\$this->attributes);\n";
+            $this->classString .= "    }\n\n";
+        }
+    }
+
+    /**
+     * @inheritdoc
+     * @return CitiesQuery the active query used by this AR class.
+     *
+    public static function searchModel()
+    {
+    $searchModel = new CitiesSearch();
+    return $searchModel->search($this->attributes);
+    }*/
+
+    protected function addGetSearchModel()
+    {
+        if(isset($this->params[self::ACTIVE_QUERY_CLASS_NAME])) {
+            $this->classString .= "    /**\n";
+            $this->classString .= "     * @inheritdoc\n";
+            $this->classString .= "     * @return ".$this->params[self::CLASS_NAME]."Search class object.\n";
+            $this->classString .= "     */\n";
+            $this->classString .= "    public function searchModel()\n";
+            $this->classString .= "    {\n";
+            $this->classString .= "         \$searchModel = new ".$this->params[self::CLASS_NAME]."Search;\n";
+            $this->classString .= "         return \$searchModel;\n";
             $this->classString .= "    }\n\n";
         }
     }
