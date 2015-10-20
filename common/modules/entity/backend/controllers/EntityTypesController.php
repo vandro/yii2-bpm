@@ -2,6 +2,7 @@
 
 namespace common\modules\entity\backend\controllers;
 
+use common\helpers\DebugHelper;
 use Yii;
 use common\modules\entity\common\models\EntityTypes;
 use common\modules\entity\common\models\EntityTypesSearch;
@@ -34,7 +35,7 @@ class EntityTypesController extends Controller
 //                        'allow' => true,
 //                    ],
                     [
-                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'build', 'item-view', 'item-create', 'item-update', 'item-delete'],
+                        'actions' => ['index', 'view', 'create', 'update', 'delete', 'build', 'item-view', 'item-create', 'item-update', 'item-delete', 'delete-generated'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -218,5 +219,28 @@ class EntityTypesController extends Controller
         $itemModel->delete();
 
         return $this->redirect(['view', 'id' => $entity_id, 'tab' => 6]);
+    }
+
+    public function actionDeleteGenerated()
+    {
+        $directory = Yii::$app->basePath.'/../frontend/runtime/generated';
+        //DebugHelper::printSingleObjectAndDie($directory);
+        if (is_dir($directory)) {
+            $directory_handle = opendir($directory);
+
+            if (!$directory_handle) {
+                return $this->redirect(['index']);
+            }
+            while ($file = readdir($directory_handle)) {
+                if ($file != "." && $file != "..") {
+                    if (!is_dir($directory . "/" . $file))
+                        unlink($directory . "/" . $file);
+                }
+            }
+            closedir($directory_handle);
+        }
+
+        return $this->redirect(['index']);
+
     }
 }
