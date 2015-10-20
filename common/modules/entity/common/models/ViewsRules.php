@@ -90,7 +90,7 @@ class ViewsRules extends \yii\db\ActiveRecord
 
         $fields = EntityFields::find()
             ->where(['entity_id' => $this->view->entity_id])
-            ->andWhere(['not in','id', $fieldsIds])
+            //->andWhere(['not in','id', $fieldsIds])
             ->all();
         return ArrayHelper::map($fields, 'id','title');
     }
