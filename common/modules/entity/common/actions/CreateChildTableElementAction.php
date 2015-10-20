@@ -9,11 +9,13 @@ namespace common\modules\entity\common\actions;
 
 use common\modules\entity\common\config\Config;
 use common\modules\entity\common\models\EntityForms;
+use common\modules\entity\common\models\EntityTypes;
 use Yii;
 use common\modules\entity\common\models\smi\SmiReestr;
 use common\modules\entity\common\factories\EntityTypeFormClassFactory;
+use yii\grid\GridView;
 
-class CreateChildEntityElementAction extends \yii\base\Action
+class CreateChildTableElementAction extends \yii\base\Action
 {
     public $params;
     public $task_id;
@@ -26,6 +28,7 @@ class CreateChildEntityElementAction extends \yii\base\Action
     {
         $form = EntityForms::findOne($this->form_id);
         $model = EntityTypeFormClassFactory::get($form->id);
+
 
         $model->load(Yii::$app->request->post());
         $model->save();
