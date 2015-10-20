@@ -107,6 +107,9 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'pagination' => [
+                'pageSize' => 5,
+            ],
         ]);
 
         $this->load($params);
@@ -148,6 +151,9 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
         $this->classString .= "         \n";
         $this->classString .= "         \$dataProvider = new ActiveDataProvider([\n";
         $this->classString .= "             'query' => \$query,\n";
+        $this->classString .= "             'pagination' => [\n";
+        $this->classString .= "                 'pageSize' => 5,\n";
+        $this->classString .= "             ],\n";
         $this->classString .= "         ]);\n";
         $this->classString .= "         \n";
         $this->classString .= "         \$this->load(\$params);\n";
@@ -193,6 +199,9 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
         $this->classString .= "         \n";
         $this->classString .= "         \$dataProvider = new ActiveDataProvider([\n";
         $this->classString .= "             'query' => \$query,\n";
+        $this->classString .= "             'pagination' => [\n";
+        $this->classString .= "                 'pageSize' => 5,\n";
+        $this->classString .= "             ],\n";
         $this->classString .= "         ]);\n";
         $this->classString .= "         \n";
         $this->classString .= "         \$arParams['".$this->params[self::CLASS_NAME]."'] = (array) \$params;\n";
