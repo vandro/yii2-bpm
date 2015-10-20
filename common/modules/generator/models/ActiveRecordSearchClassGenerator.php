@@ -101,16 +101,14 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
      *
      * @return ActiveDataProvider
      *
-    public function search($params)
+    public function search($params, $pageSize = null)
     {
+        $arDataProvider = [];
         $query = EntityFields::find();
+        $arDataProvider['query'] = $query;
+        if($pageSize != null) $arDataProvider['pagination'] = ['pageSize' => $pageSize];
 
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-            'pagination' => [
-                'pageSize' => 5,
-            ],
-        ]);
+        $dataProvider = new ActiveDataProvider($arDataProvider);
 
         $this->load($params);
 
@@ -145,16 +143,20 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
         $this->classString .= "     *\n";
         $this->classString .= "     * @return ActiveDataProvider\n";
         $this->classString .= "     */\n";
-        $this->classString .= "    public function search(\$params)\n";
+        $this->classString .= "    public function search(\$params, \$pageSize = null)\n";
         $this->classString .= "    {\n";
+        $this->classString .= "         \$arDataProvider = [];\n";
         $this->classString .= "         \$query = ".$this->params[self::CLASS_NAME]."::find();\n";
+        $this->classString .= "         \$arDataProvider['query'] = \$query;\n";
+        $this->classString .= "         if(!empty(\$pageSize)) \$arDataProvider['pagination'] = ['pageSize' => \$pageSize];\n";
         $this->classString .= "         \n";
-        $this->classString .= "         \$dataProvider = new ActiveDataProvider([\n";
-        $this->classString .= "             'query' => \$query,\n";
-        $this->classString .= "             'pagination' => [\n";
-        $this->classString .= "                 'pageSize' => 5,\n";
-        $this->classString .= "             ],\n";
-        $this->classString .= "         ]);\n";
+        $this->classString .= "         \$dataProvider = new ActiveDataProvider(\$arDataProvider);\n";
+//        $this->classString .= "         \$dataProvider = new ActiveDataProvider([\n";
+//        $this->classString .= "             'query' => \$query,\n";
+//        $this->classString .= "             'pagination' => [\n";
+//        $this->classString .= "                 'pageSize' => 5,\n";
+//        $this->classString .= "             ],\n";
+//        $this->classString .= "         ]);\n";
         $this->classString .= "         \n";
         $this->classString .= "         \$this->load(\$params);\n";
         $this->classString .= "         \n";
@@ -193,16 +195,22 @@ class ActiveRecordSearchClassGenerator extends AbstractClassGenerator
         $this->classString .= "     *\n";
         $this->classString .= "     * @return ActiveDataProvider\n";
         $this->classString .= "     */\n";
-        $this->classString .= "    public function searchLink(\$params)\n";
+        $this->classString .= "    public function searchLink(\$params, \$pageSize = null)\n";
         $this->classString .= "    {\n";
+        $this->classString .= "         \$arDataProvider = [];\n";
         $this->classString .= "         \$query = ".$this->params[self::CLASS_NAME]."::find();\n";
+        $this->classString .= "         \$arDataProvider['query'] = \$query;\n";
+        $this->classString .= "         if(!empty(\$pageSize)) \$arDataProvider['pagination'] = ['pageSize' => \$pageSize];\n";
         $this->classString .= "         \n";
-        $this->classString .= "         \$dataProvider = new ActiveDataProvider([\n";
-        $this->classString .= "             'query' => \$query,\n";
-        $this->classString .= "             'pagination' => [\n";
-        $this->classString .= "                 'pageSize' => 5,\n";
-        $this->classString .= "             ],\n";
-        $this->classString .= "         ]);\n";
+        $this->classString .= "         \$dataProvider = new ActiveDataProvider(\$arDataProvider);\n";
+//        $this->classString .= "         \$query = ".$this->params[self::CLASS_NAME]."::find();\n";
+//        $this->classString .= "         \n";
+//        $this->classString .= "         \$dataProvider = new ActiveDataProvider([\n";
+//        $this->classString .= "             'query' => \$query,\n";
+//        $this->classString .= "             'pagination' => [\n";
+//        $this->classString .= "                 'pageSize' => 5,\n";
+//        $this->classString .= "             ],\n";
+//        $this->classString .= "         ]);\n";
         $this->classString .= "         \n";
         $this->classString .= "         \$arParams['".$this->params[self::CLASS_NAME]."'] = (array) \$params;\n";
         $this->classString .= "         \n";

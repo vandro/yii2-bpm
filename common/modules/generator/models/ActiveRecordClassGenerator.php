@@ -207,13 +207,13 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
             $this->classString .= "     * @inheritdoc\n";
             $this->classString .= "     * @return ActiveDataProvider class object.\n";
             $this->classString .= "     */\n";
-            $this->classString .= "    public function search(\$params = null)\n";
+            $this->classString .= "    public function search(\$params = null, \$pageSize = null)\n";
             $this->classString .= "    {\n";
             $this->classString .= "         \$searchModel = new ".$this->params[self::CLASS_NAME]."Search;\n";
             $this->classString .= "         if(\$params == null){\n";
-            $this->classString .= "             return \$searchModel->searchLink(\$this->attributes);\n";
+            $this->classString .= "             return \$searchModel->searchLink(\$this->attributes, \$pageSize);\n";
             $this->classString .= "         }else{\n";
-            $this->classString .= "             return \$searchModel->search(\$params);\n";
+            $this->classString .= "             return \$searchModel->search(\$params, \$pageSize);\n";
             $this->classString .= "         }\n";
             $this->classString .= "    }\n\n";
         }
