@@ -6,6 +6,7 @@ use common\helpers\DebugHelper;
 use common\modules\entity\common\config\Config;
 use common\modules\entity\common\factories\EntityTypeClassFactory;
 use common\modules\entity\common\factories\EntityTypeFormClassFactory;
+use common\modules\entity\common\factories\EntityTypeViewClassFactory;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
@@ -177,7 +178,6 @@ class EntityForms extends \yii\db\ActiveRecord
 
     public function getChildEntity($parentEntity)
     {
-//        $entity = Yii::$app->modules[Config::MODULE_NAME]->childEntityFactory->getChildByForm($this);
         $entity = EntityTypeFormClassFactory::get($this->id);
         $entity->{$this->foreignKeyField->code} = $parentEntity->id;
 

@@ -243,7 +243,6 @@ class EntityViews extends \yii\db\ActiveRecord
     public function getChildEntity($parentEntity)
     {
         $entity = EntityTypeViewClassFactory::get($this->id);
-        //$entity = Yii::$app->modules[Config::MODULE_NAME]->childEntityFactory->getChildByView($this);
         $entity->{$this->foreignKeyField->code} = $parentEntity->id;
 
         return $entity;
