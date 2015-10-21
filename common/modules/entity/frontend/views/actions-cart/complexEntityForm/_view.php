@@ -27,7 +27,7 @@ use yii\widgets\DetailView;
 
                     <?= $this->render('_childGridView', [
                         'childForm' => $childForm,
-                        'entity' => $childEntity,
+                        'childEntity' => $childEntity,
                     ]) ?>
 
                     <?= $this->render('childForm', [
@@ -45,7 +45,7 @@ use yii\widgets\DetailView;
 
                             <?= $this->render('_childGridView', [
                                 'childForm' => $childForm,
-                                'entity' => $childEntity,
+                                'childEntity' => $childEntity,
                             ]) ?>
 
                         </div>
@@ -54,7 +54,7 @@ use yii\widgets\DetailView;
                             <?= $this->render('childTableSelect', [
                                 'childForm' => $childForm,
                                 'parentEntity' => $entity,
-                                'entity' => $childEntity,
+                                'childEntity' => $childEntity,
                                 'task_id' => $task_id,
                                 'node_id' => $node_id,
                                 'action_id' => $action_id,

@@ -11,8 +11,6 @@ use yii\widgets\Pjax;
 
 <?php Pjax::begin(['id' => 'child-grid']); ?>
 
-<?php $childEntity = $childForm->getChildEntity($entity);?>
-
 <?=GridView::widget([
     'summary' => '',
     'dataProvider' => $childEntity->search(null,15),
