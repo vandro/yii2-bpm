@@ -21,6 +21,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\modules\entity\common\actions\CreateChildEntityElementAction;
 use common\modules\entity\common\actions\CreateChildEntityElementLinkAction;
+use common\modules\entity\common\actions\DeleteChildEntityElementLinkAction;
 use common\modules\entity\common\actions\EntityFormAction;
 use common\modules\entity\common\actions\EntityFormAction2;
 
@@ -93,6 +94,15 @@ class ActionsCartController extends Controller
                 'form_id' => Yii::$app->request->get('form_id'),
                 'parent_id' => Yii::$app->request->get('parent_id'),
                 'link_id' => Yii::$app->request->get('link_id'),
+                'redirect_url' => 'form',
+            ],
+            'deleteChildLink' => [
+                'class' => DeleteChildEntityElementLinkAction::className(),
+                'params' => Yii::$app->request->post(),
+                'action_id' => Yii::$app->request->get('action_id'),
+                'task_id' => Yii::$app->request->get('task_id'),
+                'form_id' => Yii::$app->request->get('form_id'),
+                'item_id' => Yii::$app->request->get('item_id'),
                 'redirect_url' => 'form',
             ],
             'createChildTableElement' => [

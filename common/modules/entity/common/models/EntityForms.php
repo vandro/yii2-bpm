@@ -220,6 +220,20 @@ class EntityForms extends \yii\db\ActiveRecord
                 }
             }
         }
+        $columns[] = [
+            'class' => 'yii\grid\ActionColumn',
+            'template'=>'{select}',
+            'buttons'=>[
+                'select'=>function ($url, $model) {
+                    return Html::a( '<span class="glyphicon glyphicon-trash"></span>', '#',
+                        [
+                            'title' => Yii::t('yii', 'Выбрать'),
+                            'data-pjax' => 0,
+                            'onclick' => 'deleteElement('.$model->id.')',
+                        ]);
+                },
+            ],
+        ];
 
         return $columns;
     }

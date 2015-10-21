@@ -18,3 +18,9 @@ use yii\widgets\Pjax;
 ]);?>
 
 <?php Pjax::end(); ?>
+<script>
+    function deleteElement(item_id){
+        var action = "<?=Yii::$app->urlManager->createUrl('/bpm/actions-cart/deleteChildLink')?>?action_id=<?=$action_id?>&task_id=<?=$task_id?>&form_id=<?=$childForm->id?>&item_id="+item_id;
+        $.ajax({ url: action, type: 'get' });
+    }
+</script>
