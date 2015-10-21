@@ -54,8 +54,7 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
         $this->addRelationMethods();
         $this->addGetSearch();
         $this->addGetSearchModel();
-        //$this->addFind();
-
+        $this->addFind();
     }
 
 
@@ -210,7 +209,7 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
             $this->classString .= "    public function search(\$params = null, \$pageSize = null)\n";
             $this->classString .= "    {\n";
             $this->classString .= "         \$searchModel = new ".$this->params[self::CLASS_NAME]."Search;\n";
-            $this->classString .= "         if(\$params == null){\n";
+            $this->classString .= "         if(empty(\$params)){\n";
             $this->classString .= "             return \$searchModel->searchLink(\$this->attributes, \$pageSize);\n";
             $this->classString .= "         }else{\n";
             $this->classString .= "             return \$searchModel->search(\$params, \$pageSize);\n";
@@ -225,8 +224,8 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
      *
     public static function searchModel()
     {
-    $searchModel = new CitiesSearch();
-    return $searchModel->search($this->attributes);
+        $searchModel = new CitiesSearch();
+        return $searchModel->search($this->attributes);
     }*/
 
     protected function addGetSearchModel()
@@ -246,20 +245,20 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
 
     protected function addRelationMethods()
     {
-        if(isset($this->params[self::PROPERTIES])) {
-            foreach ($this->params[self::PROPERTIES] as $property) {
-                if (isset($property[self::RELATION]) && !empty($property[self::RELATION])) {
-                    $relation = $property[self::RELATION];
-                    $this->classString .= "    /**\n";
-                    $this->classString .= "     * @return \\yii\\db\\ActiveQuery.\n";
-                    $this->classString .= "     */\n";
-                    $this->classString .= "    public function get" . $relation[self::RELATION_METHOD_NAME] . "()\n";
-                    $this->classString .= "    {\n";
-                    $this->classString .= "         return \$this->" . $relation[self::RELATION_TYPE] . "(" . $relation[self::RELATION_TARGET_CLASS] . "::className(),['" . $relation[self::RELATION_TARGET_KEY] . "' => '" . $relation[self::RELATION_FOREIGN_KEY] . "']);\n";
-                    $this->classString .= "    }\n\n";
-                }
-            }
-        }
+//        if(isset($this->params[self::PROPERTIES])) {
+//            foreach ($this->params[self::PROPERTIES] as $property) {
+//                if (isset($property[self::RELATION]) && !empty($property[self::RELATION])) {
+//                    $relation = $property[self::RELATION];
+//                    $this->classString .= "    /**\n";
+//                    $this->classString .= "     * @return \\yii\\db\\ActiveQuery.\n";
+//                    $this->classString .= "     */\n";
+//                    $this->classString .= "    public function get" . $relation[self::RELATION_METHOD_NAME] . "()\n";
+//                    $this->classString .= "    {\n";
+//                    $this->classString .= "         return \$this->" . $relation[self::RELATION_TYPE] . "(" . $relation[self::RELATION_TARGET_CLASS] . "::className(),['" . $relation[self::RELATION_TARGET_KEY] . "' => '" . $relation[self::RELATION_FOREIGN_KEY] . "']);\n";
+//                    $this->classString .= "    }\n\n";
+//                }
+//            }
+//        }
 
         if(isset($this->params[self::RELATIONS]) && !empty($this->params[self::RELATIONS])) {
             foreach ($this->params[self::RELATIONS] as $relation) {
