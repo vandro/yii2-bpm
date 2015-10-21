@@ -5,6 +5,7 @@ namespace common\modules\entity\frontend\controllers;
 use common\helpers\DebugHelper;
 use common\modules\entity\common\actions\CreateChildTableElementAction;
 use common\modules\entity\common\actions\EntityFilteredFieldApiAction;
+use common\modules\entity\common\actions\GoToPreviousNodeAction;
 use common\modules\entity\common\config\Config;
 use common\modules\entity\common\models\permission\User;
 use common\modules\entity\common\models\Tasks;
@@ -70,6 +71,11 @@ class ActionsCartController extends Controller
                 'class' => EntityFormAction::className(),
                 'action_id' => Yii::$app->request->get('id'),
                 'task_id' => Yii::$app->request->get('task_id'),
+            ],
+            'previousNode' => [
+                'class' => GoToPreviousNodeAction::className(),
+                'task_id' => Yii::$app->request->get('task_id'),
+                'previous_node_id' => Yii::$app->request->get('previous_node_id'),
             ],
             'createChild' => [
                 'class' => CreateChildEntityElementAction::className(),

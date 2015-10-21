@@ -30,6 +30,8 @@ use yii\helpers\Html;
             'action_id' => $action_id,
             'has_file_upload' =>  $has_file_upload,
             'controller' => $controller,
+            'node_order_status' =>  $node_order_status,
+            'previous_node_id' => $previous_node_id,
         ]) ?>
     </div>
 </div>

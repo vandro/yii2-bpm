@@ -56,12 +56,19 @@ use yii\widgets\Pjax;
 <?php } ?>
 <div class="panel-footer">
     <div class="form-group">
-        <?= Html::button('Create' , ['class' => 'btn btn-default', 'onclick' => 'submitForm()']) ?>
+        <?php if($node_order_status == 'filling'){ ?>
+            <?= Html::a('Назад', ['actions-cart/previousNode', 'task_id' => $task_id, 'previous_node_id' => $previous_node_id], ['class' => 'btn btn-default']) ?>
+        <?php } ?>
+        <?= Html::button('Далее' , ['class' => 'btn btn-default', 'onclick' => 'submitForm()']) ?>
     </div>
 </div>
 
 <script>
 function submitForm()
+{
+    $('#node-action-form').submit();
+}
+function toPreviousNode()
 {
     $('#node-action-form').submit();
 }

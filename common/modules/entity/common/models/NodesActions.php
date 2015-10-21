@@ -2,6 +2,7 @@
 
 namespace common\modules\entity\common\models;
 
+use common\modules\entity\common\models\permission\NodesActionRoleLink;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\web\HttpException;
@@ -156,6 +157,11 @@ class NodesActions extends \yii\db\ActiveRecord
         }
 
         return true;
+    }
+
+    public function getPreviousNode($node_id)
+    {
+        return NodesActionRoleLink::find()->where(['next_node_id' => $node_id])->one();
     }
 
 //    public function runHandlers()

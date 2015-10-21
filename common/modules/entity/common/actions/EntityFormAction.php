@@ -70,6 +70,8 @@ class EntityFormAction extends \yii\base\Action
                 'task' => $this->findTaskModel($this->task_id),
                 'task_id' => $this->task_id,
                 'node_id' => $task->current_node_id,
+                'node_order_status' =>  $task->currentNode->order_status,
+                'previous_node_id' => $action->getPreviousNode($task->current_node_id)->node_id,
                 'action_id' => $this->action_id,
                 'has_file_upload' => $action->getHasFileUploads($task->current_node_id),
                 'controller' => $this->controller,
