@@ -51,7 +51,7 @@ use yii\widgets\DetailView;
 
                 <?php }elseif($childForm->getSetting('child-form-view-type') == 'only-child-form'){ ?>
 
-                    <?= $this->render('noModalChildForm', [
+                    <?= $this->render('noModalTypeChildForm', [
                         'childForm' => $childForm,
                         'entity' => $childEntity,
                         'task_id' => $task_id,
