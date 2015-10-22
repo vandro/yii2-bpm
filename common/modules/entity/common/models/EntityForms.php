@@ -7,6 +7,7 @@ use common\modules\entity\common\config\Config;
 use common\modules\entity\common\factories\EntityTypeClassFactory;
 use common\modules\entity\common\factories\EntityTypeFormClassFactory;
 use common\modules\entity\common\factories\EntityTypeViewClassFactory;
+use common\modules\entity\common\helpers\SystemFieldsHelper;
 use Yii;
 use yii\data\ActiveDataProvider;
 use yii\helpers\ArrayHelper;
@@ -153,11 +154,15 @@ class EntityForms extends \yii\db\ActiveRecord
         $html = $this->html;
         if(!empty($html)) {
             foreach ($this->fields as $field) {
-                $html = str_replace('{%' . $field->code . '%}', $field->getWidget($entity, $activeForm, $this), $html);
+                if(!SystemFieldsHelper::isSystemField($field->code)) {
+                    $html = str_replace('{%' . $field->code . '%}', $field->getWidget($entity, $activeForm, $this), $html);
+                }
             }
         }else{
             foreach ($this->fields as $field) {
-                $html .= $field->getWidget($entity, $activeForm, $this);
+                if(!SystemFieldsHelper::isSystemField($field->code)) {
+                    $html .= $field->getWidget($entity, $activeForm, $this);
+                }
             }
         }
 
@@ -220,20 +225,22 @@ class EntityForms extends \yii\db\ActiveRecord
                 }
             }
         }
-        $columns[] = [
-            'class' => 'yii\grid\ActionColumn',
-            'template'=>'{select}',
-            'buttons'=>[
-                'select'=>function ($url, $model) {
-                    return Html::a( '<span class="glyphicon glyphicon-trash"></span>', '#',
-                        [
-                            'title' => Yii::t('yii', 'Выбрать'),
-                            'data-pjax' => 0,
-                            'onclick' => 'deleteElement('.$model->id.')',
-                        ]);
-                },
-            ],
-        ];
+        if($this->getSetting('can-delete')) {
+            $columns[] = [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{select}',
+                'buttons' => [
+                    'select' => function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-trash"></span>', '#',
+                            [
+                                'title' => Yii::t('yii', 'Выбрать'),
+                                'data-pjax' => 0,
+                                'onclick' => 'deleteElement(' . $model->id . ')',
+                            ]);
+                    },
+                ],
+            ];
+        }
 
         return $columns;
     }
