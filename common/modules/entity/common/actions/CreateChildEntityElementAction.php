@@ -12,6 +12,7 @@ use common\modules\entity\common\models\EntityForms;
 use Yii;
 use common\modules\entity\common\models\smi\SmiReestr;
 use common\modules\entity\common\factories\EntityTypeFormClassFactory;
+use common\modules\entity\common\helpers\SystemFieldsHelper;
 
 class CreateChildEntityElementAction extends \yii\base\Action
 {
@@ -28,6 +29,7 @@ class CreateChildEntityElementAction extends \yii\base\Action
         $model = EntityTypeFormClassFactory::get($form->id);
 
         $model->load(Yii::$app->request->post());
+        $model = SystemFieldsHelper::setSystemFieldsValue($model, $form);
         $model->save();
 
         return $this->controller->redirect([$this->redirect_url,
