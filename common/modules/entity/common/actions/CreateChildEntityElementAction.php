@@ -7,14 +7,12 @@
  */
 namespace common\modules\entity\common\actions;
 
-use common\modules\entity\common\config\Config;
-use common\modules\entity\common\models\EntityForms;
 use Yii;
-use common\modules\entity\common\models\smi\SmiReestr;
+use common\modules\entity\common\models\EntityForms;
 use common\modules\entity\common\factories\EntityTypeFormClassFactory;
 use common\modules\entity\common\helpers\SystemFieldsHelper;
 
-class CreateChildEntityElementAction extends \common\modules\entity\common\actions\EntityFormAction
+class CreateChildEntityElementAction extends EntityFormAction
 {
     public $params;
     public $task_id;
