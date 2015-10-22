@@ -63,6 +63,8 @@ class EntityFormAction extends \yii\base\Action
 
     public function render($task, $action, $entity, $user)
     {
+        $previousNode = $action->getPreviousNode($task->current_node_id);
+
         if($user->hasActionAccess($action, $task->currentNode)) {
             return $this->controller->render('complexEntityForm/create', [
                 'formModel' => $action->form,
@@ -71,7 +73,7 @@ class EntityFormAction extends \yii\base\Action
                 'task_id' => $this->task_id,
                 'node_id' => $task->current_node_id,
                 'node_order_status' =>  $task->currentNode->order_status,
-                'previous_node_id' => $action->getPreviousNode($task->current_node_id)->node_id,
+                'previous_node_id' => !empty($previousNode)?$previousNode->node_id:0,
                 'action_id' => $this->action_id,
                 'has_file_upload' => $action->getHasFileUploads($task->current_node_id),
                 'controller' => $this->controller,
