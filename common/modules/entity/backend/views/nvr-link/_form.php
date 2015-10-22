@@ -21,7 +21,7 @@ use common\modules\entity\common\models\EntityViews;
 
     <?= $form->field($model, 'role_id')->dropDownList($model->allRoles, ['prompt' => ' -- Выберите роль --']) ?>
 
-    <?= $form->field($model, 'node_id')->hiddenInput()->label(''); ?>
+    <?= $form->field($model, 'settings')->textarea(['rows' => 6]);?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

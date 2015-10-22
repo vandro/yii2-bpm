@@ -42,7 +42,8 @@ class NodeViewRoleLink extends \yii\db\ActiveRecord
     {
         return [
             [['node_id', 'view_id', 'role_id'], 'required'],
-            [['node_id', 'view_id', 'role_id'], 'integer']
+            [['id','node_id', 'view_id', 'role_id'], 'integer'],
+            [['settings'], 'string']
         ];
     }
 
@@ -56,6 +57,7 @@ class NodeViewRoleLink extends \yii\db\ActiveRecord
             'node_id' => Yii::t('app', 'Шаг'),
             'view_id' => Yii::t('app', 'Представление'),
             'role_id' => Yii::t('app', 'Роль'),
+            'settings' => Yii::t('app', 'Настройки'),
         ];
     }
 
@@ -91,5 +93,14 @@ class NodeViewRoleLink extends \yii\db\ActiveRecord
     public function getAllRoles()
     {
         return ArrayHelper::map(Roles::find()->all(), 'id', 'title');
+    }
+
+    public function getSetting($settingName)
+    {
+        $settings = json_decode($this->settings, true);
+        if(isset($settings[$settingName])){
+            return $settings[$settingName];
+        }
+        return false;
     }
 }
