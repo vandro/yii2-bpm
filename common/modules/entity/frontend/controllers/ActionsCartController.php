@@ -85,6 +85,16 @@ class ActionsCartController extends Controller
                 'task_id' => Yii::$app->request->get('task_id'),
                 'form_id' => Yii::$app->request->get('form_id'),
                 'redirect_url' => 'form',
+                'go_to_next_node' => false,
+            ],
+            'createChildGoToNextNode' => [
+                'class' => CreateChildEntityElementAction::className(),
+                'params' => Yii::$app->request->post(),
+                'action_id' => Yii::$app->request->get('action_id'),
+                'task_id' => Yii::$app->request->get('task_id'),
+                'form_id' => Yii::$app->request->get('form_id'),
+                'redirect_url' => 'form',
+                'go_to_next_node' => true,
             ],
             'createChildLink' => [
                 'class' => CreateChildEntityElementLinkAction::className(),
