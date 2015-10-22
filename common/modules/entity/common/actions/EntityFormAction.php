@@ -191,17 +191,21 @@ class EntityFormAction extends \yii\base\Action
 
     protected function loggingAction($task, $node, $action)
     {
-        $log = new TaskLog();
-        $log->process_id = $task->process_id;
-        $log->task_id = $task->id;
-        $log->node_id = $node->id;
-        $log->action_id = $action->id;
-        $log->user_id = Yii::$app->user->id;
+        if($node->order_status != 'filling') {
+            $log = new TaskLog();
+            $log->process_id = $task->process_id;
+            $log->task_id = $task->id;
+            $log->node_id = $node->id;
+            $log->action_id = $action->id;
+            $log->user_id = Yii::$app->user->id;
 
-        if($log->save()) {
+            if ($log->save()) {
+                return true;
+            } else {
+                return false;
+            }
+        }else{
             return true;
-        }else {
-            return false;
         }
     }
 
