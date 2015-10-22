@@ -59,7 +59,7 @@ use yii\widgets\Pjax;
         <?php if($node_order_status == 'filling'){ ?>
             <?= Html::a('Назад', ['actions-cart/previousNode', 'task_id' => $task_id, 'previous_node_id' => $previous_node_id], ['class' => 'btn btn-default']) ?>
         <?php } ?>
-        <?= Html::button('Далее' , ['class' => 'btn btn-default', 'onclick' => 'submitForm()']) ?>
+        <?= Html::button('Далее' , ['class' => 'btn btn-default','id' => 'main-submit-button', 'onclick' => 'submitForm()']) ?>
     </div>
 </div>
 
