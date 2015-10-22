@@ -10,7 +10,7 @@ use yii\grid\GridView;
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">Лог</h3>
+        <h3 class="panel-title">История процесса рассмотрения</h3>
     </div>
     <?= GridView::widget([
         'dataProvider' => $logsAdp,
