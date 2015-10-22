@@ -14,7 +14,7 @@ use common\modules\entity\common\models\smi\SmiReestr;
 use common\modules\entity\common\factories\EntityTypeFormClassFactory;
 use common\modules\entity\common\helpers\SystemFieldsHelper;
 
-class CreateChildEntityElementAction extends \yii\base\Action
+class CreateChildEntityElementAction extends \common\modules\entity\common\actions\EntityFormAction
 {
     public $params;
     public $task_id;
@@ -22,6 +22,7 @@ class CreateChildEntityElementAction extends \yii\base\Action
     public $prevision_node_id;
     public $redirect_url;
     public $form_id;
+    public $go_to_next_node;
 
     public function run()
     {
@@ -32,11 +33,18 @@ class CreateChildEntityElementAction extends \yii\base\Action
         $model = SystemFieldsHelper::setSystemFieldsValue($model, $form);
         $model->save();
 
-        return $this->controller->redirect([$this->redirect_url,
-            'id' =>$this->action_id,
-            'task_id' => $this->task_id,
-            'prevision_node_id' => $this->prevision_node_id,
-        ]);
+        if($this->go_to_next_node) {
+            $action = $this->findModel($this->action_id);
+            $task = $this->findTaskModel($this->task_id);
+            $entity = $task->getEntityByForm($action->form_id);
+            $this->goToNextNode($task, $action, $entity);
+        }else{
+            return $this->controller->redirect([$this->redirect_url,
+                'id' => $this->action_id,
+                'task_id' => $this->task_id,
+                'prevision_node_id' => $this->prevision_node_id,
+            ]);
+        }
 
     }
 }
