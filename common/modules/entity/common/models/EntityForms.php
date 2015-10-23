@@ -201,6 +201,26 @@ class EntityForms extends \yii\db\ActiveRecord
         {
             $columns[] = $field->code;
         }
+        return $columns;
+    }
+
+    public function getColumnsForDetailView($model)
+    {
+        $columns = [];
+        foreach($this->rules as $rule)
+        {
+            if($rule->field->id != $this->foreign_key_field_id) {
+                if (empty($rule->field->dictionary_id)) {
+                    $columns[] = $rule->field->code;
+                } else {
+                    $columns[] = [
+                        'attribute' => $rule->field->code,
+                        'format' => 'html',
+                        'value' => $rule->field->getDictionaryValue($rule->field->dictionary_id, $model->{$rule->field->code}),
+                    ];
+                }
+            }
+        }
 
         return $columns;
     }

@@ -13,7 +13,7 @@ use yii\widgets\DetailView;
     <div class="panel-body">
         <?= DetailView::widget([
             'model' => $entity,
-            'attributes' => $formModel->columns,
+            'attributes' => $formModel->getColumnsForDetailView($entity),
         ])?>
 
         <?php foreach($formModel->childForms as $childForm){?>
