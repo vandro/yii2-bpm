@@ -44,7 +44,7 @@ class NodeActionRoleLink extends \yii\db\ActiveRecord
         return [
             [['action_id', 'role_id'], 'required'],
             [['node_id', 'action_id', 'role_id', 'next_node_id', 'only_one_entity', 'has_file_upload'], 'integer'],
-            [['execution_type'], 'string'],
+            [['execution_type', 'settings'], 'string'],
         ];
     }
 
@@ -56,6 +56,7 @@ class NodeActionRoleLink extends \yii\db\ActiveRecord
         return [
             'node_id' => Yii::t('app', 'Шаг'),
             'action_id' => Yii::t('app', 'Действие'),
+            'settings' => Yii::t('app', 'Настройки'),
             'role_id' => Yii::t('app', 'Роль'),
             'next_node_id' => Yii::t('app', 'Следующий шаг'),
             'execution_type' => Yii::t('app', 'Выполнение'),
@@ -113,5 +114,17 @@ class NodeActionRoleLink extends \yii\db\ActiveRecord
         ]);
 
         return $dataProvider;
+    }
+
+    public function getSetting($settingsName)
+    {
+        $settings = json_decode($this->settings, true);
+        if(is_array($settings) && !empty($settings)){
+            if(isset($settings[$settingsName])){
+                return $settings[$settingsName];
+            }
+        }
+
+        return false;
     }
 }
