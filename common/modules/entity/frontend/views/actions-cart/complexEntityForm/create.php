@@ -15,12 +15,25 @@ use yii\helpers\Html;
 //$this->title = 'Do Action';
 //$this->params['breadcrumbs'][] = ['label' => 'Action', 'url' => ['index']];
 //$this->params['breadcrumbs'][] = $this->title;
+$actionLink = $action->getNarLink($node_id);
 ?>
+<?php if($actionLink->getSetting('message')){ ?>
+    <?= $this->render('_messageView', [
+        'formModel' => $formModel,
+        'entity' => $entity,
+        'task' => $task,
+        'task_id' => $task_id,
+        'node_id' => $node_id,
+        'action_id' => $action_id,
+        'actionLink' => $actionLink,
+        'messageType' => $actionLink->getSetting('message-type'),
+    ]) ?>
+<?php } ?>
 <div class="entity-types-create">
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h2 class="panel-title"><?= Html::encode($task->process->title) ?> - <?= Html::encode($entity->entityType->title) ?></h2>
+            <h2 class="panel-title"><?= Html::encode($task->process->title) ?></h2>
         </div>
         <?= $this->render('_form', [
             'formModel' => $formModel,
