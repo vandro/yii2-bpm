@@ -54,7 +54,7 @@ class EntityViews extends \yii\db\ActiveRecord
         return [
             [['title', 'code'], 'required'],
             [['entity_id', 'parent_view_id', 'foreign_key_field_id'], 'integer'],
-            [['title', 'code', 'html'], 'string'],
+            [['title', 'code', 'html', 'settings'], 'string'],
             [['code'], 'unique'],
             [['title'], 'unique']
         ];
@@ -73,6 +73,7 @@ class EntityViews extends \yii\db\ActiveRecord
             'title' => Yii::t('app', 'Наименования'),
             'code' => Yii::t('app', 'Код'),
             'html' => Yii::t('app', 'Html'),
+            'settings' => Yii::t('app', 'Настройки'),
         ];
     }
 
@@ -311,5 +312,17 @@ class EntityViews extends \yii\db\ActiveRecord
     public function getAllViews()
     {
         return ArrayHelper::map(EntityViews::find()->where(['not in','id',[$this->id]])->all(), 'id', 'title');
+    }
+
+    public function getSetting($settingsName)
+    {
+        $settings = json_decode($this->settings, true);
+        if(is_array($settings) && !empty($settings)){
+            if(isset($settings[$settingsName])){
+                return $settings[$settingsName];
+            }
+        }
+
+        return false;
     }
 }
