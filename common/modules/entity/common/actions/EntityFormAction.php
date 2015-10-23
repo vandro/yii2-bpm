@@ -16,6 +16,7 @@ use common\modules\log\models\TaskLog;
 use common\modules\entity\common\models\NodesActions;
 use yii\web\NotFoundHttpException;
 use common\modules\entity\common\models\permission\User;
+use common\modules\entity\common\helpers\SystemFieldsHelper;
 
 
 class EntityFormAction extends \yii\base\Action
@@ -43,13 +44,17 @@ class EntityFormAction extends \yii\base\Action
 
     protected function processCreateUpdateModes($task, $action, $entity, $user)
     {
-        if ($entity->load(Yii::$app->request->post()) && $entity->save() && $this->loggingAction($task, $task->currentNode, $action)) {
-            if($this->setTasksEntitiesLink($this->task_id,$entity->id,$action, $task->currentNode, $this->prevision_node_id)) { // && $action->runHandlers()) {
-                $this->goToNextNode($task, $action, $entity);
+        if($entity->load(Yii::$app->request->post())) {
+            $entity = SystemFieldsHelper::setSystemFieldsValue($entity, $action->form);
+            if ($entity->save() && $this->loggingAction($task, $task->currentNode, $action)) {
+                if ($this->setTasksEntitiesLink($this->task_id, $entity->id, $action, $task->currentNode, $this->prevision_node_id)) { // && $action->runHandlers()) {
+                    $this->goToNextNode($task, $action, $entity);
+                }
             }
-        } else {
-            return $this->render($task, $action, $entity, $user);
         }
+
+        return $this->render($task, $action, $entity, $user);
+
     }
 
     protected function processViewMode($task, $action, $entity, $user)
