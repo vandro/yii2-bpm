@@ -77,6 +77,14 @@ class NodesActions extends \yii\db\ActiveRecord
         return $this->hasMany(NodeActionRoleLink::className(), ['action_id' => 'id']);
     }
 
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getNarLink($node_id)
+    {
+        return NodeActionRoleLink::find()->where(['node_id' => $node_id, 'action_id' => $this->id])->one();
+    }
+
     public function getHasFileUploads($node_id)
     {
         $result = $this->getNodeActionRoleLinks()->where(['node_id' => $node_id])->one();
