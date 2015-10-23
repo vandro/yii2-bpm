@@ -14,21 +14,19 @@ use yii\grid\GridView;
     </div>
     <?= GridView::widget([
         'dataProvider' => $logsAdp,
-        'showHeader' => false,
         'summary' => '',
         'tableOptions' => [
             'style' => 'margin-bottom: 0;',
             'class' => 'table table-striped',
         ],
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
             'log_at',
 
             [
                 'attribute' => 'node_id',
                 'format' => 'html',
                 'value' => function($model){
-                    $html = 'Шаг "'.$model->node->title.'"';
+                    $html = $model->node->title;
                     return $html;
                 }
             ],
@@ -36,7 +34,7 @@ use yii\grid\GridView;
                 'attribute' => 'action_id',
                 'format' => 'html',
                 'value' => function($model){
-                    $html = 'Действие "'.$model->action->title.'"';
+                    $html = $model->action->title;
                     return $html;
                 }
             ],
@@ -44,7 +42,7 @@ use yii\grid\GridView;
                 'attribute' => 'user_id',
                 'format' => 'html',
                 'value' => function($model){
-                   $html = 'Участник "'.$model->user->username.'"';
+                   $html = $model->user->username;
                     return $html;
                 }
             ],
