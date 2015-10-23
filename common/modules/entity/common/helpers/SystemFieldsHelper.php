@@ -14,9 +14,11 @@ use common\modules\entity\common\models\permission\User;
 class SystemFieldsHelper
 {
     const SYSTEM_USER_NAME = 'system_user_name';
+    const SYSTEM_DATE = 'system_date';
 
     protected static $arSystemFields = [
         self::SYSTEM_USER_NAME,
+        self::SYSTEM_DATE,
     ];
 
     public static function setSystemFieldsValue($model, $form)
@@ -25,7 +27,14 @@ class SystemFieldsHelper
         foreach(static::$arSystemFields as $field) {
             foreach($formFields as $formField) {
                 if ($formField->code == $field) {
-                    $model->{self::SYSTEM_USER_NAME} = static::getSystemCurrentUserName();
+
+                    if($field == self::SYSTEM_USER_NAME) {
+                        $model->{self::SYSTEM_USER_NAME} = static::getSystemCurrentUserName();
+                    }
+
+                    if($field == self::SYSTEM_DATE) {
+                        $model->{self::SYSTEM_DATE} = static::getSystemDate();
+                    }
                 }
             }
         }
@@ -48,6 +57,12 @@ class SystemFieldsHelper
     {
         $user = User::findOne(Yii::$app->user->id);
         return !empty($user)?$user->username:'';
+    }
+
+    protected function getSystemDate()
+    {
+
+        return date('Y-m-d h:i:sa');
     }
 
 
