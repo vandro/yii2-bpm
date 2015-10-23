@@ -53,6 +53,7 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
         $this->addAttributeLabels();
         $this->addRelationMethods();
         $this->addGetSearch();
+        $this->addGetSearchByTaskId();
         $this->addGetSearchModel();
         $this->addFind();
     }
@@ -214,6 +215,31 @@ class ActiveRecordClassGenerator extends AbstractClassGenerator
             $this->classString .= "         }else{\n";
             $this->classString .= "             return \$searchModel->search(\$params, \$pageSize);\n";
             $this->classString .= "         }\n";
+            $this->classString .= "    }\n\n";
+        }
+    }
+
+    /**
+     * @inheritdoc
+     * @return CitiesQuery the active query used by this AR class.
+     *
+    public static function search()
+    {
+    $searchModel = new CitiesSearch();
+    return $searchModel->search($this->attributes);
+    }*/
+
+    protected function addGetSearchByTaskId()
+    {
+        if(isset($this->params[self::ACTIVE_QUERY_CLASS_NAME])) {
+            $this->classString .= "    /**\n";
+            $this->classString .= "     * @inheritdoc\n";
+            $this->classString .= "     * @return ActiveDataProvider class object.\n";
+            $this->classString .= "     */\n";
+            $this->classString .= "    public function searchByTaskId(\$task_id, \$pageSize = null)\n";
+            $this->classString .= "    {\n";
+            $this->classString .= "         \$searchModel = new ".$this->params[self::CLASS_NAME]."Search;\n";
+            $this->classString .= "         return \$searchModel->searchLink(['system_task_id' => \$task_id], \$pageSize);\n";
             $this->classString .= "    }\n\n";
         }
     }
