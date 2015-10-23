@@ -50,6 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'role_id',
                             'value' => Roles::findOne($model['role_id'])->title,
                         ],
+                        'settings',
                     ],
                 ]),
                 'active' => ($tab == 1),

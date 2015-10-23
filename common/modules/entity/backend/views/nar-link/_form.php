@@ -26,6 +26,8 @@ use common\modules\entity\common\models\ProcessNodes;
 
     <?= $form->field($model, 'has_file_upload')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => ' -- Выберите --']) ?>
 
+    <?= $form->field($model, 'settings')->textarea(['rows' => 6]) ?>
+
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
     </div>
