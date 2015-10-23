@@ -24,6 +24,7 @@ class LogWidget extends \yii\bootstrap\Widget
 
         $logsAdp =  new ActiveDataProvider([
             'query' => $logs,
+            'sort'=> ['defaultOrder' => ['id'=>SORT_DESC]]
         ]);
 
         return $this->render('logWidgetView',[
