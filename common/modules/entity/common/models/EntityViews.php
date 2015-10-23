@@ -4,6 +4,7 @@ namespace common\modules\entity\common\models;
 
 //use backend\models\User;
 use common\modules\entity\common\factories\EntityTypeViewClassGenerationFactory;
+use common\modules\entity\common\helpers\SystemFieldsHelper;
 use common\modules\entity\common\models\permission\User;
 use common\helpers\DebugHelper;
 use common\modules\entity\common\config\Config;
@@ -30,6 +31,7 @@ use yii\web\NotFoundHttpException;
  */
 class EntityViews extends \yii\db\ActiveRecord
 {
+    protected $arRenderedViews = [];
     /**
      * @inheritdoc
      */
@@ -205,15 +207,37 @@ class EntityViews extends \yii\db\ActiveRecord
         }else{
             if(empty($this->childViews)) {
 
-                $html = '<div class="panel panel-default box2">
+
+                if($this->getSetting('view-type') == 'table'){
+                    if(!in_array($this->code, $this->arRenderedViews)) {
+                        $html = '<div class="panel panel-default box2">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">' . $this->title . '</h3>
                                 </div>';
-                $html .= DetailView::widget([
-                    'model' => $entityModel,
-                    'attributes' => $this->getFieldsCodesArray($entityModel),
-                ]);
-                $html .= '</div>';
+                        $html .= GridView::widget([
+                            'summary' => '',
+                            'dataProvider' => $entityModel->searchByTaskId(Yii::$app->request->get('task_id')),
+                            'columns' => $this->columnsForGridView,
+                            'tableOptions' => [
+                                'class' => 'table table-striped',
+                                'style' => 'margin-bottom: 0px;'
+                            ]
+                        ]);
+                        $html .= '</div>';
+                        $this->arRenderedViews[] = $this->code;
+                    }
+                }else {
+                    $html = '<div class="panel panel-default box2">
+                                <div class="panel-heading">
+                                    <h3 class="panel-title">' . $this->title . '</h3>
+                                </div>';
+                    $html .= DetailView::widget([
+                        'model' => $entityModel,
+                        'attributes' => $this->getFieldsCodesArray($entityModel),
+                    ]);
+                    $html .= '</div>';
+                }
+
 
             }else{
                 $html = '';
@@ -264,7 +288,7 @@ class EntityViews extends \yii\db\ActiveRecord
         $columns = [];
         foreach($this->rules as $rule)
         {
-            if($rule->field->id != $this->foreign_key_field_id) {
+            if($rule->field->id != $this->foreign_key_field_id && $rule->field->code != SystemFieldsHelper::SYSTEM_TASK_ID) {
                 if (empty($rule->field->dictionary_id)) {
                     $columns[] = $rule->field->code;
                 } else {
