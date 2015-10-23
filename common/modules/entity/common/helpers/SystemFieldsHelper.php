@@ -15,10 +15,12 @@ class SystemFieldsHelper
 {
     const SYSTEM_USER_NAME = 'system_user_name';
     const SYSTEM_DATE = 'system_date';
+    const SYSTEM_TASK_ID = 'system_task_id';
 
     protected static $arSystemFields = [
         self::SYSTEM_USER_NAME,
         self::SYSTEM_DATE,
+        self::SYSTEM_TASK_ID,
     ];
 
     public static function setSystemFieldsValue($model, $form)
@@ -34,6 +36,10 @@ class SystemFieldsHelper
 
                     if($field == self::SYSTEM_DATE) {
                         $model->{self::SYSTEM_DATE} = static::getSystemDate();
+                    }
+
+                    if($field == self::SYSTEM_TASK_ID) {
+                        $model->{self::SYSTEM_TASK_ID} = static::getSystemTaskId();
                     }
                 }
             }
@@ -63,6 +69,12 @@ class SystemFieldsHelper
     {
 
         return date('Y-m-d h:i:sa');
+    }
+
+    protected function getSystemTaskId()
+    {
+
+        return Yii::$app->request->get('task_id');
     }
 
 
