@@ -89,7 +89,6 @@ class NodesCartController extends Controller
         } else {
             $task = TasksCart::findOne($task_id);
             if($user->hasViewAccess($node)) {
-                $node->task = $task;
                 return $this->render('view', [
                     'model' => $node,
                     'task_id' => $task_id,
