@@ -288,7 +288,9 @@ class EntityViews extends \yii\db\ActiveRecord
         $columns = [];
         foreach($this->rules as $rule)
         {
-            if($rule->field->id != $this->foreign_key_field_id && $rule->field->code != SystemFieldsHelper::SYSTEM_TASK_ID) {
+            if($rule->field->id != $this->foreign_key_field_id
+                && $rule->field->code != SystemFieldsHelper::SYSTEM_TASK_ID
+                && $rule->field->code != SystemFieldsHelper::SYSTEM_NEXT_NODE_ID) {
                 if (empty($rule->field->dictionary_id)) {
                     $columns[] = $rule->field->code;
                 } else {
