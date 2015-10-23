@@ -2,8 +2,11 @@
 
 namespace common\modules\entity\common\models;
 
+use common\modules\entity\common\factories\EntityTypeViewClassFactory;
 use Yii;
 use yii\data\ActiveDataProvider;
+use yii\widgets\DetailView;
+
 /**
  * This is the model class for table "node_action_role_link".
  *
@@ -127,4 +130,26 @@ class NodeActionRoleLink extends \yii\db\ActiveRecord
 
         return false;
     }
+
+    public function getMessageEntityTable()
+    {
+
+    }
+
+    public function getMessage($task)
+    {
+        $entityView = EntityViews::find()->where(['code' => $this->getSetting('message-entity-view-code')])->one();
+        $entity = EntityTypeViewClassFactory::get($entityView->id);
+        $messages = $entity::find()
+            ->where([
+                'system_task_id' => $task->id,
+                'system_next_node_id' =>$task->current_node_id,
+            ])
+            ->all();
+        $message = end($messages);
+
+        return !empty($message)?$message->{$this->getSetting('message-field')}:false;
+    }
+
+
 }
