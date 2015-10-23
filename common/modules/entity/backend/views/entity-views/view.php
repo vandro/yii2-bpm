@@ -47,6 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'foreign_key_field_id',
                             'value' => !empty($model->foreignKeyField)?$model->foreignKeyField->title:'',
                         ],
+                        'settings',
 //                        'html:ntext',,
                     ],
                 ]),

@@ -20,9 +20,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'foreign_key_field_id')->dropDownList($model->getAllEntityFields(), ['prompt' => 'Choose Foreign Key Field ID']); ?>
 
-    <?= $form->field($model, 'html')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'settings')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'entity_id')->hiddenInput()->label('') ?>
+    <?= $form->field($model, 'html')->textarea(['rows' => 6]) ?>
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
