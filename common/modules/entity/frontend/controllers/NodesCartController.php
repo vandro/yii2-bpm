@@ -97,7 +97,8 @@ class NodesCartController extends Controller
             }else{
                 // Переход на конечную ноду
                 return $this->redirect(['view',
-                    'id' => $task->process->lastNode->id,
+//                    'id' => $task->process->lastNode->id,
+                    'id' => $task->process->inactiveNode->id,
                     'task_id' => $task_id,
                     'prevision_node_id' => $task->current_node_id,
                 ]);
