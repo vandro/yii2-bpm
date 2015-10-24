@@ -22,6 +22,7 @@ use yii\widgets\ActiveForm;
             'filling' => 'Нода заполнения',
             'first_process' => 'Первая нода в процессе обработки',
             'process' => 'Нода обработки',
+            'inactive' => 'Неактивная нода',
             'last' => 'Конечная нода'
         ],
         [
