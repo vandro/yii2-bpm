@@ -59,6 +59,17 @@ use yii\widgets\DetailView;
                         'action_id' => $action_id,
                     ]) ?>
 
+                <?php }elseif($childForm->getSetting('cant-add')){ ?>
+
+                    <?= $this->render('_childGridView', [
+                        'childForm' => $childForm,
+                        'parentEntity' => $entity,
+                        'childEntity' => $childEntity,
+                        'task_id' => $task_id,
+                        'node_id' => $node_id,
+                        'action_id' => $action_id,
+                    ]) ?>
+
                 <?php }else{ ?>
 
                     <?=$childForm->getAddButton();?>
