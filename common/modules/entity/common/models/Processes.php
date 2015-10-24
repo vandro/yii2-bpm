@@ -116,4 +116,15 @@ class Processes extends \yii\db\ActiveRecord
 
         return null;
     }
+
+    public function getInactiveNode()
+    {
+        foreach($this->nodes as $node){
+            if($node->is_inactive()){
+                return $node;
+            }
+        }
+
+        return null;
+    }
 }
