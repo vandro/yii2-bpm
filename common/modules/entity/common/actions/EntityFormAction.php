@@ -72,6 +72,8 @@ class EntityFormAction extends \yii\base\Action
 
         if($user->hasActionAccess($action, $task->currentNode)) {
             return $this->controller->render('complexEntityForm/create', [
+                'action' => $action,
+                'task' => $task,
                 'formModel' => $action->form,
                 'entity' => $entity,
                 'task' => $this->findTaskModel($this->task_id),

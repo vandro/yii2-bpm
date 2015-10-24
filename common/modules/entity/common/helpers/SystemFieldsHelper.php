@@ -8,6 +8,8 @@
 namespace common\modules\entity\common\helpers;
 
 use common\helpers\DebugHelper;
+use common\modules\entity\common\models\NodesActions;
+use common\modules\entity\common\models\TasksCart;
 use Yii;
 use common\modules\entity\common\models\permission\User;
 
@@ -16,11 +18,13 @@ class SystemFieldsHelper
     const SYSTEM_USER_NAME = 'system_user_name';
     const SYSTEM_DATE = 'system_date';
     const SYSTEM_TASK_ID = 'system_task_id';
+    const SYSTEM_NEXT_NODE_ID = 'system_next_node_id';
 
     protected static $arSystemFields = [
         self::SYSTEM_USER_NAME,
         self::SYSTEM_DATE,
         self::SYSTEM_TASK_ID,
+        self::SYSTEM_NEXT_NODE_ID,
     ];
 
     public static function setSystemFieldsValue($model, $form)
@@ -41,6 +45,10 @@ class SystemFieldsHelper
                     if($field == self::SYSTEM_TASK_ID) {
                         $model->{self::SYSTEM_TASK_ID} = static::getSystemTaskId();
                     }
+
+                    //if($field == self::SYSTEM_NEXT_NODE_ID) {
+                        $model->{self::SYSTEM_NEXT_NODE_ID} = static::getSystemNextNodeId();
+                    //}
                 }
             }
         }
@@ -75,6 +83,13 @@ class SystemFieldsHelper
     {
 
         return Yii::$app->request->get('task_id');
+    }
+
+    protected function getSystemNextNodeId()
+    {
+        $action = NodesActions::findOne(Yii::$app->request->get('id'));
+        $task = TasksCart::findOne(Yii::$app->request->get('task_id'));
+        return $action->getNarLink($task->current_node_id)->next_node_id;
     }
 
 
