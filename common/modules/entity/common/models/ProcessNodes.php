@@ -271,6 +271,11 @@ class ProcessNodes extends \yii\db\ActiveRecord
         return $this->order_status == 'last';
     }
 
+    public function is_inactive()
+    {
+        return $this->order_status == 'inactive';
+    }
+
     public function is_automatic()
     {
         return $this->execution_type == 'automatic';
