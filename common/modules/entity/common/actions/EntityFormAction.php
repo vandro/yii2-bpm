@@ -89,7 +89,8 @@ class EntityFormAction extends \yii\base\Action
             // Переход на конечную ноду
             if(!empty($task->process->lastNode)) {
                 return $this->controller->redirect(['nodes-cart/view',
-                    'id' => $task->process->lastNode->id,
+//                    'id' => $task->process->lastNode->id,
+                    'id' => $task->process->inactiveNode->id,
                     'task_id' => $this->task_id,
                     'prevision_node_id' => $task->current_node_id,
                 ]);
