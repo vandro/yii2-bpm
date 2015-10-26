@@ -42,6 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute' => 'department_id',
                             'value' => !empty($model->department_id)?$model->department->title:'No',
                         ],
+                        'first_name',
+                        'last_name',
                         'username',
                         'email:email',
                         'password_hash',
