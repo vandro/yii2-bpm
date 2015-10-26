@@ -33,7 +33,7 @@ $actionLink = $action->getNarLink($node_id);
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h2 class="panel-title"><?= Html::encode($task->process->title) ?></h2>
+            <h2 class="panel-title"><?= Html::encode($task->process->title) ?> - <?= Html::encode($action->title) ?></h2>
         </div>
         <?= $this->render('_form', [
             'formModel' => $formModel,
