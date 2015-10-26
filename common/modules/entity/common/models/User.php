@@ -174,4 +174,13 @@ class User extends \yii\db\ActiveRecord
 
         return $dataProvider;
     }
+
+    public function getTitle()
+    {
+        $title = '';
+        if(!empty($this->first_name)) $title .= $this->first_name." ";
+        if(!empty($this->first_name)) $title .= $this->last_name." ";
+        $title .= "(".$this->username.")";
+        return $title;
+    }
 }
