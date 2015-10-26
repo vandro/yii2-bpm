@@ -60,7 +60,16 @@ $this->title = $model->title;
                     'attribute' => 'id',
                     'value' => $task->id,
                 ],
-                'title',
+                [
+                    'attribute' => 'title',
+                    'label' => 'Шаг процесса',
+                    'value' => $model->title,
+                ],
+                [
+                    'attribute' => 'id',
+                    'label' => 'Заявка находится в/на',
+                    'value' => $task->currentNode->title,
+                ],
 
                 //'code',
             ],
