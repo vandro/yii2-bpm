@@ -2,6 +2,7 @@
 
 namespace common\modules\executor\models;
 
+use common\helpers\DebugHelper;
 use Yii;
 
 /**
@@ -82,5 +83,26 @@ class User extends \yii\db\ActiveRecord
     public function getUserRoleLink()
     {
         return $this->hasMany(UserRoleLink::className(), ['user_id' => 'id']);
+    }
+
+    public function getRoles()
+    {
+        return $this->hasMany(Roles::className(), ['id' => 'role_id'])
+            ->via('userRoleLink');
+    }
+
+    public function hasOrganisationRight()
+    {
+        foreach($this->roles as $role){
+            if(!empty($role->rightRoleLinks)) {
+                foreach ($role->rightRoleLinks as $link) {
+                    if ($link->right->code == 'organization' || $link->right->code == 'organizations') {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }

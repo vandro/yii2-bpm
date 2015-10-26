@@ -7,6 +7,7 @@
  */
 namespace common\modules\executor\widgets;
 
+use common\helpers\DebugHelper;
 use common\modules\executor\models\User;
 use Yii;
 
@@ -19,11 +20,19 @@ class AssignExecutorWidget extends \yii\bootstrap\Widget
 
         $chief = User::findOne(Yii::$app->user->id);
 
-        $executors = User::find()
-            ->where([
-                'organisation_id' => $chief->organisation_id,
-            ])
-            ->all();
+        if($chief->hasOrganisationRight()) {
+            $executors = User::find()
+                ->where([
+                    'organisation_id' => $chief->organisation_id,
+                ])
+                ->all();
+        }else{
+            $executors = User::find()
+                ->where([
+                    'department_id' => $chief->department_id,
+                ])
+                ->all();
+        }
 
         return $this->render('assignExecutorWidgetView',[
             'executors' => $executors,

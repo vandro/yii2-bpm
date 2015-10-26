@@ -43,4 +43,9 @@ class UserRoleLink extends \yii\db\ActiveRecord
             'role_id' => Yii::t('app', 'Role ID'),
         ];
     }
+
+    public function getRole()
+    {
+        return $this->hasOne(Roles::className(),['id' => 'role_id']);
+    }
 }

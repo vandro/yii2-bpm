@@ -16,10 +16,11 @@ $this->registerJs(
 ?>
 
 <div class="row">
-    <div class="col-xs-2">
+    <div class="col-xs-12">
         <?=Html::dropDownList('executor',null,ArrayHelper::map($executors, 'id', 'username'),[
             "prompt" => " -- Выполните исполнителя -- ",
             "class" => "form-control",
+            "style" => "",
             "id" => "executor",
         ])?>
     </div>
