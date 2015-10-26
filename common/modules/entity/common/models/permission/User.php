@@ -44,7 +44,7 @@ class User extends \yii\db\ActiveRecord
         return [
             [['username', 'email', 'password_hash', 'status', 'auth_key', 'created_at', 'updated_at'], 'required'],
             [['status', 'role', 'created_at', 'updated_at', 'organisation_id', 'department_id'], 'integer'],
-            [['username', 'email', 'password_hash', 'password_reset_token', 'account_activation_token'], 'string', 'max' => 255],
+            [['username', 'email', 'password_hash', 'password_reset_token', 'account_activation_token','first_name', 'last_name'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['username'], 'unique'],
             [['email'], 'unique'],
@@ -61,6 +61,8 @@ class User extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'organisation_id' => Yii::t('app', 'Организация'),
             'department_id' => Yii::t('app', 'Отдел'),
+            'first_name' => Yii::t('app', 'Имя'),
+            'last_name' => Yii::t('app', 'Фамилия'),
             'username' => Yii::t('app', 'Имя пользователя'),
             'email' => Yii::t('app', 'Эл.адрес'),
             'password_hash' => Yii::t('app', 'Хэш пароля'),
