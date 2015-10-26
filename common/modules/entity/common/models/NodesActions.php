@@ -95,6 +95,16 @@ class NodesActions extends \yii\db\ActiveRecord
         }
     }
 
+    public function getHasAssignExecutors($node_id)
+    {
+        $link = $this->getNodeActionRoleLinks()->where(['node_id' => $node_id])->one();
+        if($link->getSetting('can-assign-executor')){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

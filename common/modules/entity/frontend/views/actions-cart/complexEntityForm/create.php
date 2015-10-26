@@ -45,6 +45,7 @@ $actionLink = $action->getNarLink($node_id);
             'controller' => $controller,
             'node_order_status' =>  $node_order_status,
             'previous_node_id' => $previous_node_id,
+            'has_assign_executor' => $has_assign_executor,
         ]) ?>
     </div>
 </div>

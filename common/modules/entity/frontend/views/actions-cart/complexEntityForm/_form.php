@@ -8,6 +8,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use common\modules\upload\widgets\MegaFileUploadWidget;
+use common\modules\executor\widgets\AssignExecutorWidget;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
@@ -54,6 +55,14 @@ use yii\widgets\Pjax;
         ]) ?>
     </div>
 <?php } ?>
+<?php if($has_assign_executor){?>
+    <div class="panel-body">
+        <?= AssignExecutorWidget::widget([
+            'task_id' => $task_id,
+        ]) ?>
+    </div>
+<?php } ?>
+
 <div class="panel-footer">
     <div class="form-group">
         <?php if($node_order_status == 'filling'){ ?>
