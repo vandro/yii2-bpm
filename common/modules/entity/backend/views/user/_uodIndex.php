@@ -30,14 +30,14 @@ use common\helpers\ActionColumnHelper;
             [
                 'attribute' => 'organisation_id',
                 'value' => function($model){
-                    return $model->organisation->title;
+                    return !empty($model->organisation)?$model->organisation->title:'';
                 }
             ],
 
             [
                 'attribute' => 'department_id',
                 'value' => function($model){
-                    return $model->department->title;
+                    return !empty($model->department)?$model->department->title:'';
                 }
             ],
 
