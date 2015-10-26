@@ -39,7 +39,7 @@ class NodesViewRoleLinkQuery extends \yii\db\ActiveQuery
     public function active()
     {
         $this->joinWith(['node' => function ($q) {
-            $q->where('process_nodes.order_status IS NOT "last"');
+            $q->where('process_nodes.order_status IS NOT "last"'); // OR process_nodes.order_status IS NOT "approved_last" OR process_nodes.order_status IS NOT "rejected_last"');
         }]);
         return $this;
     }
@@ -47,7 +47,7 @@ class NodesViewRoleLinkQuery extends \yii\db\ActiveQuery
     public function last()
     {
         $this->joinWith(['node' => function ($q) {
-            $q->where('process_nodes.order_status = "last" OR process_nodes.order_status = "approved_last" OR process_nodes.order_status = "rejected_last"');
+            $q->where('process_nodes.order_status = "last"'); // OR process_nodes.order_status = "approved_last" OR process_nodes.order_status = "rejected_last"');
         }]);
         return $this;
     }
