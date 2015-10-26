@@ -23,11 +23,13 @@ class AppAsset extends AssetBundle
 
     public $css = [
         'css/site.css',
-        'css/mega_upload_styles.css'
+        'css/mega_upload_styles.css',
+        'css/vis.min.css',
     ];
     public $js = [
         'js/raphael-min.js',
         'js/uploader.min.js',
+        'js/vis.min.js',
         //'js/graffle.js',
     ];
     public $depends = [

@@ -18,6 +18,12 @@ return [
         'upload' => [
             'class' => 'common\modules\upload\Module',
         ],
+        'log' => [
+            'class' => 'common\modules\log\Module',
+        ],
+        'executor' => [
+            'class' => 'common\modules\executor\Module',
+        ],
     ],
     'components' => [
         'view' => [
