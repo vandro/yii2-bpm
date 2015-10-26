@@ -17,7 +17,7 @@ $this->registerJs(
 
 <div class="row">
     <div class="col-xs-12">
-        <?=Html::dropDownList('executor',null,ArrayHelper::map($executors, 'id', 'username'),[
+        <?=Html::dropDownList('executor',null,ArrayHelper::map($executors, 'id', 'title'),[
             "prompt" => " -- Выполните исполнителя -- ",
             "class" => "form-control",
             "style" => "",

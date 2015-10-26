@@ -42,11 +42,10 @@ class User extends \yii\db\ActiveRecord
         return [
             [['organisation_id', 'department_id', 'status', 'role', 'created_at', 'updated_at'], 'integer'],
             [['username', 'email', 'password_hash', 'status', 'auth_key', 'created_at', 'updated_at'], 'required'],
-            [['username', 'email', 'password_hash', 'password_reset_token', 'account_activation_token'], 'string', 'max' => 255],
+            [['username', 'email', 'password_hash', 'password_reset_token', 'account_activation_token', 'last_name','first_name'], 'string', 'max' => 255],
             [['auth_key'], 'string', 'max' => 32],
             [['username'], 'unique'],
             [['email'], 'unique'],
-            [['password_reset_token'], 'unique']
         ];
     }
 
@@ -59,7 +58,9 @@ class User extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'organisation_id' => Yii::t('app', 'Organisation ID'),
             'department_id' => Yii::t('app', 'Department ID'),
-            'username' => Yii::t('app', 'Username'),
+            'first_name' => Yii::t('app', 'Имя'),
+            'last_name' => Yii::t('app', 'Фамилия'),
+            'username' => Yii::t('app', 'Логин'),
             'email' => Yii::t('app', 'Email'),
             'password_hash' => Yii::t('app', 'Password Hash'),
             'status' => Yii::t('app', 'Status'),
@@ -104,5 +105,14 @@ class User extends \yii\db\ActiveRecord
         }
 
         return false;
+    }
+
+    public function getTitle()
+    {
+        $title = '';
+        if(!empty($this->first_name)) $title .= $this->first_name." ";
+        if(!empty($this->first_name)) $title .= $this->last_name." ";
+        $title .= "(".$this->username.")";
+        return $title;
     }
 }
