@@ -70,7 +70,7 @@ class SystemFieldsHelper
     protected function getSystemCurrentUserName()
     {
         $user = User::findOne(Yii::$app->user->id);
-        return !empty($user)?$user->username:'';
+        return !empty($user)?$user->title:'';
     }
 
     protected function getSystemDate()
