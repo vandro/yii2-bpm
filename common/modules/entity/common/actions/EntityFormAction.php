@@ -83,6 +83,7 @@ class EntityFormAction extends \yii\base\Action
                 'previous_node_id' => !empty($previousNode)?$previousNode->node_id:0,
                 'action_id' => $this->action_id,
                 'has_file_upload' => $action->getHasFileUploads($task->current_node_id),
+                'has_assign_executor' => $action->getHasAssignExecutors($task->current_node_id),
                 'controller' => $this->controller,
             ]);
         }else{
