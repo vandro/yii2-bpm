@@ -46,6 +46,7 @@ class EntityFormAction extends \yii\base\Action
     {
         if($entity->load(Yii::$app->request->post())) {
             $entity = SystemFieldsHelper::setSystemFieldsValue($entity, $action->form);
+            if(empty($entity->task_id))$entity->task_id = $task->id;
             if ($entity->save() && $this->loggingAction($task, $task->currentNode, $action)) {
                 if ($this->setTasksEntitiesLink($this->task_id, $entity->id, $action, $task->currentNode, $this->prevision_node_id)) { // && $action->runHandlers()) {
                     $this->goToNextNode($task, $action, $entity);

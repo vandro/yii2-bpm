@@ -60,6 +60,7 @@ class EntityContainer
     {
         $this->columns = array_merge([
                 'id' => Schema::TYPE_PK,
+                'task_id' => Schema::TYPE_INTEGER,
             ],
             $columns
         );
