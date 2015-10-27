@@ -47,6 +47,14 @@ class WidgetFactory extends Component
                 }
             } elseif ($this->field->type == 'TEXT') {
                 return $this->activeForm->field($this->entity, $this->field->code)->textArea();
+            }elseif ($this->field->type == 'DATE') {
+                return $this->activeForm->field($this->entity, $this->field->code)->widget(\yii\jui\DatePicker::classname(), [
+                    'language' => 'ru',
+                    'dateFormat' => 'yyyy-MM-dd',
+                    'options' => [
+                        'class' => 'form-control'
+                    ]
+                ]);
             }
         }else{
             $entityClassName = (new \ReflectionClass($this->entity))->getShortName();
