@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Tabs::widget([
         'items' => [
             [
-                'label' => 'Entity',
+                'label' => 'Process',
                 'content' => DetailView::widget([
                     'model' => $model,
                     'attributes' => [
@@ -53,6 +53,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     'model' => $model,
                 ]),
                 'active' => ($tab == 3),
+            ],
+            [
+                'label' =>'Schema',
+                'content' => $this->render('_nodesSchema', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 4),
             ],
 //            [
 //                'label' =>'Fields',

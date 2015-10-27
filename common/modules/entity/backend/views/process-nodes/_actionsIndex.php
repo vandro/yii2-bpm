@@ -26,16 +26,17 @@ use common\helpers\ActionColumnHelper;
         'dataProvider' => $model->getActionRoleLinksAdp(),
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
+            'id',
             [
                 'attribute' => 'action_id',
                 'value' => function($model){
-                    return $model->action->title;
+                    return !empty($model->action)?$model->action->title:'';
                 }
             ],
             [
                 'attribute' => 'role_id',
                 'value' => function($model){
-                    return $model->role->title;
+                    return !empty($model->role)?$model->role->title:'';
                 }
             ],
             [

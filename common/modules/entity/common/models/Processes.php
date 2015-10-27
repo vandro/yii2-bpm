@@ -69,7 +69,7 @@ class Processes extends \yii\db\ActiveRecord
     public function getJsonNodesArray()
     {
         $arNodes = [];
-
+        $index = 1;
         foreach($this->nodes as $node){
             if($node->order_status == 'last'){
                 $borderWidth = 4;
@@ -105,11 +105,11 @@ class Processes extends \yii\db\ActiveRecord
 
             $arNodes[] = [
                 'id' => $node->id,
-                'label' => $node->id,
+                'label' => $index."/".$node->id,
                 'title' => $node->title,
                 'shape' => $shape,
                 'font' => [
-                    'size' => $size,
+                    'size' => 20, //$size,
                     'color' => '#000000',
                 ],
                 'size' => $size,
@@ -119,6 +119,7 @@ class Processes extends \yii\db\ActiveRecord
                 ],
                 'borderWidth' => $borderWidth,
             ];
+            $index++;
         }
 
         return json_encode($arNodes);
@@ -127,20 +128,24 @@ class Processes extends \yii\db\ActiveRecord
     public function getJsonEdgesArray()
     {
         $arEdges = [];
+        $index = 1;
         foreach($this->nodes as $node){
             foreach($node->actionRoleLinks as $link) {
+                $title = !empty($link->action)?$link->action->title:'';
+                $title = !empty($link->role)?$title."(".$link->role->title.")":$title."()";
                 $arEdges[] = [
-                    'title' => $link->action->title."(".$link->role->title.")",
-                    'label' => $link->id,
+                    'title' => $title,
+                    'label' =>  $index."/".$link->id,
                     'from' => $node->id,
                     'to' => $link->next_node_id,
                     'arrows' => 'to',
                     'length' => 200,
                     'font' => [
-                        'size' => 30,
+                        'size' => 15,
                         'align' => 'bottom'
                     ],
                 ];
+                $index++;
             }
         }
 
