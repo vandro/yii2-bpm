@@ -24,7 +24,7 @@ class EntityTypeClassFactory
         if(class_exists($entityTypeClass)){
             return new $entityTypeClass;
         }else{
-            if(EntityTypeClassGenerator::generateFile($entity_id,self::$namespace,'pdb', Yii::$app->basePath.'/runtime/generated')) {
+            if(EntityTypeClassGenerator::generateFile($entity_id,self::$namespace,$entityType->database->code, Yii::$app->basePath.'/runtime/generated')) {
                 return new $entityTypeClass;
             }
         }

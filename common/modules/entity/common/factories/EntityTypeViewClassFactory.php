@@ -26,7 +26,7 @@ class EntityTypeViewClassFactory
         if(class_exists($entityTypeViewClass)){
             return new $entityTypeViewClass;
         }else{
-            if(EntityTypeViewClassGenerator::generateFile($view_id,self::$namespace,'pdb', Yii::$app->basePath.'/runtime/generated')) {
+            if(EntityTypeViewClassGenerator::generateFile($view_id,self::$namespace,$entityTypeView->entity->database->code, Yii::$app->basePath.'/runtime/generated')) {
                 return new $entityTypeViewClass;
             }
         }

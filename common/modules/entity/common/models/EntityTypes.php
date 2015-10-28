@@ -19,6 +19,7 @@ use yii\helpers\Html;
  * @property string $title
  * @property string $code
  * @property integer $added
+ * @property integer $database_id
  *
  * @property EntityFields[] $entityFields
  * @property EntityFields[] $entityFields0
@@ -59,7 +60,7 @@ class EntityTypes extends \yii\db\ActiveRecord
         return [
             [['title', 'code'], 'required'],
             [['title', 'code'], 'string'],
-            [['added'], 'integer'],
+            [['added', 'database_id'], 'integer'],
             [['code'], 'unique'],
             [['title'], 'unique']
         ];
@@ -75,6 +76,7 @@ class EntityTypes extends \yii\db\ActiveRecord
             'title' => 'Наименования',
             'code' => 'Код',
             'added' => 'Добавленной',
+            'database_id' => 'База данных',
         ];
     }
 
@@ -84,6 +86,14 @@ class EntityTypes extends \yii\db\ActiveRecord
     public function getFields()
     {
         return $this->hasMany(EntityFields::className(), ['entity_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getDatabase()
+    {
+        return $this->hasOne(Databeses::className(), ['id' => 'database_id']);
     }
 
     /**
@@ -292,6 +302,11 @@ class EntityTypes extends \yii\db\ActiveRecord
     public function getForm()
     {
         return $this->forms[0];
+    }
+
+    public function getAllDatabases()
+    {
+        return ArrayHelper::map(Databeses::find()->all(), 'id', 'titleForDD');
     }
 }
 

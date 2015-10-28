@@ -26,7 +26,7 @@ class EntityTypeFormClassFactory
         if(class_exists($entityTypeFormClass)){
             return new $entityTypeFormClass;
         }else{
-            if(EntityTypeFormClassGenerator::generateFile($form_id,self::$namespace,'pdb', Yii::$app->basePath.'/runtime/generated')) {
+            if(EntityTypeFormClassGenerator::generateFile($form_id,self::$namespace,$entityTypeForm->entity->database->code, Yii::$app->basePath.'/runtime/generated')) {
                 return new $entityTypeFormClass;
             }
         }

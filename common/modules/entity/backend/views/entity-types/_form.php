@@ -16,6 +16,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'code')->textInput() ?>
 
+    <?= $form->field($model, 'database_id')->dropDownList($model->getAllDatabases(), ['prompt' => '-- Выбрать --']); ?>
+
     <?php if($model->added) {
         echo $form->field($model, 'added')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Добавить']);
     }?>
