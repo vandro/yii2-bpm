@@ -2,21 +2,20 @@
 /**
  * Author: Avazbek Niyazov
  * Email: avazbe@gmail.com
- * Date: 15.10.2015
- * Time: 15:32
+ * Date: 28.10.2015
+ * Time: 10:32
  */
 namespace common\modules\generator\gridviews;
 
-use common\helpers\DebugHelper;
-use common\modules\entity\common\models\permission\Gridviews;
 use Yii;
-use common\modules\entity\common\models\EntityForms;
+use common\modules\entity\common\models\permission\Gridviews;
 use common\modules\generator\models\AbstractClassGenerator;
 use common\modules\generator\models\ActiveRecordClassGenerator;
 use common\modules\generator\models\ActiveRecordSearchClassGenerator;
 use common\modules\generator\models\ActiveRecordQueryClassGenerator;
 use common\modules\generator\entity\EntityTypeClassGenerator;
 use yii\web\NotFoundHttpException;
+use common\helpers\DebugHelper;
 
 class GridViewClassGenerator extends EntityTypeClassGenerator
 {
@@ -86,10 +85,17 @@ class GridViewClassGenerator extends EntityTypeClassGenerator
         foreach(self::$gridView->gridviewFields as $gridviewField)
         {
             if(!in_array($gridviewField->field->entity->code, $arEntityTypes)) {
-                self::$params[AbstractClassGenerator::SELECTED_ENTITY_TYPES][] = [
-                    AbstractClassGenerator::ENTITY_TYPE_NAME => $gridviewField->field->entity->code,
-                    AbstractClassGenerator::ENTITY_TYPE_JOINS => self::getJoins($gridviewField->field->entity, $arCachedEntityTypes),
-                ];
+                $arJoins = self::getJoins($gridviewField->field->entity, $arCachedEntityTypes);
+                if(!empty($arJoins)) {
+                    self::$params[AbstractClassGenerator::SELECTED_ENTITY_TYPES][] = [
+                        AbstractClassGenerator::ENTITY_TYPE_NAME => $gridviewField->field->entity->code,
+                        AbstractClassGenerator::ENTITY_TYPE_JOINS => $arJoins,
+                    ];
+                }else{
+                    self::$params[AbstractClassGenerator::SELECTED_ENTITY_TYPES][] = [
+                        AbstractClassGenerator::ENTITY_TYPE_NAME => $gridviewField->field->entity->code,
+                    ];
+                }
                 $arEntityTypes[] = $gridviewField->field->entity->code;
             }
         }
@@ -105,7 +111,8 @@ class GridViewClassGenerator extends EntityTypeClassGenerator
                 if($field->dictionary->code == $cachedEntityType->code){
                     $arJoins[] = [
                         AbstractClassGenerator::PROPERTY_NAME => $field->code,
-                        AbstractClassGenerator::ENTITY_TYPE_NAME => $field->dictionary->code,
+                        AbstractClassGenerator::DICTIONARY_NAME => $field->dictionary->code,
+                        AbstractClassGenerator::DICTIONARY_KEY_FIELD_NAME => $field->getSetting("key"),
                     ];
                 }
             }
@@ -124,29 +131,4 @@ class GridViewClassGenerator extends EntityTypeClassGenerator
         }
         return $arEntityTypes;
     }
-
-    protected function setJoins()
-    {
-        $arSelectedEntityTypes = [];
-        foreach(self::$params[AbstractClassGenerator::SELECTED_ENTITY_TYPES] as $selectedEntityType){
-            foreach(self::$gridView->gridviewFields as $gridviewField){
-                if($selectedEntityType[AbstractClassGenerator::ENTITY_TYPE_NAME] != $gridviewField->field->entity->code){
-                    foreach($gridviewField->field->entity->fields as $field){
-                        if(!empty($field->dictionary)){
-                            if($field->dictionary->code == $selectedEntityType[AbstractClassGenerator::ENTITY_TYPE_NAME]){
-                                $selectedEntityType[AbstractClassGenerator::ENTITY_TYPE_JOINS][] = [
-                                    AbstractClassGenerator::PROPERTY_NAME => $field->code,
-                                    AbstractClassGenerator::ENTITY_TYPE_NAME => $field->dictionary->code,
-                                ];
-                                $arSelectedEntityTypes[] = $selectedEntityType;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        self::$params[AbstractClassGenerator::SELECTED_ENTITY_TYPES] = $arSelectedEntityTypes;
-    }
-
 }
