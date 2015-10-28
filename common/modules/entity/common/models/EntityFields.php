@@ -147,4 +147,16 @@ class EntityFields extends \yii\db\ActiveRecord
         }
 
     }
+
+    public function getSetting($settingsName)
+    {
+        $settings = json_decode($this->settings, true);
+        if(is_array($settings) && !empty($settings)){
+            if(isset($settings[$settingsName])){
+                return $settings[$settingsName];
+            }
+        }
+
+        return false;
+    }
 }
