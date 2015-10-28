@@ -150,7 +150,7 @@ class EntityFields extends \yii\db\ActiveRecord
 
     public function getSetting($settingsName)
     {
-        $settings = json_decode($this->settings, true);
+        $settings = json_decode($this->options, true);
         if(is_array($settings) && !empty($settings)){
             if(isset($settings[$settingsName])){
                 return $settings[$settingsName];
