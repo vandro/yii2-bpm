@@ -47,6 +47,7 @@ AppAsset::register($this);
                 ['label' => 'EPIGU Services', 'url' => ['/epigu/epigu-service/index']],
                 ['label' => 'Integration', 'url' => ['/epigu/integration-actions/index']],
                 ['label' => 'Handlers', 'url' => ['/entity/handlers/index']],
+                ['label' => 'Databases', 'url' => ['/entity/databases/index']],
             ]
         ];
         $menuItems[] = ['label' => 'Users', 'url' => ['/entity/user/index']];
