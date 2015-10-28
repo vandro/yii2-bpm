@@ -9,13 +9,14 @@ namespace common\modules\generator\gridviews;
 
 use Yii;
 use common\modules\entity\common\models\permission\Gridviews;
-use common\modules\generator\models\AbstractClassGenerator;
+use common\modules\generator\models\GridViewActiveRecordClassGenerator;
 use common\modules\generator\models\ActiveRecordClassGenerator;
 use common\modules\generator\models\ActiveRecordSearchClassGenerator;
 use common\modules\generator\models\ActiveRecordQueryClassGenerator;
 use common\modules\generator\entity\EntityTypeClassGenerator;
 use yii\web\NotFoundHttpException;
 use common\helpers\DebugHelper;
+use common\modules\generator\models\AbstractClassGenerator;
 
 class GridViewClassGenerator extends EntityTypeClassGenerator
 {
@@ -33,7 +34,16 @@ class GridViewClassGenerator extends EntityTypeClassGenerator
         self::setClassFileLocationPath($fileLocationPath);
         self::setSelectFields();
         self::setSelectEntityTypes();
+        self::setTableName();
+        self::setPropertyValidationRules([
+            'required' => '\common\modules\generator\rules\ActiveRecordRequiredRuleGenerator',
+            'string' => '\common\modules\generator\rules\ActiveRecordStringRuleGenerator',
+            'integer' => '\common\modules\generator\rules\ActiveRecordIntegerRuleGenerator',
+            'email' => '\common\modules\generator\rules\ActiveRecordEmailRuleGenerator',
+        ]);
 
+        $activeRecordGenerator = new GridViewActiveRecordClassGenerator(self::$params);
+        $activeRecordGenerator->generateClassFile();
         return static::$params;
     }
 
@@ -56,6 +66,16 @@ class GridViewClassGenerator extends EntityTypeClassGenerator
         self::$params[AbstractClassGenerator::ACTIVE_QUERY_CLASS_NAME] = 'GridViewQuery'.self::$gridView->id;
     }
 
+    protected function setTableName()
+    {
+        foreach(self::$params[AbstractClassGenerator::SELECTED_ENTITY_TYPES] as $entityType) {
+            if(!isset($entityType[AbstractClassGenerator::ENTITY_TYPE_JOINS])) {
+                self::$params[AbstractClassGenerator::TABLE_NAME] = $entityType[AbstractClassGenerator::ENTITY_TYPE_NAME];
+                self::$params[AbstractClassGenerator::DATABASE_NAME] = $entityType[AbstractClassGenerator::ENTITY_TYPE_DATABASE];
+            }
+        }
+    }
+
     protected function setSelectFields()
     {
         self::$params[AbstractClassGenerator::PROPERTIES] = [];
@@ -63,7 +83,14 @@ class GridViewClassGenerator extends EntityTypeClassGenerator
         {
             $property = [
                 AbstractClassGenerator::PROPERTY_NAME => $gridviewField->field->code,
+                AbstractClassGenerator::PROPERTY_TYPE => self::$types[$gridviewField->field->type],
                 AbstractClassGenerator::ENTITY_TYPE_NAME => $gridviewField->field->entity->code,
+                AbstractClassGenerator::PROPERTY_LABEL => $gridviewField->field->title,
+                AbstractClassGenerator::PROPERTY_VALIDATION_RULES => [
+                    [
+                        AbstractClassGenerator::PROPERTY_VALIDATION_RULE_TYPE => self::$types[$gridviewField->field->type],
+                    ],
+                ]
             ];
 
             if(!empty($gridviewField->field->dictionary)){
@@ -89,11 +116,13 @@ class GridViewClassGenerator extends EntityTypeClassGenerator
                 if(!empty($arJoins)) {
                     self::$params[AbstractClassGenerator::SELECTED_ENTITY_TYPES][] = [
                         AbstractClassGenerator::ENTITY_TYPE_NAME => $gridviewField->field->entity->code,
+                        AbstractClassGenerator::ENTITY_TYPE_DATABASE => $gridviewField->field->entity->database->code,
                         AbstractClassGenerator::ENTITY_TYPE_JOINS => $arJoins,
                     ];
                 }else{
                     self::$params[AbstractClassGenerator::SELECTED_ENTITY_TYPES][] = [
                         AbstractClassGenerator::ENTITY_TYPE_NAME => $gridviewField->field->entity->code,
+                        AbstractClassGenerator::ENTITY_TYPE_DATABASE => $gridviewField->field->entity->database->code,
                     ];
                 }
                 $arEntityTypes[] = $gridviewField->field->entity->code;
