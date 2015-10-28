@@ -58,12 +58,21 @@ class EntityContainer
 
     public function setColumns($columns)
     {
-        $this->columns = array_merge([
+        if(!isset($columns['task_id'])) {
+            $this->columns = array_merge([
                 'id' => Schema::TYPE_PK,
                 'task_id' => Schema::TYPE_INTEGER,
             ],
-            $columns
-        );
+                $columns
+            );
+        }else{
+            $this->columns = array_merge([
+                'id' => Schema::TYPE_PK,
+            ],
+                $columns
+            );
+        }
+
     }
 
     public function addColumn($field)
