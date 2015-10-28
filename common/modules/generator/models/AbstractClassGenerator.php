@@ -46,6 +46,14 @@ abstract class AbstractClassGenerator
     const RENDER_MODE = 'RENDER_MODE';
     const RENDER_MODE_VALUE = 'RENDER_MODE_VALUE'; // Эту константу необходимо переопределить в дочернем классе
 
+    // Для GridView
+    const ENTITY_TYPE_NAME = 'ENTITY_TYPE_NAME';
+    const ENTITY_TYPE_JOINS = 'ENTITY_TYPE_JOINS';
+    const SELECTED_ENTITY_TYPES = 'SELECTED_ENTITY_TYPES';
+    const DICTIONARY_NAME = 'DICTIONARY_NAME';
+    const DICTIONARY_KEY_FIELD_NAME = 'DICTIONARY_KEY_FIELD_NAME';
+    const DICTIONARY_VALUE_FIELD_NAME = 'DICTIONARY_VALUE_FIELD_NAME';
+
     protected $params;
     protected $classString;
 
