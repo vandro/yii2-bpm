@@ -22,6 +22,9 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
             'yii\\db\\ActiveRecord',
             'yii\\data\\ActiveDataProvider',
             'yii\\grid\\GridView',
+            'yii\\helpers\\Html',
+            'yii\\helpers\\ArrayHelper',
+            'common\\modules\\entity\\common\\factories\\EntityTypeClassFactory',
         ];
         $arParams[self::EXTEND_CLASS_NAME] = 'ActiveRecord';
         $arParams[self::CLASS_NAME] = $params[self::CLASS_NAME];
@@ -51,6 +54,7 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
     protected function addInClass()
     {
         $this->addPropertyInitialisation();
+        $this->addGetInstance();
         $this->addTableName();
         $this->addGetDb();
         $this->addRules();
@@ -58,7 +62,7 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->addSearch();
         $this->addGetColumns();
         $this->addRender();
-//        $this->addRelationMethods();
+        $this->addRelationMethods();
 //        $this->addFind();
     }
 
@@ -68,12 +72,38 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
 
     protected function addPropertyInitialisation()
     {
+        $this->classString .= "    public static \$instance;\n";
         foreach($this->params[self::PROPERTIES] as $property) {
             if($this->hasJoins($property[self::ENTITY_TYPE_NAME])) {
                 $this->classString .= "    public $" . $property[self::PROPERTY_NAME] . ";\n";
             }
         }
         $this->classString .= "    \n";
+    }
+
+    /*public static function getInstance()
+    {
+        if(empty(static::instance)) {
+            $className = self::className();
+            static::instance = new $className;
+        }
+
+        return static::instance;
+    }*/
+
+    protected function addGetInstance()
+    {
+        $this->classString .= "    /**\n";
+        $this->classString .= "     * @inheritdoc\n";
+        $this->classString .= "     */\n";
+        $this->classString .= "    public static function getInstance()\n";
+        $this->classString .= "    {\n";
+        $this->classString .= "         if(empty(static::\$instance)) {\n";
+        $this->classString .= "             \$className = self::className();\n";
+        $this->classString .= "             static::\$instance = new \$className;\n";
+        $this->classString .= "         }\n";
+        $this->classString .= "         return static::\$instance;\n";
+        $this->classString .= "    }\n\n";
     }
 
     /**
@@ -219,7 +249,21 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
                 $this->classString .= "     */\n";
                 $this->classString .= "    public function get" . $relation[self::RELATION_METHOD_NAME] . "()\n";
                 $this->classString .= "    {\n";
+                $this->classString .= "         if(!class_exists('" . $relation[self::RELATION_TARGET_CLASS] . "')) {\n";
+                $this->classString .= "             EntityTypeClassFactory::get(" . $relation[self::ENTITY_TYPE_ID] . ");\n";
+                $this->classString .= "         }\n";
                 $this->classString .= "         return \$this->" . $relation[self::RELATION_TYPE] . "(" . $relation[self::RELATION_TARGET_CLASS] . "::className(),['" . $relation[self::RELATION_TARGET_KEY] . "' => '" . $relation[self::RELATION_FOREIGN_KEY] . "']);\n";
+                $this->classString .= "    }\n\n";
+
+                $this->classString .= "    /**\n";
+                $this->classString .= "     * @return array ['key' => 'value'].\n";
+                $this->classString .= "     */\n";
+                $this->classString .= "    public function get" . $relation[self::RELATION_METHOD_NAME] . "s()\n";
+                $this->classString .= "    {\n";
+                $this->classString .= "         if(!class_exists('" . $relation[self::RELATION_TARGET_CLASS] . "')) {\n";
+                $this->classString .= "             EntityTypeClassFactory::get(" . $relation[self::ENTITY_TYPE_ID] . ");\n";
+                $this->classString .= "         }\n";
+                $this->classString .= "         return ArrayHelper::map(" . $relation[self::RELATION_TARGET_CLASS] . "::find()->all(),'".$relation[self::DICTIONARY_KEY_FIELD_NAME]."','".$relation[self::DICTIONARY_VALUE_FIELD_NAME]."');\n";
                 $this->classString .= "    }\n\n";
             }
         }
@@ -359,13 +403,47 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
     {
         $this->classString .= "    public function getColumns()\n";
         $this->classString .= "    {\n";
+        $this->classString .= "         \$instance = self::getInstance();\n";
         $this->classString .= "         return [\n";
         foreach($this->params[self::PROPERTIES] as $property) {
-            $this->classString .= "             '". $property[self::PROPERTY_NAME] . "',\n";
+            if(isset($property[self::DICTIONARY_NAME])){
+                $this->classString .= "             [\n";
+                $this->classString .= "                 'attribute' => '" . $property[self::PROPERTY_NAME] . "',\n";
+                $this->classString .= "                 'filter' => Html::activeDropDownList(\n";
+                $this->classString .= "                     \$instance,\n";
+                $this->classString .= "                     '" . $property[self::PROPERTY_NAME] . "',\n";
+                $this->classString .= "                     \$instance->" . $property[self::RELATION] . "s,\n";
+                $this->classString .= "                     [\n";
+                $this->classString .= "                         'prompt' => ' -- Выберите --',\n";
+                $this->classString .= "                         'class' => 'form-control',\n";
+                $this->classString .= "                         'style' => 'width: 100%;'\n";
+                $this->classString .= "                     ]\n";
+                $this->classString .= "                 ),\n";
+                $this->classString .= "                 'value' => function(\$model){\n";
+                $this->classString .= "                     return !empty(\$model->" . $property[self::RELATION] . ")?\$model->" . $property[self::RELATION] . "->".$property[self::DICTIONARY_VALUE_FIELD_NAME].":'Нет';\n";
+                $this->classString .= "                 },\n";
+                $this->classString .= "             ],\n";
+            }else {
+                $this->classString .= "             '" . $property[self::PROPERTY_NAME] . "',\n";
+            }
         }
         $this->classString .= "         ];\n";
         $this->classString .= "    }\n\n";
     }
+
+    /*public function getSomeFilter()
+    {
+        return Html::activeDropDownList(
+            $gridView,
+            'language_id',
+            ArrayHelper::map($gridView->languages::find()->all(),'id','title'),
+            [
+                'prompt' => ' -- Выберите --',
+                'class' => 'form-control',
+                'style'=>'width: 100%;'
+            ]
+        );
+    }*/
 
     /*public static function render()
     {
@@ -382,8 +460,9 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
     {
         $this->classString .= "    public static function render()\n";
         $this->classString .= "    {\n";
-        $this->classString .= "         \$className = self::className();\n";
-        $this->classString .= "         \$gridView = new \$className;\n";
+//        $this->classString .= "         \$className = self::className();\n";
+//        $this->classString .= "         \$gridView = \$className::getInstance();\n";
+        $this->classString .= "         \$gridView = static::getInstance();\n";
         $this->classString .= "         return GridView::widget([\n";
         $this->classString .= "             'dataProvider' => \$gridView->search(Yii::\$app->request->queryParams),\n";
         $this->classString .= "             'filterModel' => \$gridView,\n";

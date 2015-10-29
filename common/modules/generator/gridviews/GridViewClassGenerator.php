@@ -79,12 +79,14 @@ class GridViewClassGenerator extends EntityTypeClassGenerator
     protected function setSelectFields()
     {
         self::$params[AbstractClassGenerator::PROPERTIES] = [];
+        self::$params[AbstractClassGenerator::RELATIONS] = [];
         foreach(self::$gridView->gridviewFields as $gridviewField)
         {
             $property = [
                 AbstractClassGenerator::PROPERTY_NAME => $gridviewField->field->code,
                 AbstractClassGenerator::PROPERTY_TYPE => self::$types[$gridviewField->field->type],
                 AbstractClassGenerator::ENTITY_TYPE_NAME => $gridviewField->field->entity->code,
+                AbstractClassGenerator::ENTITY_TYPE_ID => $gridviewField->field->entity->id,
                 AbstractClassGenerator::PROPERTY_LABEL => $gridviewField->field->title,
                 AbstractClassGenerator::PROPERTY_VALIDATION_RULES => [
                     [
@@ -97,6 +99,22 @@ class GridViewClassGenerator extends EntityTypeClassGenerator
                 $property[AbstractClassGenerator::DICTIONARY_NAME] = $gridviewField->field->dictionary->code;
                 $property[AbstractClassGenerator::DICTIONARY_KEY_FIELD_NAME] = $gridviewField->field->getSetting("key");
                 $property[AbstractClassGenerator::DICTIONARY_VALUE_FIELD_NAME] = $gridviewField->field->getSetting("value");
+                $property[AbstractClassGenerator::RELATION] = lcfirst(self::getMethodsName($gridviewField->field->code));
+
+                $relation = [
+                    AbstractClassGenerator::RELATION_METHOD_NAME => self::getMethodsName($gridviewField->field->code),
+                    AbstractClassGenerator::ENTITY_TYPE_ID => $gridviewField->field->dictionary->id,
+                    AbstractClassGenerator::RELATION_TYPE => AbstractClassGenerator::RELATION_TYPE_HAS_ONE,
+                    AbstractClassGenerator::RELATION_FOREIGN_KEY => $gridviewField->field->code,
+                    AbstractClassGenerator::RELATION_TARGET_KEY => 'id',
+                    AbstractClassGenerator::RELATION_TARGET_CLASS => self::getName($gridviewField->field->dictionary->code),
+                    AbstractClassGenerator::RELATION_TABLE_NAME => $gridviewField->field->dictionary->code,
+                    AbstractClassGenerator::DICTIONARY_KEY_FIELD_NAME => $gridviewField->field->getSetting("key"),
+                    AbstractClassGenerator::DICTIONARY_VALUE_FIELD_NAME => $gridviewField->field->getSetting("value"),
+                ];
+                if (!in_array($relation, self::$params[AbstractClassGenerator::RELATIONS])) {
+                    self::$params[AbstractClassGenerator::RELATIONS][] = $relation;
+                }
             }
 
             self::$params[AbstractClassGenerator::PROPERTIES][] = $property;
