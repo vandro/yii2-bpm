@@ -47,6 +47,7 @@ abstract class AbstractClassGenerator
     const RENDER_MODE_VALUE = 'RENDER_MODE_VALUE'; // Эту константу необходимо переопределить в дочернем классе
 
     // Для GridView
+    const ENTITY_TYPE_ID = 'ENTITY_TYPE_ID';
     const ENTITY_TYPE_NAME = 'ENTITY_TYPE_NAME';
     const ENTITY_TYPE_JOINS = 'ENTITY_TYPE_JOINS';
     const ENTITY_TYPE_DATABASE = 'ENTITY_TYPE_DATABASE';
