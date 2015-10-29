@@ -18,6 +18,10 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'database_id')->dropDownList($model->getAllDatabases(), ['prompt' => '-- Выбрать --']); ?>
 
+    <?= $form->field($model, 'type_id')->dropDownList($model->getAllTypes(), ['prompt' => '-- Выбрать --']); ?>
+
+    <?=  $form->field($model, 'published')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Опубликовать']); ?>
+
     <?php if($model->added) {
         echo $form->field($model, 'added')->dropDownList([0 => 'Нет', 1 => 'Да'], ['prompt' => 'Добавить']);
     }?>

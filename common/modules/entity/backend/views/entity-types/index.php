@@ -36,6 +36,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return !empty($model->database)?$model->database->titleForDD:'';
                 }
             ],
+            [
+                'attribute' => 'type_id',
+                'value' => function($model){
+                    return !empty($model->type)?$model->type->title:'';
+                }
+            ],
 
 //            ['class' => 'yii\grid\ActionColumn'],
             [

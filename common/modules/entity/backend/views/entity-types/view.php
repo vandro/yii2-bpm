@@ -43,8 +43,16 @@ $this->params['breadcrumbs'][] = $this->title;
                             'value' => !empty($model->database)? $model->database->title.' ('.$model->database->code.')':'Нет',
                         ],
                         [
+                            'attribute' => 'type_id',
+                            'value' => !empty($model->type)? $model->type->title:'Нет',
+                        ],
+                        [
                             'attribute' => 'added',
                             'value' => $model->added == 1?'Да':'Нет',
+                        ],
+                        [
+                            'attribute' => 'published',
+                            'value' => $model->published == 1?'Да':'Нет',
                         ],
                     ],
                 ]),

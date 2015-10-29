@@ -18,8 +18,8 @@ class EntityTypesSearch extends EntityTypes
     public function rules()
     {
         return [
-            [['id'], 'integer'],
-            [['title', 'code'], 'safe'],
+            [['id','published','type_id','database_id'], 'integer'],
+            [['title', 'code', ], 'safe'],
         ];
     }
 

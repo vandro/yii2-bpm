@@ -60,7 +60,7 @@ class EntityTypes extends \yii\db\ActiveRecord
         return [
             [['title', 'code'], 'required'],
             [['title', 'code'], 'string'],
-            [['added', 'database_id'], 'integer'],
+            [['added', 'database_id', 'type_id', 'published'], 'integer'],
             [['code'], 'unique'],
             [['title'], 'unique']
         ];
@@ -77,6 +77,8 @@ class EntityTypes extends \yii\db\ActiveRecord
             'code' => 'Код',
             'added' => 'Добавленной',
             'database_id' => 'База данных',
+            'type_id' => 'Тип сущности',
+            'published' => 'Опубликован',
         ];
     }
 
@@ -94,6 +96,14 @@ class EntityTypes extends \yii\db\ActiveRecord
     public function getDatabase()
     {
         return $this->hasOne(Databeses::className(), ['id' => 'database_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getType()
+    {
+        return $this->hasOne(EntityTypeTypes::className(), ['id' => 'type_id']);
     }
 
     /**
@@ -307,6 +317,11 @@ class EntityTypes extends \yii\db\ActiveRecord
     public function getAllDatabases()
     {
         return ArrayHelper::map(Databeses::find()->all(), 'id', 'titleForDD');
+    }
+
+    public function getAllTypes()
+    {
+        return ArrayHelper::map(EntityTypeTypes::find()->all(), 'id', 'title');
     }
 }
 
