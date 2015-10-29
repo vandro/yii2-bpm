@@ -58,6 +58,11 @@ class Gridviews extends \yii\db\ActiveRecord
         return $this->hasMany(GridviewFields::className(), ['gridview_id' => 'id']);
     }
 
+    public function getFields()
+    {
+        return $this->hasMany(GridviewFields::className(), ['gridview_id' => 'id']);
+    }
+
     /**
      * Creates data provider instance with search query applied
      *
