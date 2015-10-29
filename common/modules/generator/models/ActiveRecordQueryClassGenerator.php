@@ -98,20 +98,25 @@ class ActiveRecordQueryClassGenerator extends AbstractClassGenerator
 
     protected function addPropertyMethods()
     {
+        $arControlDuplicates = [];
         if (isset($this->params[self::PROPERTIES])) {
             foreach ($this->params[self::PROPERTIES] as $property) {
-                $this->classString .= "    /**\n";
-                $this->classString .= "     * @return \\yii\\db\\ActiveQuery.\n";
-                $this->classString .= "     */\n";
-                $this->classString .= "    public function " . $property[self::PROPERTY_NAME] . "($" . $property[self::PROPERTY_NAME] . ")\n";
-                $this->classString .= "    {\n";
-                if($property[self::PROPERTY_TYPE] == 'string'){
-                    $this->classString .= "         \$this->andWhere(['like','" . $property[self::PROPERTY_NAME] . "', $" . $property[self::PROPERTY_NAME] . "]);\n";
-                }else {
-                    $this->classString .= "         \$this->andWhere(['" . $property[self::PROPERTY_NAME] . "' => $" . $property[self::PROPERTY_NAME] . "]);\n";
+                if(!in_array($property[self::PROPERTY_NAME], $arControlDuplicates)) {
+                    $this->classString .= "    /**\n";
+                    $this->classString .= "     * @return \\yii\\db\\ActiveQuery.\n";
+                    $this->classString .= "     */\n";
+                    $this->classString .= "    public function " . $property[self::PROPERTY_NAME] . "($" . $property[self::PROPERTY_NAME] . ")\n";
+                    $this->classString .= "    {\n";
+                    if ($property[self::PROPERTY_TYPE] == 'string') {
+                        $this->classString .= "         \$this->andWhere(['like','" . $property[self::PROPERTY_NAME] . "', $" . $property[self::PROPERTY_NAME] . "]);\n";
+                    } else {
+                        $this->classString .= "         \$this->andWhere(['" . $property[self::PROPERTY_NAME] . "' => $" . $property[self::PROPERTY_NAME] . "]);\n";
+                    }
+                    $this->classString .= "         return \$this;\n";
+                    $this->classString .= "    }\n\n";
+
+                    $arControlDuplicates[] = $property[self::PROPERTY_NAME];
                 }
-                $this->classString .= "         return \$this;\n";
-                $this->classString .= "    }\n\n";
             }
         }
     }
