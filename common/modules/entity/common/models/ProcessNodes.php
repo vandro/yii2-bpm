@@ -310,10 +310,20 @@ class ProcessNodes extends \yii\db\ActiveRecord
         $items = [];
         $user = User::findOne(Yii::$app->user->id);
 
-        foreach ($this->actions as $action) {
-            //if($user->hasActionAccess($action, $this)) {
-                $items[] = ['label' => $action->title, 'url' => Yii::$app->getUrlManager()->createUrl([Config::MODULE_NAME . '/actions-cart/form', 'id' => $action->id, 'task_id' => $task->id])];
-            //}
+//        foreach ($this->actions as $action) {
+//            //if($user->hasActionAccess($action, $this)) {
+//                $items[] = ['label' => $action->title, 'url' => Yii::$app->getUrlManager()->createUrl([Config::MODULE_NAME . '/actions-cart/form', 'id' => $action->id, 'task_id' => $task->id])];
+//            //}
+//        }
+
+        foreach ($this->actionRoleLinks as $link) {
+            if($link->hasAssignedNode()) {
+                if(!empty($task->assignedTo)) {
+                    $items[] = ['label' => $link->action->title, 'url' => Yii::$app->getUrlManager()->createUrl([Config::MODULE_NAME . '/actions-cart/form', 'id' => $link->action->id, 'task_id' => $task->id])];
+                }
+            }else{
+                $items[] = ['label' => $link->action->title, 'url' => Yii::$app->getUrlManager()->createUrl([Config::MODULE_NAME . '/actions-cart/form', 'id' => $link->action->id, 'task_id' => $task->id])];
+            }
         }
 
 

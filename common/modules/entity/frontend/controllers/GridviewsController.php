@@ -2,6 +2,7 @@
 
 namespace common\modules\entity\frontend\controllers;
 
+use common\modules\generator\gridviews\GridViewClassGenerator;
 use Yii;
 use common\modules\entity\common\models\permission\Gridviews;
 use common\modules\entity\common\models\permission\GridviewsSearch;
@@ -46,14 +47,16 @@ class GridviewsController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id, $tab = 1)
+    public function actionView($id, $tab = 2)
     {
         $actionName = Yii::$app->cache->get('action'.Yii::$app->user->id);
         $actionName = !empty($actionName)?$actionName:'active';
+        $gridView = GridViewClassGenerator::generateFile($id,'frontend\runtime\generated','pdb', Yii::$app->basePath.'/runtime/generated');
 
         return $this->render('view', [
             'model' => $this->findModel($id),
             //'actionName' => Yii::$app->request->get('action'),
+            'gridView' => $gridView,
             'tab' => $tab,
             'actionName' => $actionName,
         ]);

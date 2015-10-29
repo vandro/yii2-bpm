@@ -151,5 +151,16 @@ class NodeActionRoleLink extends \yii\db\ActiveRecord
         return !empty($message)?$message->{$this->getSetting('message-field')}:false;
     }
 
+    public function hasAssignedNode()
+    {
+        foreach($this->nextNode->viewRoleLinks as $link){
+            foreach($link->role->rights as $right) {
+                if ($right->code == 'assigned'){
+                    return true;
+                }
+            }
+        }
 
+        return false;
+    }
 }

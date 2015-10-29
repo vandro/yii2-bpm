@@ -34,14 +34,14 @@ class GridviewFieldsController extends Controller
     public function actions()
     {
         return [
-            'create' => [
-                'class' => CreateAction::className(),
-                'parent_id' => Yii::$app->request->get('parent_id'),
-                'tab' => 2,
-                'redirect_url' => 'gridviews/view',
-                'modelClass' => GridviewFields::className(),
-                'parent_id_filed' => 'gridview_id',
-            ],
+//            'create' => [
+//                'class' => CreateAction::className(),
+//                'parent_id' => Yii::$app->request->get('parent_id'),
+//                'tab' => 2,
+//                'redirect_url' => 'gridviews/view',
+//                'modelClass' => GridviewFields::className(),
+//                'parent_id_filed' => 'gridview_id',
+//            ],
             'update' => [
                 'class' => UpdateAction::className(),
                 'id' => Yii::$app->request->get('id'),
@@ -93,18 +93,22 @@ class GridviewFieldsController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreate($parent_id)
     {
         $model = new GridviewFields();
-        $model->order = 100;
+        $model->gridview_id = $parent_id;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+        if ($model->load(Yii::$app->request->post())) {
+            if(empty($model->order))  $model->order = 100;
+            if ($model->save()) {
+                return $this->redirect(['gridviews/view', 'id' => $model->gridview_id]);
+            }
         }
+
+        return $this->render('create', [
+            'model' => $model,
+        ]);
+
     }
 
     /**

@@ -87,7 +87,7 @@ class GridviewFields extends \yii\db\ActiveRecord
 
     public function getAllEntityTypes()
     {
-        return ArrayHelper::map(EntityTypes::find()->all(), 'id', 'title');
+        return ArrayHelper::map(EntityTypes::find()->where(['published' => 1])->andWhere(['in', 'type_id', [2,3]])->all(), 'id', 'title');
     }
 
     public function getAllEntityTypeFields()

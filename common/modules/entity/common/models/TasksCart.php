@@ -73,6 +73,22 @@ class TasksCart extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
+    public function getAuthor()
+    {
+        return $this->hasOne(User::className(), ['id' => 'author_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getAssignedTo()
+    {
+        return $this->hasOne(User::className(), ['id' => 'assigned_to_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
     public function getProcess()
     {
         return $this->hasOne(Processes::className(), ['id' => 'process_id']);
