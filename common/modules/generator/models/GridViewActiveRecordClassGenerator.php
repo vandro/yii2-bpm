@@ -7,11 +7,12 @@
  */
 namespace common\modules\generator\models;
 
+use common\helpers\DebugHelper;
 use Yii;
 
 class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
 {
-    const RENDER_MODE_VALUE = 'GRID_VIEW_ACTIVE_RECORD_MODE';
+    const RENDER_MODE_VALUE = 'ACTIVE_RECORD_SEARCH_MODE';
 
     public function __construct($params)
     {
@@ -19,6 +20,8 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $arParams[self::USED_CLASSES] = [
             'Yii',
             'yii\\db\\ActiveRecord',
+            'yii\\data\\ActiveDataProvider',
+            'yii\\grid\\GridView',
         ];
         $arParams[self::EXTEND_CLASS_NAME] = 'ActiveRecord';
         $arParams[self::CLASS_NAME] = $params[self::CLASS_NAME];
@@ -47,17 +50,31 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
 
     protected function addInClass()
     {
+        $this->addPropertyInitialisation();
         $this->addTableName();
         $this->addGetDb();
         $this->addRules();
-//        $this->addAttributeLabels();
+        $this->addAttributeLabels();
+        $this->addSearch();
+        $this->addGetColumns();
+        $this->addRender();
 //        $this->addRelationMethods();
-//        $this->addGetSearch();
-//        $this->addGetSearchByTaskId();
-//        $this->addGetSearchModel();
 //        $this->addFind();
     }
 
+    /*public $title;
+    public $language_id;
+    public $language;*/
+
+    protected function addPropertyInitialisation()
+    {
+        foreach($this->params[self::PROPERTIES] as $property) {
+            if($this->hasJoins($property[self::ENTITY_TYPE_NAME])) {
+                $this->classString .= "    public $" . $property[self::PROPERTY_NAME] . ";\n";
+            }
+        }
+        $this->classString .= "    \n";
+    }
 
     /**
      * @inheritdoc
@@ -190,101 +207,10 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
         }
     }
 
-    /**
-     * @inheritdoc
-     * @return CitiesQuery the active query used by this AR class.
-     *
-    public static function search()
-    {
-        $searchModel = new CitiesSearch();
-        return $searchModel->search($this->attributes);
-    }*/
 
-    protected function addGetSearch()
-    {
-        if(isset($this->params[self::ACTIVE_QUERY_CLASS_NAME])) {
-            $this->classString .= "    /**\n";
-            $this->classString .= "     * @inheritdoc\n";
-            $this->classString .= "     * @return ActiveDataProvider class object.\n";
-            $this->classString .= "     */\n";
-            $this->classString .= "    public function search(\$params = null, \$pageSize = null)\n";
-            $this->classString .= "    {\n";
-            $this->classString .= "         \$searchModel = new ".$this->params[self::CLASS_NAME]."Search;\n";
-            $this->classString .= "         if(empty(\$params)){\n";
-            $this->classString .= "             return \$searchModel->searchLink(\$this->attributes, \$pageSize);\n";
-            $this->classString .= "         }else{\n";
-            $this->classString .= "             return \$searchModel->search(\$params, \$pageSize);\n";
-            $this->classString .= "         }\n";
-            $this->classString .= "    }\n\n";
-        }
-    }
-
-    /**
-     * @inheritdoc
-     * @return CitiesQuery the active query used by this AR class.
-     *
-    public static function search()
-    {
-    $searchModel = new CitiesSearch();
-    return $searchModel->search($this->attributes);
-    }*/
-
-    protected function addGetSearchByTaskId()
-    {
-        if(isset($this->params[self::ACTIVE_QUERY_CLASS_NAME])) {
-            $this->classString .= "    /**\n";
-            $this->classString .= "     * @inheritdoc\n";
-            $this->classString .= "     * @return ActiveDataProvider class object.\n";
-            $this->classString .= "     */\n";
-            $this->classString .= "    public function searchByTaskId(\$task_id, \$pageSize = null)\n";
-            $this->classString .= "    {\n";
-            $this->classString .= "         \$searchModel = new ".$this->params[self::CLASS_NAME]."Search;\n";
-            $this->classString .= "         return \$searchModel->searchLink(['system_task_id' => \$task_id], \$pageSize);\n";
-            $this->classString .= "    }\n\n";
-        }
-    }
-
-    /**
-     * @inheritdoc
-     * @return CitiesQuery the active query used by this AR class.
-     *
-    public static function searchModel()
-    {
-        $searchModel = new CitiesSearch();
-        return $searchModel->search($this->attributes);
-    }*/
-
-    protected function addGetSearchModel()
-    {
-        if(isset($this->params[self::ACTIVE_QUERY_CLASS_NAME])) {
-            $this->classString .= "    /**\n";
-            $this->classString .= "     * @inheritdoc\n";
-            $this->classString .= "     * @return ".$this->params[self::CLASS_NAME]."Search class object.\n";
-            $this->classString .= "     */\n";
-            $this->classString .= "    public function searchModel()\n";
-            $this->classString .= "    {\n";
-            $this->classString .= "         \$searchModel = new ".$this->params[self::CLASS_NAME]."Search;\n";
-            $this->classString .= "         return \$searchModel;\n";
-            $this->classString .= "    }\n\n";
-        }
-    }
 
     protected function addRelationMethods()
     {
-//        if(isset($this->params[self::PROPERTIES])) {
-//            foreach ($this->params[self::PROPERTIES] as $property) {
-//                if (isset($property[self::RELATION]) && !empty($property[self::RELATION])) {
-//                    $relation = $property[self::RELATION];
-//                    $this->classString .= "    /**\n";
-//                    $this->classString .= "     * @return \\yii\\db\\ActiveQuery.\n";
-//                    $this->classString .= "     */\n";
-//                    $this->classString .= "    public function get" . $relation[self::RELATION_METHOD_NAME] . "()\n";
-//                    $this->classString .= "    {\n";
-//                    $this->classString .= "         return \$this->" . $relation[self::RELATION_TYPE] . "(" . $relation[self::RELATION_TARGET_CLASS] . "::className(),['" . $relation[self::RELATION_TARGET_KEY] . "' => '" . $relation[self::RELATION_FOREIGN_KEY] . "']);\n";
-//                    $this->classString .= "    }\n\n";
-//                }
-//            }
-//        }
 
         if(isset($this->params[self::RELATIONS]) && !empty($this->params[self::RELATIONS])) {
             foreach ($this->params[self::RELATIONS] as $relation) {
@@ -297,5 +223,195 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
                 $this->classString .= "    }\n\n";
             }
         }
+    }
+
+    /**
+     * Creates data provider instance with search query applied
+     *
+     * @param array $params
+     *
+     * @return ActiveDataProvider
+     *
+    public function search($params, $pageSize = null)
+    {
+        $arDataProvider = [];
+        $query = EntityFields::find();
+        $arDataProvider['query'] = $query;
+        if($pageSize != null) $arDataProvider['pagination'] = ['pageSize' => $pageSize];
+
+        $dataProvider = new ActiveDataProvider($arDataProvider);
+
+        $this->load($params);
+
+        if (!$this->validate()) {
+            return $dataProvider;
+        }
+
+        $query->select([
+            'tasks_cart.id as id',
+            'smi_registration_appeals_reest.smiTitle as title',
+            'smi_registration_appeals_reest_languages.language_id as language_id',
+            'languages.title as language',
+        ]);
+
+        $query->leftJoin('smi_registration_appeals_reest','smi_registration_appeals_reest.task_id = tasks_cart.id');
+        $query->leftJoin('smi_registration_appeals_reest_languages','smi_registration_appeals_reest_languages.smiId = smi_registration_appeals_reest.id');
+        $query->leftJoin('languages','languages.id = smi_registration_appeals_reest_languages.language_id');
+
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'process_id' => $this->process_id,
+            'author_id' => Yii::$app->user->id,
+            'current_node_id' => $this->current_node_id,
+            'created_at' => $this->created_at,
+            'languages.id' => $this->language_id
+        ]);
+
+        $query->andFilterWhere(['like', 'smi_registration_appeals_reest.smiTitle', $this->title]);
+
+        $query->orderBy('id desc');
+
+        return $dataProvider;
+    }*/
+
+    protected function addSearch()
+    {
+        $this->classString .= "    /**\n";
+        $this->classString .= "     * Creates data provider instance with search query applied\n";
+        $this->classString .= "     *\n";
+        $this->classString .= "     * @param array \$params\n";
+        $this->classString .= "     *\n";
+        $this->classString .= "     * @return ActiveDataProvider\n";
+        $this->classString .= "     */\n";
+        $this->classString .= "    public function search(\$params, \$pageSize = null)\n";
+        $this->classString .= "    {\n";
+        $this->classString .= "         \$arDataProvider = [];\n";
+        $this->classString .= "         \$query = static::find();\n";
+        $this->classString .= "         \$arDataProvider['query'] = \$query;\n";
+        $this->classString .= "         if(!empty(\$pageSize)) \$arDataProvider['pagination'] = ['pageSize' => \$pageSize];\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         \$dataProvider = new ActiveDataProvider(\$arDataProvider);\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         \$this->load(\$params);\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         if (!\$this->validate()) {\n";
+        $this->classString .= "             return \$dataProvider;\n";
+        $this->classString .= "         }\n";
+        $this->classString .= "         \n";
+        $this->classString .= "         \$query->select([\n";
+        foreach($this->params[self::PROPERTIES] as $property) {
+            $this->classString .= "             '" .$property[self::ENTITY_TYPE_NAME].".".$property[self::PROPERTY_NAME] . " as ".$property[self::PROPERTY_NAME]."',\n";
+        }
+        $this->classString .= "         ]);\n";
+        $this->classString .= "         \n";
+        foreach($this->params[self::SELECTED_ENTITY_TYPES] as $entityType) {
+            if(isset($entityType[self::ENTITY_TYPE_JOINS]) && !empty($entityType[self::ENTITY_TYPE_JOINS])) {
+                foreach($entityType[self::ENTITY_TYPE_JOINS] as $join) {
+                    $this->classString .= "          \$query->leftJoin('".$entityType[self::ENTITY_TYPE_NAME]."','".$entityType[self::ENTITY_TYPE_NAME].".".$join[self::PROPERTY_NAME]." = ".$join[self::DICTIONARY_NAME].".".$join[self::DICTIONARY_KEY_FIELD_NAME]."');\n";
+                }
+            }
+        }
+        $this->classString .= "         \n";
+        $this->classString .= "         \$query->andFilterWhere([\n";
+        foreach($this->params[self::PROPERTIES] as $property) {
+            if(isset($property[self::PROPERTY_TYPE]) && $property[self::PROPERTY_TYPE] == 'integer') {
+                $this->classString .= "             '" .$property[self::ENTITY_TYPE_NAME].".".$property[self::PROPERTY_NAME] . "' => \$this->" . $property[self::PROPERTY_NAME] . ",\n";
+            }
+        }
+        $this->classString .= "         ]);\n";
+        $this->classString .= "         \n";
+        if($this->hasStringPropertyType()) {
+            $this->classString .= "         \$query\n";
+            foreach ($this->params[self::PROPERTIES] as $property) {
+                if (isset($property[self::PROPERTY_TYPE]) && $property[self::PROPERTY_TYPE] == 'string') {
+                    $this->classString .= "           ->andFilterWhere(['like', '" .$property[self::ENTITY_TYPE_NAME].".". $property[self::PROPERTY_NAME] . "', \$this->" . $property[self::PROPERTY_NAME] . "])\n";
+                }
+            }
+            $this->classString .= "         ;\n";
+        }
+        $this->classString .= "         \n";
+        $this->classString .= "         return \$dataProvider;\n";
+        $this->classString .= "    }\n\n";
+    }
+
+    protected function hasStringPropertyType()
+    {
+        foreach($this->params[self::PROPERTIES] as $property) {
+            if (isset($property[self::PROPERTY_TYPE]) && $property[self::PROPERTY_TYPE] == 'string') {
+                return true;
+            }
+        }
+    }
+
+    /*public function getColumns()
+    {
+        return [
+            'id',
+            'process_id',
+            'author_id',
+            'current_node_id',
+            'created_at',
+            'languages.id',
+        ];
+    }*/
+
+    protected function addGetColumns()
+    {
+        $this->classString .= "    public function getColumns()\n";
+        $this->classString .= "    {\n";
+        $this->classString .= "         return [\n";
+        foreach($this->params[self::PROPERTIES] as $property) {
+            $this->classString .= "             '". $property[self::PROPERTY_NAME] . "',\n";
+        }
+        $this->classString .= "         ];\n";
+        $this->classString .= "    }\n\n";
+    }
+
+    /*public static function render()
+    {
+        $className = self::className();
+        $gridView = new $className;
+        return GridView::widget([
+            'dataProvider' => $gridView->search(Yii::$app->request->queryParams),
+            'filterModel' => $gridView,
+            'columns' => $gridView->columns,
+        ]);
+    }*/
+
+    protected function addRender()
+    {
+        $this->classString .= "    public static function render()\n";
+        $this->classString .= "    {\n";
+        $this->classString .= "         \$className = self::className();\n";
+        $this->classString .= "         \$gridView = new \$className;\n";
+        $this->classString .= "         return GridView::widget([\n";
+        $this->classString .= "             'dataProvider' => \$gridView->search(Yii::\$app->request->queryParams),\n";
+        $this->classString .= "             'filterModel' => \$gridView,\n";
+        $this->classString .= "             'columns' => \$gridView->columns,\n";
+        $this->classString .= "         ]);\n";
+        $this->classString .= "    }\n\n";
+    }
+
+    /*protected function addRender()
+    {
+        $this->classString .= "    public function render()\n";
+        $this->classString .= "    {\n";
+        $this->classString .= "         return GridView::widget([\n";
+        $this->classString .= "             'dataProvider' => \$this->search(Yii::\$app->request->queryParams),\n";
+        $this->classString .= "             'filterModel' => \$this,\n";
+        $this->classString .= "             'columns' => \$this->columns,\n";
+        $this->classString .= "         ]);\n";
+        $this->classString .= "    }\n\n";
+    }*/
+
+    protected function hasJoins($entityTypeName)
+    {
+        foreach($this->params[self::SELECTED_ENTITY_TYPES] as $entityType) {
+            if($entityType[self::ENTITY_TYPE_NAME] ==  $entityTypeName && isset($entityType[self::ENTITY_TYPE_JOINS])){
+                return true;
+            }
+        }
+
+        return false;
     }
 }
