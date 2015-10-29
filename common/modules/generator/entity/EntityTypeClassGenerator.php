@@ -44,6 +44,7 @@ class EntityTypeClassGenerator
             'string' => '\common\modules\generator\rules\ActiveRecordStringRuleGenerator',
             'integer' => '\common\modules\generator\rules\ActiveRecordIntegerRuleGenerator',
             'email' => '\common\modules\generator\rules\ActiveRecordEmailRuleGenerator',
+            'date' => '\common\modules\generator\rules\ActiveRecordDateRuleGenerator',
         ]);
         self::setClassProperties();
         self::setProperties();
