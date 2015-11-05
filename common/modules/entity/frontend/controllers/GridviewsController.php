@@ -2,6 +2,8 @@
 
 namespace common\modules\entity\frontend\controllers;
 
+use common\helpers\DebugHelper;
+use common\modules\entity\common\factories\GridViewClassFactory2;
 use common\modules\generator\gridviews\GridViewClassGenerator;
 use Yii;
 use common\modules\entity\common\models\permission\Gridviews;
@@ -51,12 +53,16 @@ class GridviewsController extends Controller
     {
         $actionName = Yii::$app->cache->get('action'.Yii::$app->user->id);
         $actionName = !empty($actionName)?$actionName:'active';
-        $gridView = GridViewClassGenerator::generateFile($id,'frontend\runtime\generated','pdb', Yii::$app->basePath.'/runtime/generated');
+        //$gridView = GridViewClassFactory::get($id,true);
+        $gridViewParams = GridViewClassFactory2::getParams($id);
+        $gridView = GridViewClassFactory2::get($id);
 
+//        DebugHelper::printSingleObjectAndDie($this->findModel($id));
         return $this->render('view', [
             'model' => $this->findModel($id),
             //'actionName' => Yii::$app->request->get('action'),
             'gridView' => $gridView,
+            'gridViewParams' => $gridViewParams,
             'tab' => $tab,
             'actionName' => $actionName,
         ]);

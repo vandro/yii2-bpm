@@ -9,7 +9,7 @@ namespace common\modules\entity\common\factories;
 
 use common\helpers\DebugHelper;
 use common\modules\entity\common\models\permission\Gridviews;
-use common\modules\generator\gridviews\GridViewClassGenerator;
+use common\modules\generator\gridviews\GridViewClassGenerator2;
 use Yii;
 use common\modules\generator\entity\EntityTypeClassGenerator;
 use common\modules\entity\common\models\EntityTypes;
@@ -17,7 +17,7 @@ use yii\grid\GridView;
 use yii\web\NotFoundHttpException;
 
 
-class GridViewClassFactory
+class GridViewClassFactory2
 {
     protected static $namespace = 'frontend\runtime\generated';
 
@@ -28,7 +28,7 @@ class GridViewClassFactory
         if(class_exists($gridViewClass) && !$generate){
             return $gridViewClass;
         }else{
-            if(GridViewClassGenerator::generateFile($grid_view_id,'frontend\runtime\generated','pdb', Yii::$app->basePath.'/runtime/generated')) {
+            if(GridViewClassGenerator2::generateFile($grid_view_id,'frontend\runtime\generated','pdb', Yii::$app->basePath.'/runtime/generated')) {
                 return $gridViewClass;
             }
         }
@@ -36,7 +36,7 @@ class GridViewClassFactory
 
     public static function getParams($grid_view_id)
     {
-        return GridViewClassGenerator::generateFile($grid_view_id,'frontend\runtime\generated','pdb', Yii::$app->basePath.'/runtime/generated');
+        return GridViewClassGenerator2::generateFile($grid_view_id,'frontend\runtime\generated','pdb', Yii::$app->basePath.'/runtime/generated');
     }
 
     protected static function getGridView($id)
