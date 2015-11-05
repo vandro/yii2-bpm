@@ -21,7 +21,8 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
             'Yii',
             'yii\\db\\ActiveRecord',
             'yii\\data\\ActiveDataProvider',
-            'yii\\grid\\GridView',
+//            'yii\\grid\\GridView',
+            'kartik\\grid\\GridView',
             'yii\\helpers\\Html',
             'yii\\helpers\\ArrayHelper',
             'common\\modules\\entity\\common\\factories\\EntityTypeClassFactory',
@@ -420,6 +421,7 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
                 $this->classString .= "                     ]\n";
                 $this->classString .= "                 ),\n";
                 $this->classString .= "                 'value' => function(\$model){\n";
+//                $this->classString .= "                     return !empty(\$model->" . $property[self::RELATION] . ")?\$model->" . $property[self::RELATION] . "->".$property[self::DICTIONARY_VALUE_FIELD_NAME].":'Нет';\n";
                 $this->classString .= "                     return !empty(\$model->" . $property[self::RELATION] . ")?\$model->" . $property[self::RELATION] . "->".$property[self::DICTIONARY_VALUE_FIELD_NAME].":'Нет';\n";
                 $this->classString .= "                 },\n";
                 $this->classString .= "             ],\n";
@@ -463,11 +465,14 @@ class GridViewActiveRecordClassGenerator extends AbstractClassGenerator
 //        $this->classString .= "         \$className = self::className();\n";
 //        $this->classString .= "         \$gridView = \$className::getInstance();\n";
         $this->classString .= "         \$gridView = static::getInstance();\n";
-        $this->classString .= "         return GridView::widget([\n";
-        $this->classString .= "             'dataProvider' => \$gridView->search(Yii::\$app->request->queryParams),\n";
-        $this->classString .= "             'filterModel' => \$gridView,\n";
-        $this->classString .= "             'columns' => \$gridView->columns,\n";
-        $this->classString .= "         ]);\n";
+        $this->classString .= "         if(!empty(\$gridView->columns)){\n";
+        $this->classString .= "             return GridView::widget([\n";
+        $this->classString .= "                 'dataProvider' => \$gridView->search(Yii::\$app->request->queryParams),\n";
+        $this->classString .= "                 'filterModel' => \$gridView,\n";
+        $this->classString .= "                 'columns' => \$gridView->columns,\n";
+        $this->classString .= "             ]);\n";
+        $this->classString .= "         }\n";
+        $this->classString .= "         return false;\n";
         $this->classString .= "    }\n\n";
     }
 
