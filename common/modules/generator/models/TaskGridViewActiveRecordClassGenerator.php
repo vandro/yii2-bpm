@@ -248,6 +248,7 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
 
     protected function addAttributeLabels()
     {
+        $properties = [];
         $this->classString .= "    /**\n";
         $this->classString .= "     * @inheritdoc\n";
         $this->classString .= "     */\n";
@@ -257,9 +258,15 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         if(isset($this->params[self::PROPERTIES])) {
             foreach ($this->params[self::PROPERTIES] as $property) {
                 if (isset($this->params[self::I18N_MESSAGE_FILE_ALIAS])) {
-                    $this->classString .= "             '" . $property[self::PROPERTY_NAME] . "' => Yii::t('" . $this->params[self::I18N_MESSAGE_FILE_ALIAS] . "', '" . $property[self::PROPERTY_LABEL] . "'),\n";
+                    if(!in_array($property[self::PROPERTY_NAME], $properties)) {
+                        $this->classString .= "             '" . $property[self::PROPERTY_NAME] . "' => Yii::t('" . $this->params[self::I18N_MESSAGE_FILE_ALIAS] . "', '" . $property[self::PROPERTY_LABEL] . "'),\n";
+                        $properties[] = $property[self::PROPERTY_NAME];
+                    }
                 } else {
-                    $this->classString .= "             '" . $property[self::PROPERTY_NAME] . "' => '" . $property[self::PROPERTY_LABEL] . "',\n";
+                    if(!in_array($property[self::PROPERTY_NAME], $properties)) {
+                        $this->classString .= "             '" . $property[self::PROPERTY_NAME] . "' => '" . $property[self::PROPERTY_LABEL] . "',\n";
+                        $properties[] = $property[self::PROPERTY_NAME];
+                    }
                 }
             }
         }
@@ -297,6 +304,7 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "     * @inheritdoc\n";
         $this->classString .= "     */\n";
         $this->classString .= "    public function searchActive(\$params, \$pageSize = null)\n";
+//        $this->classString .= "    public function searchActive()\n";
         $this->classString .= "    {\n";
         $this->classString .= "         \$user = User::find()->where(['id' => Yii::\$app->user->id])->one();\n";
         $this->classString .= "         \n";
@@ -311,8 +319,8 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "             \n";
         $this->classString .= "             \$this->rights(\$user);\n";
         $this->classString .= "             \n";
-//        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
-//        $this->classString .= "             \n";
+        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
+        $this->classString .= "             \n";
         $this->classString .= "         }else{\n";
         $this->classString .= "             \n";
         $this->classString .= "             throw new HttpException(403,'Для открытия данной страницы необходимо войти в систему.');\n";
@@ -326,7 +334,8 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "    /**\n";
         $this->classString .= "     * @inheritdoc\n";
         $this->classString .= "     */\n";
-        $this->classString .= "    public function searchActive(\$params, \$pageSize = null)\n";
+        $this->classString .= "    public function searchInActive(\$params, \$pageSize = null)\n";
+//        $this->classString .= "    public function searchInActive()\n";
         $this->classString .= "    {\n";
         $this->classString .= "         \$user = User::find()->where(['id' => Yii::\$app->user->id])->one();\n";
         $this->classString .= "         \n";
@@ -341,8 +350,8 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "             \n";
         $this->classString .= "             \$this->rights(\$user);\n";
         $this->classString .= "             \n";
-//        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
-//        $this->classString .= "             \n";
+        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
+        $this->classString .= "             \n";
         $this->classString .= "         }else{\n";
         $this->classString .= "             \n";
         $this->classString .= "             throw new HttpException(403,'Для открытия данной страницы необходимо войти в систему.');\n";
@@ -356,7 +365,8 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "    /**\n";
         $this->classString .= "     * @inheritdoc\n";
         $this->classString .= "     */\n";
-        $this->classString .= "    public function searchActive(\$params, \$pageSize = null)\n";
+        $this->classString .= "    public function searchClose(\$params, \$pageSize = null)\n";
+//        $this->classString .= "    public function searchClose()\n";
         $this->classString .= "    {\n";
         $this->classString .= "         \$user = User::find()->where(['id' => Yii::\$app->user->id])->one();\n";
         $this->classString .= "         \n";
@@ -371,8 +381,8 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "             \n";
         $this->classString .= "             \$this->rights(\$user);\n";
         $this->classString .= "             \n";
-//        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
-//        $this->classString .= "             \n";
+        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
+        $this->classString .= "             \n";
         $this->classString .= "         }else{\n";
         $this->classString .= "             \n";
         $this->classString .= "             throw new HttpException(403,'Для открытия данной страницы необходимо войти в систему.');\n";
@@ -387,6 +397,7 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "     * @inheritdoc\n";
         $this->classString .= "     */\n";
         $this->classString .= "    public function searchAll(\$params, \$pageSize = null)\n";
+//        $this->classString .= "    public function searchAll()\n";
         $this->classString .= "    {\n";
         $this->classString .= "         \$user = User::find()->where(['id' => Yii::\$app->user->id])->one();\n";
         $this->classString .= "         \n";
@@ -394,8 +405,8 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "             \n";
         $this->classString .= "             \$this->rights(\$user);\n";
         $this->classString .= "             \n";
-//        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
-//        $this->classString .= "             \n";
+        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
+        $this->classString .= "             \n";
         $this->classString .= "         }else{\n";
         $this->classString .= "             \n";
         $this->classString .= "             throw new HttpException(403,'Для открытия данной страницы необходимо войти в систему.');\n";
@@ -645,7 +656,8 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "    public function search(\$params, \$pageSize = null)\n";
         $this->classString .= "    {\n";
         $this->classString .= "         \$arDataProvider = [];\n";
-        $this->classString .= "         \$query = static::find();\n";
+//        $this->classString .= "         \$query = static::find();\n";
+        $this->classString .= "         \$query = static::\$query;\n";
         $this->classString .= "         \$arDataProvider['query'] = \$query;\n";
         $this->classString .= "         if(!empty(\$pageSize)) \$arDataProvider['pagination'] = ['pageSize' => \$pageSize];\n";
         $this->classString .= "         \n";
@@ -795,14 +807,14 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
 
     protected function addRender()
     {
-        $this->classString .= "    public static function render()\n";
+        $this->classString .= "    public static function render(\$status = null)\n";
         $this->classString .= "    {\n";
 //        $this->classString .= "         \$className = self::className();\n";
 //        $this->classString .= "         \$gridView = \$className::getInstance();\n";
         $this->classString .= "         \$gridView = static::getInstance();\n";
         $this->classString .= "         if(!empty(\$gridView->columns)){\n";
         $this->classString .= "             return GridView::widget([\n";
-        $this->classString .= "                 'dataProvider' => \$gridView->search(Yii::\$app->request->queryParams),\n";
+        $this->classString .= "                 'dataProvider' => empty(\$status)?\$gridView->search(Yii::\$app->request->queryParams):\$gridView->\$status(Yii::\$app->request->queryParams),\n";
         $this->classString .= "                 'filterModel' => \$gridView,\n";
         $this->classString .= "                 'columns' => \$gridView->columns,\n";
         $this->classString .= "             ]);\n";

@@ -7,6 +7,7 @@
  */
 namespace common\modules\generator\gridviews;
 
+use common\modules\generator\models\TaskGridViewActiveRecordClassGenerator;
 use Yii;
 use common\modules\entity\common\models\permission\Gridviews;
 use common\modules\generator\models\GridViewActiveRecordClassGenerator2;
@@ -42,7 +43,7 @@ class TaskGridViewClassGenerator extends EntityTypeClassGenerator
             'email' => '\common\modules\generator\rules\ActiveRecordEmailRuleGenerator',
         ]);
 
-        $activeRecordGenerator = new GridViewActiveRecordClassGenerator2(self::$params);
+        $activeRecordGenerator = new TaskGridViewActiveRecordClassGenerator(self::$params);
         $activeRecordGenerator->generateClassFile();
         return static::$params;
     }
@@ -68,7 +69,7 @@ class TaskGridViewClassGenerator extends EntityTypeClassGenerator
 
     protected function setTableName()
     {
-        self::$params[AbstractClassGenerator::TABLE_NAME] = 'task_cart';
+        self::$params[AbstractClassGenerator::TABLE_NAME] = 'tasks_cart';
         self::$params[AbstractClassGenerator::DATABASE_NAME] = 'pdb';
     }
 
