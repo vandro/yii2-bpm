@@ -87,7 +87,34 @@ class GridviewFields extends \yii\db\ActiveRecord
 
     public function getAllEntityTypes()
     {
-        return ArrayHelper::map(EntityTypes::find()->where(['published' => 1])->andWhere(['in', 'type_id', [2,3]])->all(), 'id', 'title');
+        $entityTypesQuery = EntityTypes::find()->where(['published' => 1])->andWhere(['in', 'type_id', [2,3]]);
+        if(empty($this->gridview->fields)){
+            return ArrayHelper::map($entityTypesQuery->andWhere(['id' => 1])->all(), 'id', 'title');
+        }else{
+            $ids = [];
+            $entityTypesIds = $this->getGridViewFieldsEntityTypesIds();
+            $entityTypes = EntityTypes::find()->all();
+            foreach($entityTypes as $entityType){
+                foreach($entityType->fields as $field) {
+                    if(!empty($field->dictionary) && in_array($field->dictionary->id, $entityTypesIds)) {
+                        $ids[] = $entityType->id;
+                    }
+                }
+            }
+            $ids = array_merge($entityTypesIds, $ids);
+            return ArrayHelper::map($entityTypesQuery->andWhere(['in', 'id', $ids])->all(), 'id', 'title');
+        }
+
+    }
+
+    protected function getGridViewFieldsEntityTypesIds()
+    {
+        $ids = [];
+        foreach($this->gridview->fields as $field){
+            $ids[] = $field->entity_type_id;
+        }
+
+        return $ids;
     }
 
     public function getAllEntityTypeFields()
