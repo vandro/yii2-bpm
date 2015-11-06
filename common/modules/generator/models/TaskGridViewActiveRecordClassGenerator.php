@@ -311,8 +311,8 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "             \n";
         $this->classString .= "             \$this->rights(\$user);\n";
         $this->classString .= "             \n";
-        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
-        $this->classString .= "             \n";
+//        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
+//        $this->classString .= "             \n";
         $this->classString .= "         }else{\n";
         $this->classString .= "             \n";
         $this->classString .= "             throw new HttpException(403,'Для открытия данной страницы необходимо войти в систему.');\n";
@@ -341,8 +341,8 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "             \n";
         $this->classString .= "             \$this->rights(\$user);\n";
         $this->classString .= "             \n";
-        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
-        $this->classString .= "             \n";
+//        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
+//        $this->classString .= "             \n";
         $this->classString .= "         }else{\n";
         $this->classString .= "             \n";
         $this->classString .= "             throw new HttpException(403,'Для открытия данной страницы необходимо войти в систему.');\n";
@@ -371,8 +371,8 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "             \n";
         $this->classString .= "             \$this->rights(\$user);\n";
         $this->classString .= "             \n";
-        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
-        $this->classString .= "             \n";
+//        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
+//        $this->classString .= "             \n";
         $this->classString .= "         }else{\n";
         $this->classString .= "             \n";
         $this->classString .= "             throw new HttpException(403,'Для открытия данной страницы необходимо войти в систему.');\n";
@@ -394,8 +394,8 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "             \n";
         $this->classString .= "             \$this->rights(\$user);\n";
         $this->classString .= "             \n";
-        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
-        $this->classString .= "             \n";
+//        $this->classString .= "             return \$this->search(\$params, \$pageSize);\n";
+//        $this->classString .= "             \n";
         $this->classString .= "         }else{\n";
         $this->classString .= "             \n";
         $this->classString .= "             throw new HttpException(403,'Для открытия данной страницы необходимо войти в систему.');\n";
