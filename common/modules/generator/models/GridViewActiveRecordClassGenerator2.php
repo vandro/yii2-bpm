@@ -190,11 +190,15 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
                 $this->classString .= $ruleObject->getRuleString($this->params);
             }
         }
+        $variables = [];
         $this->classString .= "             [[";
         foreach($this->params[self::SELECTED_ENTITY_TYPES] as $entityType) {
             if(isset($entityType[self::ENTITY_TYPE_JOINS])) {
                 foreach ($entityType[self::ENTITY_TYPE_JOINS] as $join) {
-                    $this->classString .= "'" . $join[self::DICTIONARY_NAME] . "_" . $join[self::DICTIONARY_KEY_FIELD_NAME] . "', ";
+                    if(!in_array($join[self::DICTIONARY_NAME] . "_" . $join[self::DICTIONARY_KEY_FIELD_NAME], $variables)) {
+                        $this->classString .= "'" . $join[self::DICTIONARY_NAME] . "_" . $join[self::DICTIONARY_KEY_FIELD_NAME] . "', ";
+                        $variables[] = $join[self::DICTIONARY_NAME] . "_" . $join[self::DICTIONARY_KEY_FIELD_NAME];
+                    }
                 }
             }
         }
@@ -505,6 +509,8 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
                 $this->classString .= "                 'value' => function(\$model){\n";
                 $this->classString .= "                     if(!empty(\$model->" . $property[self::RELATION] . "sRelation)){\n";
                 $this->classString .= "                         return \$this->get" . ucwords($property[self::RELATION]) . "sTable(\$model);\n";
+                $this->classString .= "                     }elseif(!empty(\$model->" . $property[self::RELATION] . ")){\n";
+                $this->classString .= "                         return \$model->" . $property[self::RELATION] . "->".$property[self::DICTIONARY_VALUE_FIELD_NAME].";\n";
                 $this->classString .= "                     }\n";
                 $this->classString .= "                     return '<table class=\"table\" style=\"margin: 0; background: inherit;\"><tr><td>Нет</td></tr></table>';\n";
                 $this->classString .= "                 },\n";
