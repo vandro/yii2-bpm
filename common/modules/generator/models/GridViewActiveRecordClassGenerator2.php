@@ -293,16 +293,18 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
                 $this->classString .= "    }\n\n";
 
                 $property = $this->getProperty($relation[self::VIA_TABLE]);
-                $this->classString .= "    /**\n";
-                $this->classString .= "     * @return array ['key' => 'value'].\n";
-                $this->classString .= "     */\n";
-                $this->classString .= "    public function get".$this->getName($relation[self::VIA_TABLE])."()\n";
-                $this->classString .= "    {\n";
-                $this->classString .= "        if(!class_exists('".$this->getName($relation[self::VIA_TABLE])."')) {\n";
-                $this->classString .= "            EntityTypeClassFactory::get(" . $property[self::ENTITY_TYPE_ID] . ");\n";
-                $this->classString .= "        }\n";
-                $this->classString .= "        return \$this->hasMany(".$this->getName($relation[self::VIA_TABLE])."::className(),['" . $joins[0][self::PROPERTY_NAME] . "' => '" . $joins[0][self::DICTIONARY_NAME] . "_" . $joins[0][self::DICTIONARY_KEY_FIELD_NAME] . "']);\n";
-                $this->classString .= "    }\n\n";
+                if(!empty($joins)) {
+                    $this->classString .= "    /**\n";
+                    $this->classString .= "     * @return array ['key' => 'value'].\n";
+                    $this->classString .= "     */\n";
+                    $this->classString .= "    public function get" . $this->getName($relation[self::VIA_TABLE]) . "()\n";
+                    $this->classString .= "    {\n";
+                    $this->classString .= "        if(!class_exists('" . $this->getName($relation[self::VIA_TABLE]) . "')) {\n";
+                    $this->classString .= "            EntityTypeClassFactory::get(" . $property[self::ENTITY_TYPE_ID] . ");\n";
+                    $this->classString .= "        }\n";
+                    $this->classString .= "        return \$this->hasMany(" . $this->getName($relation[self::VIA_TABLE]) . "::className(),['" . $joins[0][self::PROPERTY_NAME] . "' => '" . $joins[0][self::DICTIONARY_NAME] . "_" . $joins[0][self::DICTIONARY_KEY_FIELD_NAME] . "']);\n";
+                    $this->classString .= "    }\n\n";
+                }
 
 
                 $this->classString .= "    /**\n";
@@ -410,10 +412,14 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
 //        foreach($this->params[self::SELECTED_ENTITY_TYPES] as $entityType) {
 //            $this->classString .= "             '" .$entityType[self::ENTITY_TYPE_NAME].".id as ".$entityType[self::ENTITY_TYPE_NAME]."_id',\n";
 //        }
+        $variables = [];
         foreach($this->params[self::SELECTED_ENTITY_TYPES] as $entityType) {
             if(isset($entityType[self::ENTITY_TYPE_JOINS])) {
                 foreach ($entityType[self::ENTITY_TYPE_JOINS] as $join) {
-                    $this->classString .= "             '" . $join[self::DICTIONARY_NAME] . "." . $join[self::DICTIONARY_KEY_FIELD_NAME] . " as " . $join[self::DICTIONARY_NAME] . "_" . $join[self::DICTIONARY_KEY_FIELD_NAME] . "',\n";
+                    if (!in_array($join[self::DICTIONARY_NAME] . "_" . $join[self::DICTIONARY_KEY_FIELD_NAME], $variables)) {
+                        $this->classString .= "             '" . $join[self::DICTIONARY_NAME] . "." . $join[self::DICTIONARY_KEY_FIELD_NAME] . " as " . $join[self::DICTIONARY_NAME] . "_" . $join[self::DICTIONARY_KEY_FIELD_NAME] . "',\n";
+                        $variables[] = $join[self::DICTIONARY_NAME] . "_" . $join[self::DICTIONARY_KEY_FIELD_NAME];
+                    }
                 }
             }
         }
