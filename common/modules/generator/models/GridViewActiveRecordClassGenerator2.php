@@ -439,6 +439,8 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
                 }
             }
         }
+        $this->classString .= "          \$query->groupBy('tasks_cart.id');";
+
         $this->classString .= "         \n";
         $this->classString .= "         \$query->andFilterWhere([\n";
         foreach($this->params[self::PROPERTIES] as $property) {

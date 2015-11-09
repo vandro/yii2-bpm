@@ -29,6 +29,13 @@ $this->params['breadcrumbs'][] = $this->title;
     <?= Tabs::widget([
         'items' => [
             [
+                'label' =>'Columns',
+                'content' => $this->render('_fieldsIndex', [
+                    'model' => $model,
+                ]),
+                'active' => ($tab == 2),
+            ],
+            [
                 'label' => 'View',
                 'content' => DetailView::widget([
                     'model' => $model,
@@ -39,13 +46,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     ],
                 ]),
                 'active' => ($tab == 1),
-            ],
-            [
-                'label' =>'Columns',
-                'content' => $this->render('_fieldsIndex', [
-                    'model' => $model,
-                ]),
-                'active' => ($tab == 2),
             ],
 //            [
 //                'label' =>'Forms',
@@ -71,4 +71,8 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]);?>
 
+<!--    --><?//=\common\helpers\DebugHelper::printSingleObject($gridViewParams)?>
+<!--    --><?//=\frontend\runtime\generated\GridView4::render()?>
+    <?=$gridView::render();?>
+<!--    --><?//=\common\helpers\DebugHelper::printSingleObject($gridView)?>
 </div>

@@ -31,13 +31,13 @@ use common\helpers\ActionColumnHelper;
             [
                 'attribute' => 'entity_type_id',
                 'value' => function($model){
-                    return $model->entityType->title;
+                    return !empty($model->entityType)?$model->entityType->title:"";
                 }
             ],
             [
                 'attribute' => 'field_id',
                 'value' => function($model){
-                    return $model->field->title;
+                    return !empty($model->field)?$model->field->title:'';
                 }
             ],
             'condition',

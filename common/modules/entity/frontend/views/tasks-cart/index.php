@@ -69,45 +69,48 @@ $this->params['breadcrumbs'][] = str_replace("action","",Yii::$app->controller->
             </div><!-- /.nav-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
+    <?php if(!empty($gridView)) {?>
 
-    <?=$gridView::render($status)?>
+        <?=$gridView::render($status)?>
 
-<!--    --><?//= GridView::widget([
-//        'dataProvider' => $dataProvider,
-//        'filterModel' => $searchModel,
-//        'columns' => [
-//            'id',
-//            [
-//                'attribute' => 'process_id',
-//                'value' => function($model){
-//                    return $model->process->title;
-//                }
-//            ],
-//            [
-//                'attribute' => 'current_node_id',
-//                'value' => function($model){
-//                    return $model->currentNode->title;
-//                }
-//            ],
-//            'created_at',
-//
-//            [
-//                'class' => 'yii\grid\ActionColumn',
-//                'template'=>'{view}{delete}',
-//                'buttons'=>[
-//                    'view'=>function ($url, $model) {
-//                        return ActionColumnHelper::view($url,$model,'bpm/tasks-cart');
-//                    },
-//                    'update'=>function ($url, $model) {
-//                        return ActionColumnHelper::update($url,$model,'bpm/tasks-cart');
-//                    },
-//                    'delete'=>function ($url, $model) {
-//                        return ActionColumnHelper::delete($url,$model,'bpm/tasks-cart');
-//                    },
-//                ],
-//
-//            ],
-//        ],
-//    ]); ?>
+    <?php }else{?>
 
+        <?= GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                'id',
+                [
+                    'attribute' => 'process_id',
+                    'value' => function($model){
+                        return $model->process->title;
+                    }
+                ],
+                [
+                    'attribute' => 'current_node_id',
+                    'value' => function($model){
+                        return $model->currentNode->title;
+                    }
+                ],
+                'created_at',
+
+                [
+                    'class' => 'yii\grid\ActionColumn',
+                    'template'=>'{view}{delete}',
+                    'buttons'=>[
+                        'view'=>function ($url, $model) {
+                            return ActionColumnHelper::view($url,$model,'bpm/tasks-cart');
+                        },
+                        'update'=>function ($url, $model) {
+                            return ActionColumnHelper::update($url,$model,'bpm/tasks-cart');
+                        },
+                        'delete'=>function ($url, $model) {
+                            return ActionColumnHelper::delete($url,$model,'bpm/tasks-cart');
+                        },
+                    ],
+
+                ],
+            ],
+        ]); ?>
+    <?php }?>
 </div>

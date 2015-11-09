@@ -684,8 +684,12 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
                 }
             }
         }
+        $propertyVariables = [];
         foreach($this->params[self::PROPERTIES] as $property) {
-            $this->classString .= "             '" .$property[self::ENTITY_TYPE_NAME].".".$property[self::PROPERTY_NAME] . " as ".$property[self::PROPERTY_NAME]."',\n";
+            if(!in_array($property[self::PROPERTY_NAME],$propertyVariables)) {
+                $this->classString .= "             '" . $property[self::ENTITY_TYPE_NAME] . "." . $property[self::PROPERTY_NAME] . " as " . $property[self::PROPERTY_NAME] . "',\n";
+                $propertyVariables[] = $property[self::PROPERTY_NAME];
+            }
         }
         $this->classString .= "         ]);\n";
         $this->classString .= "         \n";
@@ -696,6 +700,9 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
                 }
             }
         }
+
+        $this->classString .= "          \$query->groupBy('tasks_cart.id');";
+
         $this->classString .= "         \n";
         $this->classString .= "         \$query->andFilterWhere([\n";
         foreach($this->params[self::PROPERTIES] as $property) {
@@ -742,38 +749,42 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
 
     protected function addGetColumns()
     {
+        $arProperties = [];
         $this->classString .= "    public function getColumns()\n";
         $this->classString .= "    {\n";
         $this->classString .= "         \$instance = self::getInstance();\n";
         $this->classString .= "         return [\n";
         foreach($this->params[self::PROPERTIES] as $property) {
-            if(isset($property[self::DICTIONARY_NAME])){
-                $this->classString .= "             [\n";
-                $this->classString .= "                 'attribute' => '" . $property[self::PROPERTY_NAME] . "',\n";
-                $this->classString .= "                 'filter' => Html::activeDropDownList(\n";
-                $this->classString .= "                     \$instance,\n";
-                $this->classString .= "                     '" . $property[self::PROPERTY_NAME] . "',\n";
-                $this->classString .= "                     \$instance->" . $property[self::RELATION] . "s,\n";
-                $this->classString .= "                     [\n";
-                $this->classString .= "                         'prompt' => ' -- Выберите --',\n";
-                $this->classString .= "                         'class' => 'form-control',\n";
-                $this->classString .= "                         'style' => 'width: 100%;'\n";
-                $this->classString .= "                     ]\n";
-                $this->classString .= "                 ),\n";
-                $this->classString .= "                 'format' => 'html',\n";
-                $this->classString .= "                 'contentOptions' => ['style' => 'padding: 0;'],\n";
+            if(!in_array($property[self::PROPERTY_NAME],$arProperties)) {
+                if (isset($property[self::DICTIONARY_NAME])) {
+                    $this->classString .= "             [\n";
+                    $this->classString .= "                 'attribute' => '" . $property[self::PROPERTY_NAME] . "',\n";
+                    $this->classString .= "                 'filter' => Html::activeDropDownList(\n";
+                    $this->classString .= "                     \$instance,\n";
+                    $this->classString .= "                     '" . $property[self::PROPERTY_NAME] . "',\n";
+                    $this->classString .= "                     \$instance->" . $property[self::RELATION] . "s,\n";
+                    $this->classString .= "                     [\n";
+                    $this->classString .= "                         'prompt' => ' -- Выберите --',\n";
+                    $this->classString .= "                         'class' => 'form-control',\n";
+                    $this->classString .= "                         'style' => 'width: 100%;'\n";
+                    $this->classString .= "                     ]\n";
+                    $this->classString .= "                 ),\n";
+                    $this->classString .= "                 'format' => 'html',\n";
+                    $this->classString .= "                 'contentOptions' => ['style' => 'padding: 0;'],\n";
 
-                $this->classString .= "                 'value' => function(\$model){\n";
-                $this->classString .= "                     if(!empty(\$model->" . $property[self::RELATION] . "sRelation)){\n";
-                $this->classString .= "                         return \$this->get" . ucwords($property[self::RELATION]) . "sTable(\$model);\n";
-                $this->classString .= "                     }elseif(!empty(\$model->" . $property[self::RELATION] . ")){\n";
-                $this->classString .= "                         return \$model->" . $property[self::RELATION] . "->".$property[self::DICTIONARY_VALUE_FIELD_NAME].";\n";
-                $this->classString .= "                     }\n";
-                $this->classString .= "                     return '<table class=\"table\" style=\"margin: 0; background: inherit;\"><tr><td>Нет</td></tr></table>';\n";
-                $this->classString .= "                 },\n";
-                $this->classString .= "             ],\n";
-            }else {
-                $this->classString .= "             '" . $property[self::PROPERTY_NAME] . "',\n";
+                    $this->classString .= "                 'value' => function(\$model){\n";
+                    $this->classString .= "                     if(!empty(\$model->" . $property[self::RELATION] . "sRelation)){\n";
+                    $this->classString .= "                         return \$this->get" . ucwords($property[self::RELATION]) . "sTable(\$model);\n";
+                    $this->classString .= "                     }elseif(!empty(\$model->" . $property[self::RELATION] . ")){\n";
+                    $this->classString .= "                         return \$model->" . $property[self::RELATION] . "->" . $property[self::DICTIONARY_VALUE_FIELD_NAME] . ";\n";
+                    $this->classString .= "                     }\n";
+                    $this->classString .= "                     return '<table class=\"table\" style=\"margin: 0; background: inherit;\"><tr><td>Нет</td></tr></table>';\n";
+                    $this->classString .= "                 },\n";
+                    $this->classString .= "             ],\n";
+                } else {
+                    $this->classString .= "             '" . $property[self::PROPERTY_NAME] . "',\n";
+                }
+                $arProperties[] = $property[self::PROPERTY_NAME];
             }
         }
         $this->classString .= "         ];\n";
@@ -814,6 +825,22 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "         \$gridView = static::getInstance();\n";
         $this->classString .= "         if(!empty(\$gridView->columns)){\n";
         $this->classString .= "             return GridView::widget([\n";
+        $this->classString .= "                 'toolbar'=> [\n";
+        $this->classString .= "                     '{export}',\n";
+        $this->classString .= "                     '{toggleData}',\n";
+        $this->classString .= "                 ],\n";
+        $this->classString .= "                 'panel'=>[\n";
+        $this->classString .= "                     'type'=>GridView::TYPE_PRIMARY,\n";
+        $this->classString .= "                 ],\n";
+        $this->classString .= "                 'export'=>[\n";
+        $this->classString .= "                     'label' => 'Page',\n";
+        $this->classString .= "                     'fontAwesome'=>true,\n";
+        $this->classString .= "                     'target' => \\kartik\\export\\ExportMenu::TARGET_BLANK,\n";
+        $this->classString .= "                 ],\n";
+        $this->classString .= "                 'exportConfig' => [\n";
+        $this->classString .= "                     'xls' => true,\n";
+        $this->classString .= "                     'pdf' => true,\n";
+        $this->classString .= "                 ],\n";
         $this->classString .= "                 'dataProvider' => empty(\$status)?\$gridView->search(Yii::\$app->request->queryParams):\$gridView->\$status(Yii::\$app->request->queryParams),\n";
         $this->classString .= "                 'filterModel' => \$gridView,\n";
         $this->classString .= "                 'columns' => \$gridView->columns,\n";

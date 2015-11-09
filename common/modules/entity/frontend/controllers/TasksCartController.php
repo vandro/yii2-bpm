@@ -97,22 +97,36 @@ class TasksCartController extends Controller
 //        ]);
     }
 
+//    protected function getGridView()
+//    {
+//        $views_id = Yii::$app->request->get('views_id');
+//        if(empty($views_id)){
+//            $gridView = Gridviews::find()->where(['default' => 1])->one();
+//            if(!empty($gridView)) {
+//                return $gridView->id;
+//            }else{
+//                $gridView = Gridviews::find()->one();
+//                return $gridView->id;
+//            }
+//        }
+//    }
+
     /**
      * Lists all TasksCart models.
      * @return mixed
      */
     public function actionActive()
     {
-//        $searchModel = new TasksSearch();
-//        $dataProvider = $searchModel->searchActive(Yii::$app->request->queryParams);
+        $searchModel = new TasksSearch();
+        $dataProvider = $searchModel->searchActive(Yii::$app->request->queryParams);
 
-        Yii::$app->cache->set('action'.Yii::$app->user->id, 'active');
+        Yii::$app->cache->set('action' . Yii::$app->user->id, 'active');
 
-        $gridView = TaskGridViewClassFactory::get(Yii::$app->request->get('views_id'));
+        $gridView = $this->getGridView(Yii::$app->request->get('views_id'));
 
         return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
             'gridViewsUrls' => $this->getGridViewsUrls(),
             'view' => Gridviews::findOne(Yii::$app->request->get('views_id')),
             'actionName' => 'active',
@@ -127,16 +141,16 @@ class TasksCartController extends Controller
      */
     public function actionInactive()
     {
-//        $searchModel = new TasksSearch();
-//        $dataProvider = $searchModel->searchInActive(Yii::$app->request->queryParams);
+        $searchModel = new TasksSearch();
+        $dataProvider = $searchModel->searchInActive(Yii::$app->request->queryParams);
 
         Yii::$app->cache->set('action'.Yii::$app->user->id, 'inactive');
 
-        $gridView = TaskGridViewClassFactory::get(Yii::$app->request->get('views_id'));
+        $gridView = $this->getGridView(Yii::$app->request->get('views_id'));
 
         return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
             'gridViewsUrls' => $this->getGridViewsUrls(),
             'view' => Gridviews::findOne(Yii::$app->request->get('views_id')),
             'actionName' => 'inactive',
@@ -152,16 +166,16 @@ class TasksCartController extends Controller
      */
     public function actionClosed()
     {
-//        $searchModel = new TasksSearch();
-//        $dataProvider = $searchModel->searchClosed(Yii::$app->request->queryParams);
+        $searchModel = new TasksSearch();
+        $dataProvider = $searchModel->searchClosed(Yii::$app->request->queryParams);
 
         Yii::$app->cache->set('action'.Yii::$app->user->id, 'closed');
 
-        $gridView = TaskGridViewClassFactory::get(Yii::$app->request->get('views_id'));
+        $gridView = $this->getGridView(Yii::$app->request->get('views_id'));
 
         return $this->render('index', [
-//            'searchModel' => $searchModel,
-//            'dataProvider' => $dataProvider,
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
             'gridViewsUrls' => $this->getGridViewsUrls(),
             'view' => Gridviews::findOne(Yii::$app->request->get('views_id')),
             'actionName' => 'closed',
@@ -176,11 +190,16 @@ class TasksCartController extends Controller
      */
     public function actionAll()
     {
+        $searchModel = new TasksSearch();
+        $dataProvider = $searchModel->searchClosed(Yii::$app->request->queryParams);
+
         Yii::$app->cache->set('action'.Yii::$app->user->id, 'all');
 
-        $gridView = TaskGridViewClassFactory::get(Yii::$app->request->get('views_id'));
+        $gridView = $this->getGridView(Yii::$app->request->get('views_id'));
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
             'gridViewsUrls' => $this->getGridViewsUrls(),
             'view' => Gridviews::findOne(Yii::$app->request->get('views_id')),
             'actionName' => 'all',
@@ -193,42 +212,42 @@ class TasksCartController extends Controller
      * Lists all TasksCart models.
      * @return mixed
      */
-    public function actionDebugTasks()
-    {
-        Yii::$app->cache->set('action'.Yii::$app->user->id, 'all');
-
-        $gridView = GridViewClassFactory::get(Yii::$app->request->get('views_id'));
-
-        return $this->render('indexAll', [
-            'gridViewsUrls' => $this->getGridViewsUrls(),
-            'view' => Gridviews::findOne(Yii::$app->request->get('views_id')),
-            'actionName' => 'all',
-            'gridView' => $gridView,
-        ]);
-    }
+//    public function actionDebugTasks()
+//    {
+//        Yii::$app->cache->set('action'.Yii::$app->user->id, 'all');
+//
+//        $gridView = GridViewClassFactory::get(Yii::$app->request->get('views_id'));
+//
+//        return $this->render('indexAll', [
+//            'gridViewsUrls' => $this->getGridViewsUrls(),
+//            'view' => Gridviews::findOne(Yii::$app->request->get('views_id')),
+//            'actionName' => 'all',
+//            'gridView' => $gridView,
+//        ]);
+//    }
 
     /**
      * Lists all TasksCart models.
      * @return mixed
      */
-    public function actionFiltered($view_id = null)
-    {
-//        $searchModel = QueryViewClassFactory::get($view_id);
+//    public function actionFiltered($view_id = null)
+//    {
+////        $searchModel = QueryViewClassFactory::get($view_id);
+////        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+//
+//        $searchModel= new TasksCartFilteredSearch();
 //        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        $searchModel= new TasksCartFilteredSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        Yii::$app->cache->set('action'.Yii::$app->user->id, 'filtered');
-
-        return $this->render('indexFiltered', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'gridViewsUrls' => $this->getGridViewsUrls(),
-            'view' => Gridviews::findOne(Yii::$app->request->get('views_id')),
-            'actionName' => 'filtered',
-        ]);
-    }
+//
+//        Yii::$app->cache->set('action'.Yii::$app->user->id, 'filtered');
+//
+//        return $this->render('indexFiltered', [
+//            'searchModel' => $searchModel,
+//            'dataProvider' => $dataProvider,
+//            'gridViewsUrls' => $this->getGridViewsUrls(),
+//            'view' => Gridviews::findOne(Yii::$app->request->get('views_id')),
+//            'actionName' => 'filtered',
+//        ]);
+//    }
 
     protected function getGridView($view_id = null)
     {
@@ -243,7 +262,12 @@ class TasksCartController extends Controller
             $view = Gridviews::findOne($view_id);
         }
 
-        return $view;
+        $gridView = null;
+        if(!empty($view)){
+            $gridView = TaskGridViewClassFactory::get($view->id);
+        }
+
+        return $gridView;
     }
 
     /**
