@@ -780,7 +780,6 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
                         $this->classString .= "                 ),\n";
                         $this->classString .= "                 'format' => 'html',\n";
                         $this->classString .= "                 'contentOptions' => ['style' => 'padding: 0;'],\n";
-
                         $this->classString .= "                 'value' => function(\$model){\n";
                         $this->classString .= "                     if(!empty(\$model->" . $property[self::RELATION] . "sRelation)){\n";
                         $this->classString .= "                         return \$this->get" . ucwords($property[self::RELATION]) . "sTable(\$model);\n";
