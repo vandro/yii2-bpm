@@ -756,33 +756,43 @@ class TaskGridViewActiveRecordClassGenerator extends AbstractClassGenerator
         $this->classString .= "         return [\n";
         foreach($this->params[self::PROPERTIES] as $property) {
             if(!in_array($property[self::PROPERTY_NAME],$arProperties)) {
-                if (isset($property[self::DICTIONARY_NAME])) {
+                if($property[self::PROPERTY_NAME] == 'id'){
                     $this->classString .= "             [\n";
                     $this->classString .= "                 'attribute' => '" . $property[self::PROPERTY_NAME] . "',\n";
-                    $this->classString .= "                 'filter' => Html::activeDropDownList(\n";
-                    $this->classString .= "                     \$instance,\n";
-                    $this->classString .= "                     '" . $property[self::PROPERTY_NAME] . "',\n";
-                    $this->classString .= "                     \$instance->" . $property[self::RELATION] . "s,\n";
-                    $this->classString .= "                     [\n";
-                    $this->classString .= "                         'prompt' => ' -- Выберите --',\n";
-                    $this->classString .= "                         'class' => 'form-control',\n";
-                    $this->classString .= "                         'style' => 'width: 100%;'\n";
-                    $this->classString .= "                     ]\n";
-                    $this->classString .= "                 ),\n";
-                    $this->classString .= "                 'format' => 'html',\n";
-                    $this->classString .= "                 'contentOptions' => ['style' => 'padding: 0;'],\n";
-
+                    $this->classString .= "                 'format' => 'raw',\n";
                     $this->classString .= "                 'value' => function(\$model){\n";
-                    $this->classString .= "                     if(!empty(\$model->" . $property[self::RELATION] . "sRelation)){\n";
-                    $this->classString .= "                         return \$this->get" . ucwords($property[self::RELATION]) . "sTable(\$model);\n";
-                    $this->classString .= "                     }elseif(!empty(\$model->" . $property[self::RELATION] . ")){\n";
-                    $this->classString .= "                         return \$model->" . $property[self::RELATION] . "->" . $property[self::DICTIONARY_VALUE_FIELD_NAME] . ";\n";
-                    $this->classString .= "                     }\n";
-                    $this->classString .= "                     return '<table class=\"table\" style=\"margin: 0; background: inherit;\"><tr><td>Нет</td></tr></table>';\n";
+                    $this->classString .= "                     return Html::a(\$model->id, Yii::\$app->urlManager->createUrl(['bpm/tasks-cart/view','id' => \$model->id]));\n";
                     $this->classString .= "                 },\n";
                     $this->classString .= "             ],\n";
-                } else {
-                    $this->classString .= "             '" . $property[self::PROPERTY_NAME] . "',\n";
+                }else {
+                    if (isset($property[self::DICTIONARY_NAME])) {
+                        $this->classString .= "             [\n";
+                        $this->classString .= "                 'attribute' => '" . $property[self::PROPERTY_NAME] . "',\n";
+                        $this->classString .= "                 'filter' => Html::activeDropDownList(\n";
+                        $this->classString .= "                     \$instance,\n";
+                        $this->classString .= "                     '" . $property[self::PROPERTY_NAME] . "',\n";
+                        $this->classString .= "                     \$instance->" . $property[self::RELATION] . "s,\n";
+                        $this->classString .= "                     [\n";
+                        $this->classString .= "                         'prompt' => ' -- Выберите --',\n";
+                        $this->classString .= "                         'class' => 'form-control',\n";
+                        $this->classString .= "                         'style' => 'width: 100%;'\n";
+                        $this->classString .= "                     ]\n";
+                        $this->classString .= "                 ),\n";
+                        $this->classString .= "                 'format' => 'html',\n";
+                        $this->classString .= "                 'contentOptions' => ['style' => 'padding: 0;'],\n";
+
+                        $this->classString .= "                 'value' => function(\$model){\n";
+                        $this->classString .= "                     if(!empty(\$model->" . $property[self::RELATION] . "sRelation)){\n";
+                        $this->classString .= "                         return \$this->get" . ucwords($property[self::RELATION]) . "sTable(\$model);\n";
+                        $this->classString .= "                     }elseif(!empty(\$model->" . $property[self::RELATION] . ")){\n";
+                        $this->classString .= "                         return \$model->" . $property[self::RELATION] . "->" . $property[self::DICTIONARY_VALUE_FIELD_NAME] . ";\n";
+                        $this->classString .= "                     }\n";
+                        $this->classString .= "                     return '<table class=\"table\" style=\"margin: 0; background: inherit;\"><tr><td>Нет</td></tr></table>';\n";
+                        $this->classString .= "                 },\n";
+                        $this->classString .= "             ],\n";
+                    } else {
+                        $this->classString .= "             '" . $property[self::PROPERTY_NAME] . "',\n";
+                    }
                 }
                 $arProperties[] = $property[self::PROPERTY_NAME];
             }
