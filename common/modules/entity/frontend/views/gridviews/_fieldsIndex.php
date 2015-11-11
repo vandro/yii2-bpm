@@ -40,10 +40,16 @@ use common\helpers\ActionColumnHelper;
                     return !empty($model->field)?$model->field->title:'';
                 }
             ],
-            'condition',
-            'value',
+//            'condition',
+//            'value',
+            [
+                'attribute' => 'grouping',
+                'value' => function($model){
+                    return ($model->grouping == 1)?'Да':'Нет';
+                }
+            ],
+            'subGroupOf',
             'order',
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {update} {delete}',

@@ -55,12 +55,17 @@ class Gridviews extends \yii\db\ActiveRecord
      */
     public function getGridviewFields()
     {
-        return $this->hasMany(GridviewFields::className(), ['gridview_id' => 'id']);
+        return $this->hasMany(GridviewFields::className(), ['gridview_id' => 'id'])->orderBy(['order' => SORT_ASC]);
+    }
+
+    public function getGroupingGridviewFields()
+    {
+        return $this->hasMany(GridviewFields::className(), ['gridview_id' => 'id'])->where(['grouping' => 1])->orderBy(['order' => SORT_ASC]);
     }
 
     public function getFields()
     {
-        return $this->hasMany(GridviewFields::className(), ['gridview_id' => 'id']);
+        return $this->hasMany(GridviewFields::className(), ['gridview_id' => 'id'])->orderBy(['order' => SORT_ASC]);
     }
 
     /**

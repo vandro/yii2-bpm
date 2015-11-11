@@ -2,6 +2,7 @@
 
 namespace common\modules\entity\common\models\permission;
 
+use common\helpers\DebugHelper;
 use common\modules\entity\common\models\EntityFields;
 use common\modules\entity\common\models\EntityTypes;
 use Yii;
@@ -37,7 +38,7 @@ class GridviewFields extends \yii\db\ActiveRecord
     {
         return [
             [['gridview_id', 'entity_type_id', 'field_id'], 'required'],
-            [['gridview_id', 'entity_type_id', 'field_id', 'order'], 'integer'],
+            [['gridview_id', 'entity_type_id', 'field_id', 'order', 'grouping', 'subGroupOf'], 'integer'],
             [['condition', 'value'], 'string']
         ];
     }
@@ -55,6 +56,8 @@ class GridviewFields extends \yii\db\ActiveRecord
             'order' => Yii::t('app', 'Порядок'),
             'condition' => Yii::t('app', 'Состояние'),
             'value' => Yii::t('app', 'Значения'),
+            'grouping' => Yii::t('app', 'Группировать?'),
+            'subGroupOf' => Yii::t('app', 'Подгруппа поля'),
         ];
     }
 
@@ -120,6 +123,12 @@ class GridviewFields extends \yii\db\ActiveRecord
     public function getAllEntityTypeFields()
     {
         return ArrayHelper::map(EntityFields::find()->where(['entity_id' => $this->entity_type_id])->all(), 'id', 'title');
+    }
+
+    public function getAllGroupingFields()
+    {
+//        DebugHelper::printSingleObjectAndDie($this->gridview->groupingGridviewFields);
+        return ArrayHelper::map($this->gridview->groupingGridviewFields, 'order', 'field.title');
     }
 
     public function getAllConditionsTypes()

@@ -56,6 +56,8 @@ abstract class AbstractClassGenerator
     const DICTIONARY_KEY_FIELD_NAME = 'DICTIONARY_KEY_FIELD_NAME';
     const DICTIONARY_VALUE_FIELD_NAME = 'DICTIONARY_VALUE_FIELD_NAME';
     const VIA_TABLE = 'VIA_TABLE';
+    const GROUPING = 'GROUPING';
+    const SUB_GROUP_OF = 'SUB_GROUP_OF';
 
     protected $params;
     protected $classString;

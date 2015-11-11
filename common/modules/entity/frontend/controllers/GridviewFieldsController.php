@@ -168,4 +168,12 @@ class GridviewFieldsController extends Controller
         }
         echo json_encode($arItems);
     }
+
+    public function actionGetFildsValue($id)
+    {
+        $gridViewField = $this->findModel($id);
+        if(!empty($gridViewField->field->dictionary)){
+
+        }
+    }
 }

@@ -20,6 +20,7 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
         $arParams[self::USED_CLASSES] = [
             'Yii',
             'yii\\db\\ActiveRecord',
+            'common\\helpers\\DebugHelper',
             'yii\\data\\ActiveDataProvider',
             'kartik\\grid\\GridView',
             'yii\\helpers\\Html',
@@ -268,7 +269,7 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
 
     protected function addRelationMethods()
     {
-
+        $arViaRelationMethods = [];
         if(isset($this->params[self::RELATIONS]) && !empty($this->params[self::RELATIONS])) {
             foreach ($this->params[self::RELATIONS] as $relation) {
 
@@ -298,16 +299,20 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
 
                 $property = $this->getProperty($relation[self::VIA_TABLE]);
                 if(!empty($joins)) {
-                    $this->classString .= "    /**\n";
-                    $this->classString .= "     * @return array ['key' => 'value'].\n";
-                    $this->classString .= "     */\n";
-                    $this->classString .= "    public function get" . $this->getName($relation[self::VIA_TABLE]) . "()\n";
-                    $this->classString .= "    {\n";
-                    $this->classString .= "        if(!class_exists('" . $this->getName($relation[self::VIA_TABLE]) . "')) {\n";
-                    $this->classString .= "            EntityTypeClassFactory::get(" . $property[self::ENTITY_TYPE_ID] . ");\n";
-                    $this->classString .= "        }\n";
-                    $this->classString .= "        return \$this->hasMany(" . $this->getName($relation[self::VIA_TABLE]) . "::className(),['" . $joins[0][self::PROPERTY_NAME] . "' => '" . $joins[0][self::DICTIONARY_NAME] . "_" . $joins[0][self::DICTIONARY_KEY_FIELD_NAME] . "']);\n";
-                    $this->classString .= "    }\n\n";
+                    if(!in_array($relation[self::VIA_TABLE],$arViaRelationMethods)) {
+                        $this->classString .= "    /**\n";
+                        $this->classString .= "     * @return array ['key' => 'value'].\n";
+                        $this->classString .= "     */\n";
+                        $this->classString .= "    public function get" . $this->getName($relation[self::VIA_TABLE]) . "()\n";
+                        $this->classString .= "    {\n";
+                        $this->classString .= "        if(!class_exists('" . $this->getName($relation[self::VIA_TABLE]) . "')) {\n";
+                        $this->classString .= "            EntityTypeClassFactory::get(" . $property[self::ENTITY_TYPE_ID] . ");\n";
+                        $this->classString .= "        }\n";
+                        $this->classString .= "        return \$this->hasMany(" . $this->getName($relation[self::VIA_TABLE]) . "::className(),['" . $joins[0][self::PROPERTY_NAME] . "' => '" . $joins[0][self::DICTIONARY_NAME] . "_" . $joins[0][self::DICTIONARY_KEY_FIELD_NAME] . "']);\n";
+                        $this->classString .= "    }\n\n";
+
+                        $arViaRelationMethods[] = $relation[self::VIA_TABLE];
+                    }
                 }
 
 
@@ -397,7 +402,7 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
         $this->classString .= "     *\n";
         $this->classString .= "     * @return ActiveDataProvider\n";
         $this->classString .= "     */\n";
-        $this->classString .= "    public function search(\$params, \$pageSize = null)\n";
+        $this->classString .= "    public function search(\$params, \$pageSize = 100)\n";
         $this->classString .= "    {\n";
         $this->classString .= "         \$arDataProvider = [];\n";
         $this->classString .= "         \$query = static::find();\n";
@@ -439,7 +444,18 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
                 }
             }
         }
-        $this->classString .= "          \$query->groupBy('tasks_cart.id');";
+
+//        if(!$this->hasGroping()) {
+        $this->classString .= "          \$query->groupBy('tasks_cart.id');\n";
+        if($this->hasGrouping()) {
+            $this->classString .= "          \$query->orderBy([\n";
+            foreach($this->getGroupingFields() as $gField) {
+                $this->classString .= "                 '" . $gField . "' => SORT_ASC,\n";
+            }
+            $this->classString .= "          ]);\n";
+//        }else{
+//            //$this->classString .= "          \$query->groupBy('".$this->getGropingField()."');";
+        }
 
         $this->classString .= "         \n";
         $this->classString .= "         \$query->andFilterWhere([\n";
@@ -457,7 +473,12 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
                     $this->classString .= "           ->andFilterWhere(['like', '" .$property[self::ENTITY_TYPE_NAME].".". $property[self::PROPERTY_NAME] . "', \$this->" . $property[self::PROPERTY_NAME] . "])\n";
                 }
             }
+//            $gropingField = $this->getGropingField();
+//            if($gropingField != false) {
+//                $this->classString .= "           ->andFilterWhere(['not', ['" .$gropingField. "' => null]])\n";
+//            }
             $this->classString .= "         ;\n";
+            //$this->classString .= "         DebugHelper::printSingleObjectAndDie(\$query);\n";
         }
         $this->classString .= "         \n";
         $this->classString .= "         return \$dataProvider;\n";
@@ -495,6 +516,14 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
             if(isset($property[self::DICTIONARY_NAME])){
                 $this->classString .= "             [\n";
                 $this->classString .= "                 'attribute' => '" . $property[self::PROPERTY_NAME] . "',\n";
+                if(isset($property[self::GROUPING])) {
+                    $this->classString .= "                 'group' => true,\n";
+                    $this->classString .= "                 'groupOddCssClass' => '',\n";
+                    $this->classString .= "                 'groupEvenCssClass' => '',\n";
+                    if(isset($property[self::SUB_GROUP_OF])){
+                        $this->classString .= "                 'subGroupOf' => ".$property[self::SUB_GROUP_OF].",\n";
+                    }
+                }
                 $this->classString .= "                 'filter' => Html::activeDropDownList(\n";
                 $this->classString .= "                     \$instance,\n";
                 $this->classString .= "                     '" . $property[self::PROPERTY_NAME] . "',\n";
@@ -607,5 +636,31 @@ class GridViewActiveRecordClassGenerator2 extends AbstractClassGenerator
                 return $property;
             }
         }
+    }
+
+    protected function hasGrouping()
+    {
+        foreach($this->params[self::PROPERTIES] as $property) {
+            if(isset($property[self::GROUPING])){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+
+    protected function getGroupingFields()
+    {
+        $groupedFields = [];
+        foreach($this->params[self::PROPERTIES] as $property) {
+            if(isset($property[self::GROUPING])){
+                $groupedFields[] = $property[self::ENTITY_TYPE_NAME].".".$property[self::PROPERTY_NAME];
+            }
+        }
+        if(!empty($groupedFields)){
+            return $groupedFields;
+        }
+        return false;
     }
 }

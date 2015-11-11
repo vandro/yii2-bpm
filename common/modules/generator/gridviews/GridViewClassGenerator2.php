@@ -95,6 +95,13 @@ class GridViewClassGenerator2 extends EntityTypeClassGenerator
                 ]
             ];
 
+            if($gridviewField->grouping == 1){
+                $property[AbstractClassGenerator::GROUPING] = 1;
+                if(!empty($gridviewField->subGroupOf)){
+                    $property[AbstractClassGenerator::SUB_GROUP_OF] = $gridviewField->subGroupOf;
+                }
+            }
+
             if(!empty($gridviewField->field->dictionary)){
                 $property[AbstractClassGenerator::DICTIONARY_NAME] = $gridviewField->field->dictionary->code;
                 $property[AbstractClassGenerator::DICTIONARY_KEY_FIELD_NAME] = $gridviewField->field->getSetting("key");

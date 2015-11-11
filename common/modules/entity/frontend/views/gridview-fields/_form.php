@@ -26,13 +26,24 @@ use yii\widgets\ActiveForm;
         'prompt' => ' -- Choose column--',
     ]) ?>
 
-    <?= $form->field($model, 'condition')->dropDownList($model->getAllConditionsTypes(),[
-        'prompt' => ' -- Choose condition--',
+<!--    --><?//= $form->field($model, 'condition')->dropDownList($model->getAllConditionsTypes(),[
+//        'prompt' => ' -- Choose condition--',
+//    ]) ?>
+<!---->
+<!--    --><?//= $form->field($model, 'value')->textInput() ?>
+
+    <?= $form->field($model, 'grouping')->dropDownList([
+            0 => 'Нет',
+            1 => 'Да',
+        ]
+    ) ?>
+
+    <?= $form->field($model, 'subGroupOf')->dropDownList($model->getAllGroupingFields(),[
+        'prompt' => ' -- Choose column--',
     ]) ?>
 
-    <?= $form->field($model, 'value')->textInput() ?>
-
     <?= $form->field($model, 'order')->textInput() ?>
+
 
     <div class="form-group">
         <?= Html::submitButton($model->isNewRecord ? Yii::t('app', 'Create') : Yii::t('app', 'Update'), ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
